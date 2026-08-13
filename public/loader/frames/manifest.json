@@ -1,0 +1,10 @@
+{
+  "frameCount": 145,
+  "sourceFps": 24,
+  "tiers": [
+    { "name": "360", "width": 640,  "height": 360, "bytes": 1079004 },
+    { "name": "540", "width": 960,  "height": 540, "bytes": 1908164 },
+    { "name": "720", "width": 1280, "height": 720, "bytes": 2953916 }
+  ],
+  "beats": { "converge": 40, "lock": 100, "sweep": 108, "settle": 122 }
+}
