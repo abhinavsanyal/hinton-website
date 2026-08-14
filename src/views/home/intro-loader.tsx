@@ -19,6 +19,7 @@ export const IntroLoader = () => {
   const [warmCache, setWarmCache] = useState(false);
 
   const counterRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reqRef = useRef<number | null>(null);
 
@@ -101,6 +102,10 @@ export const IntroLoader = () => {
         const pct = Math.min(100, Math.round(s.displayProgress * 100));
         counterRef.current.innerText = `${pct}%`;
       }
+      
+      if (progressRef.current) {
+        progressRef.current.style.width = `${s.displayProgress * 100}%`;
+      }
 
       // Check exit condition (time passed AND progress is 100%)
       const elapsed = time - s.startedAt;
@@ -163,27 +168,45 @@ export const IntroLoader = () => {
             style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 400 400%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%221%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
           />
           
-          {/* Glass Card UI */}
+          {/* Glass Card UI Container */}
           <div 
             className="absolute inset-0 flex flex-col items-center justify-center"
             style={{ animation: `dolly-zoom 20s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards` }}
           >
-            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-[2px] w-[80vw] max-w-[640px] aspect-video">
+            <div className="relative rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-[2px] w-[75vw] max-w-[600px] aspect-video">
+              
+              {/* Chromatic Aberration Waves Underneath */}
+              <div className="absolute inset-0 z-0 overflow-hidden rounded-[30px] pointer-events-none mix-blend-screen opacity-70">
+                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-red-600/40 blur-[50px] animate-[pulse_4s_ease-in-out_infinite_alternate]" />
+                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-cyan-400/40 blur-[40px] animate-[pulse_3s_ease-in-out_infinite_alternate_reverse]" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 blur-[60px] animate-[pulse_5s_ease-in-out_infinite_alternate]" />
+              </div>
+
+              {/* Native Video */}
               <video
                 ref={videoRef}
                 src="/assets/brand/loader-logo.mp4"
                 autoPlay
                 muted
                 playsInline
-                className="w-full h-full object-cover rounded-[30px] opacity-90 mix-blend-screen"
+                className="relative z-10 w-full h-full object-cover rounded-[30px] mix-blend-screen"
+                style={{ filter: "brightness(1.1) contrast(1.05)" }}
               />
             </div>
             
-            {/* Premium Typography Countdown */}
-            <div className="mt-12 pointer-events-none">
+            {/* Premium Typography Countdown & Sleek Progress Bar */}
+            <div className="mt-8 flex flex-col items-center gap-3 pointer-events-none w-[75vw] max-w-[600px]">
+              {/* Modern gaming-style thin progress bar */}
+              <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  ref={progressRef}
+                  className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" 
+                  style={{ width: "0%" }} 
+                />
+              </div>
               <div 
                 ref={counterRef} 
-                className="text-white/40 font-mono text-sm tracking-widest uppercase tabular-nums"
+                className="text-white/50 font-mono text-xs tracking-[0.3em] uppercase tabular-nums"
               >
                 0%
               </div>
