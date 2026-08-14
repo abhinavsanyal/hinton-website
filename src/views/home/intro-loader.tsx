@@ -101,11 +101,11 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
     }
     stateRef.current.tier = selectedTier;
 
-    const played = false; // sessionStorage.getItem(config.sessionStorageKey);
+    const played = sessionStorage.getItem(config.sessionStorageKey);
     if (played) {
       stateRef.current.warmCache = true;
     } else {
-      // sessionStorage.setItem(config.sessionStorageKey, "1");
+      sessionStorage.setItem(config.sessionStorageKey, "1");
     }
 
     stopScroll();
@@ -394,7 +394,7 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
       const timer = setTimeout(() => {
         setRevealed(true);
         setPhase("done");
-      }, 2550); // 2500ms cinematic animation + 50ms buffer
+      }, 850); // 800ms cinematic animation + 50ms buffer
       return () => clearTimeout(timer);
     }
   }, [phase, setRevealed]);
@@ -416,7 +416,7 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
   return (
     <div 
       className={`fixed inset-0 z-[200] overflow-hidden ${phase === "loading" || phase === "split" ? "bg-[#010101]" : "pointer-events-none"}`}
-      style={phase === "split" ? { animation: 'loader-slide-up 2400ms cubic-bezier(0.85, 0, 0.15, 1) forwards' } : {}}
+      style={phase === "split" ? { animation: 'loader-slide-up 800ms cubic-bezier(0.85, 0, 0.15, 1) forwards' } : {}}
     >
       
       {/* Continuous Dolly Zoom Wrapper that persists across BOTH phases to eliminate jitter */}
@@ -447,7 +447,7 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
       {phase === "split" && !reduced && !stateRef.current.warmCache && (
         <style>{`
           main {
-            animation: page-fly-in 2400ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
+            animation: page-fly-in 800ms cubic-bezier(0.85, 0, 0.15, 1) forwards;
             transform-origin: 50% 50vh;
             will-change: transform, opacity, filter;
           }

@@ -27,7 +27,7 @@ const PfCard = ({ item, active }: { item: PortfolioItem; active: boolean }) => (
           loop
           muted
           playsInline
-          preload="auto"
+          preload="none"
           aria-hidden="true"
         />
 

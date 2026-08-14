@@ -77,7 +77,7 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload="none"
                   aria-hidden="true"
                 />
 

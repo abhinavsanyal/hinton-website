@@ -27,7 +27,7 @@ export const CatalistCard = ({ variant, content, bg }: CatalistCardProps) => {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="none"
             aria-hidden="true"
           />
         </div>
