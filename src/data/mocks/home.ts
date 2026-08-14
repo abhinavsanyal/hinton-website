@@ -43,6 +43,7 @@ export interface PortfolioItem {
   title: string;
   discipline: string;
   video: string;
+  poster?: string;
 }
 
 export interface ShowreelContent {
@@ -101,7 +102,7 @@ const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
   : "/assets";
 
 const A = `${MEDIA_BASE}/showreel`;
-const B = "/assets/brand";
+const B = `${MEDIA_BASE}/brand`;
 
 export const homeContent: ShowreelContent = {
   brand: "Hinton Studios",
@@ -208,7 +209,8 @@ export const homeContent: ShowreelContent = {
         client: "Kookie & Kandy",
         title: "Kookie & Kandy",
         discipline: "AI Animated Series · 2D Character Animation",
-        video: `${A}/portfolio-3.mp4`,
+        video: `${MEDIA_BASE}/all-content/3D%20Animation%20Kookie%20Kandy%5B30sec%5D.mov`,
+        poster: "/assets/posters/kookie.jpg",
       },
     ],
   },

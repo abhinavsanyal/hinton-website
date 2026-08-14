@@ -12,6 +12,7 @@ export type WorkVideo = {
   id: string;
   title: string;
   videoUrl: string;
+  posterUrl?: string;
   categories: string[];
   client: string;
   duration: string;
@@ -128,6 +129,7 @@ export const WorkView = ({ initialVideos }: { initialVideos: WorkVideo[] }) => {
                 muted
                 playsInline
                 preload="none"
+                poster={video.posterUrl}
               />
               {/* Glass Play Button Overlay */}
               <GlassPlayButton videoSrc={video.videoUrl} />

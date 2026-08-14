@@ -140,18 +140,15 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
             opacity: s.gridOpacity,
           }}
         >
-          {/* On mobile, we skip rendering the 14 grid videos entirely. 
-              This prevents a massive network choke on iOS Safari and saves huge amounts of memory. */}
-          {!isMobile && (
-            <video
-              className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
-              src={item.video}
-              loop
-              muted
-              playsInline
-              preload="none"
-            />
-          )}
+          {/* On mobile, we render the video but don't play it, so it acts like a static poster. */}
+          <video
+            className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
+            src={item.video}
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          />
 
           {/* Cinematic grain + gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
@@ -184,6 +181,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
   // Optimize video performance: only play the 14 grid background videos when the target scene is active.
   // We do this via DOM query to avoid breaking the memoized gridTiles (which would cause a flash).
   useEffect(() => {
+    if (isMobile) return; // Don't crash mobile by playing 14 videos at once
     const videos = document.querySelectorAll('.grid-bg-video') as NodeListOf<HTMLVideoElement>;
     videos.forEach((video) => {
       if (vis.target) {
@@ -192,7 +190,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
         video.pause();
       }
     });
-  }, [vis.target]);
+  }, [vis.target, isMobile]);
 
   // DEBUGGING: Log clicks to find what is intercepting the hero buttons
   useEffect(() => {
