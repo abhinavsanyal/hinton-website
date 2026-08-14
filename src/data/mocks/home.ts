@@ -35,6 +35,7 @@ export interface CatalistContent {
   searchText?: string;
   /** Optional video overlay for the diagonal card treatment. */
   video?: string;
+  poster?: string;
 }
 
 export interface PortfolioItem {
