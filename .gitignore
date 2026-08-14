@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 public/assets/showreel/
-public/assets/brand/
+public/assets/brand/*.mp4
 public/assets/all-content/

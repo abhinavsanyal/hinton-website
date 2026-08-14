@@ -101,7 +101,7 @@ const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
   : "/assets";
 
 const A = `${MEDIA_BASE}/showreel`;
-const B = `${MEDIA_BASE}/brand`;
+const B = "/assets/brand";
 
 export const homeContent: ShowreelContent = {
   brand: "Hinton Studios",
