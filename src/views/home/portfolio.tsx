@@ -4,6 +4,7 @@ import { animated, type SpringValue } from "@react-spring/web";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import type { PortfolioItem } from "@/data/mocks/home";
 import { portfolioTransform, pfTrackTransform } from "@/utils/showreel/timeline";
+import { useWindowWidth } from "@/hooks/use-window-size";
 
 
 export interface PortfolioProps {
@@ -13,24 +14,36 @@ export interface PortfolioProps {
   active: boolean;
 }
 
-const PfCard = ({ item, active }: { item: PortfolioItem; active: boolean }) => (
+const PfCard = ({ item, active }: { item: PortfolioItem; active: boolean }) => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth > 0 && windowWidth < 768;
+
+  return (
   // `translateZ(0)` + `backface-visibility:hidden` keep each card (and its video)
   // on a stable GPU layer so the horizontal track-pan is a pure composite — no
   // per-frame re-raster flicker as the cards slide.
   <article className="relative flex h-full w-[85vw] md:w-[65vw] max-w-[1200px] shrink-0 flex-col justify-between overflow-hidden rounded-pf bg-black p-[4vmin] text-white [backface-visibility:hidden] [transform:translateZ(0)]">
     {active && (
       <>
-        <video
-          className="absolute inset-0 z-0 size-full object-cover opacity-90 [transform:scale(1.35)] [backface-visibility:hidden] pointer-events-none"
-          src={item.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="none"
-          poster={item.poster}
-          aria-hidden="true"
-        />
+        {isMobile ? (
+          <img
+            className="absolute inset-0 z-0 size-full object-cover opacity-90 [transform:scale(1.35)] [backface-visibility:hidden] pointer-events-none"
+            src={item.poster || "/assets/posters/portfolio-1.jpg"}
+            alt=""
+          />
+        ) : (
+          <video
+            className="absolute inset-0 z-0 size-full object-cover opacity-90 [transform:scale(1.35)] [backface-visibility:hidden] pointer-events-none"
+            src={item.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            poster={item.poster}
+            aria-hidden="true"
+          />
+        )}
 
       </>
     )}
@@ -57,7 +70,7 @@ const PfCard = ({ item, active }: { item: PortfolioItem; active: boolean }) => (
       {item.title}
     </h3>
   </article>
-);
+)};
 
 /**
  * Fixed portfolio section. Flies up from below, scrolls its three video cards

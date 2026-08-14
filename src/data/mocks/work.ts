@@ -10,6 +10,7 @@ export interface WorkVideo {
   id: string;
   title: string;
   videoUrl: string;
+  posterUrl: string;
   categories: string[];
   client: string;
   duration: string;
@@ -26,6 +27,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-0",
     title: "3D Animation Kookie Kandy",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("3D Animation Kookie Kandy[30sec].mov")}`,
+    posterUrl: "/assets/posters/kookie.jpg",
     categories: ["3D Animation", "Commercial"],
     client: "Kookie Kandy",
     duration: "30s",
@@ -35,6 +37,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-1",
     title: "Dominoz",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Dominoz[30sec].mov")}`,
+    posterUrl: "/assets/posters/dominoz.jpg",
     categories: ["Commercial"],
     client: "Dominoz",
     duration: "30s",
@@ -44,6 +47,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-2",
     title: "Horror Comedy Soda AD",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Horror Comedy Soda AD[60secs].mov")}`,
+    posterUrl: "/assets/posters/horror.jpg",
     categories: ["Commercial", "Comedy"],
     client: "Soda Brand",
     duration: "60s",
@@ -53,6 +57,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-3",
     title: "Ilaiyaraaja Birthday Tribute",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Ilaiyaraaja-birthday-tribute-final-cut.mov")}`,
+    posterUrl: "/assets/posters/ilaiyaraaja.jpg",
     categories: ["Tribute", "Commercial"],
     client: "Ilaiyaraaja",
     duration: "Various",
@@ -62,6 +67,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-4",
     title: "Nishiddham",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Nishiddham-previz[4mins].mov")}`,
+    posterUrl: "/assets/posters/nishiddham.jpg",
     categories: ["Previz"],
     client: "Nishiddham",
     duration: "4m",
@@ -71,6 +77,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-5",
     title: "Superstar",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Superstar-previz[3mins].mov")}`,
+    posterUrl: "/assets/posters/superstar.jpg",
     categories: ["Previz"],
     client: "Superstar",
     duration: "3m",
@@ -80,6 +87,7 @@ export const workVideos: WorkVideo[] = [
     id: "video-6",
     title: "TATA 1MG",
     videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("TATA-1MG[40secs].mov")}`,
+    posterUrl: "/assets/posters/tata1mg.jpg",
     categories: ["Commercial"],
     client: "TATA 1MG",
     duration: "40s",

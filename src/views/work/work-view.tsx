@@ -121,16 +121,24 @@ export const WorkView = ({ initialVideos }: { initialVideos: WorkVideo[] }) => {
               delayIn={(idx % 3) * 150}
               className="group relative flex flex-col justify-end overflow-hidden rounded-pf bg-white/5 aspect-[4/5] [backface-visibility:hidden] [transform:translateZ(0)] border border-white/5"
             >
-              <video
-                className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-1000 ease-out group-hover:opacity-100 group-hover:scale-105 [backface-visibility:hidden] [transform:translateZ(0)] pointer-events-none"
-                src={video.videoUrl}
-                autoPlay={!isMobile}
-                loop
-                muted
-                playsInline
-                preload="none"
-                poster={video.posterUrl}
-              />
+              {isMobile ? (
+                <img
+                  className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-1000 ease-out group-hover:opacity-100 group-hover:scale-105 [backface-visibility:hidden] [transform:translateZ(0)] pointer-events-none"
+                  src={video.posterUrl || "/assets/posters/portfolio-1.jpg"}
+                  alt=""
+                />
+              ) : (
+                <video
+                  className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-1000 ease-out group-hover:opacity-100 group-hover:scale-105 [backface-visibility:hidden] [transform:translateZ(0)] pointer-events-none"
+                  src={video.videoUrl}
+                  autoPlay={!isMobile}
+                  loop
+                  muted
+                  playsInline
+                  preload="none"
+                  poster={video.posterUrl}
+                />
+              )}
               {/* Glass Play Button Overlay */}
               <GlassPlayButton videoSrc={video.videoUrl} />
 

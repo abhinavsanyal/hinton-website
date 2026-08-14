@@ -370,6 +370,15 @@ const GRID_VIDEOS = [
   `${MEDIA_BASE}/showreel/portfolio-6.mp4`,
 ];
 
+const GRID_POSTERS = [
+  "/assets/posters/portfolio-1.jpg",
+  "/assets/posters/portfolio-2.jpg",
+  "/assets/posters/portfolio-3.jpg",
+  "/assets/posters/portfolio-4.jpg",
+  "/assets/posters/portfolio-5.jpg",
+  "/assets/posters/portfolio-6.jpg",
+];
+
 /** The 14 placeholder positions from the original markup, with deterministic
  *  pseudo-random depth (so the parallax pattern is fixed across reloads). */
 const RAW_GRID: Array<{ tx: number; ty: number; w: string; h: string }> = [
@@ -396,7 +405,8 @@ export const GRID_ITEMS: GridItem[] = RAW_GRID.map((it, index) => {
   
   // Cycle through all 6 videos so every film is represented
   const video = GRID_VIDEOS[index % GRID_VIDEOS.length];
-  return { ...it, z, scale, image: "", video };
+  const image = GRID_POSTERS[index % GRID_POSTERS.length];
+  return { ...it, z, scale, image, video };
 });
 
 export const gridItemTransform = (item: GridItem) => {

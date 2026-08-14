@@ -100,18 +100,13 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
         </div>
       )}
 
-      {/* Mobile Single Video Fallback */}
+      {/* Mobile Single Video Fallback - using IMG to prevent play button */}
       {active && isMobile && (
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <video
+          <img
             className="absolute inset-0 size-full object-cover opacity-80 pointer-events-none"
-            src={REEL_VIDEOS[0]}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="none"
-            aria-hidden="true"
+            src="/assets/posters/portfolio-1.jpg"
+            alt=""
           />
         </div>
       )}

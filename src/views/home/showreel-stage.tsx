@@ -140,15 +140,23 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
             opacity: s.gridOpacity,
           }}
         >
-          {/* On mobile, we render the video but don't play it, so it acts like a static poster. */}
-          <video
-            className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
-            src={item.video}
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          />
+          {/* On mobile, we render a pure static image instead of a video to prevent OS-level Play buttons. */}
+          {isMobile ? (
+            <img
+              className="grid-bg-image absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
+              src={item.image || "/assets/posters/portfolio-1.jpg"} // fallback if image is missing
+              alt=""
+            />
+          ) : (
+            <video
+              className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
+              src={item.video}
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            />
+          )}
 
           {/* Cinematic grain + gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />

@@ -160,6 +160,7 @@ export const homeContent: ShowreelContent = {
     lead: "Production engine for ",
     leadStrong: "AI Films",
     video: `${B}/Outro-horizontal.mp4`,
+    poster: "/assets/posters/outro-horizontal.jpg",
   },
   catalistLight: {
     url: "hintonstudios.com",
@@ -167,6 +168,7 @@ export const homeContent: ShowreelContent = {
     lead: "From script to screen. ",
     leadStrong: "One AI pipeline.",
     video: `${A}/portfolio-1.mp4`,
+    poster: "/assets/posters/portfolio-1.jpg",
   },
 
   carouselCta: {
@@ -196,6 +198,7 @@ export const homeContent: ShowreelContent = {
         title: "Tata 1mg",
         discipline: "AI TVC · Comedy Ad Film · VFX",
         video: `${A}/portfolio-1.mp4`,
+        poster: "/assets/posters/portfolio-1.jpg",
       },
       {
         year: "2025",
@@ -203,6 +206,7 @@ export const homeContent: ShowreelContent = {
         title: "Domino's",
         discipline: "AI Ad Film · 3D Animation · Product Film",
         video: `${A}/portfolio-2.mp4`,
+        poster: "/assets/posters/portfolio-2.jpg",
       },
       {
         year: "2025",
