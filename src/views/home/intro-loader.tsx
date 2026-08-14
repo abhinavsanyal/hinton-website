@@ -43,6 +43,7 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
   const startScroll = useScroll((s) => s.start);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const counterRef = useRef<HTMLDivElement>(null);
   const reqRef = useRef<number | null>(null);
   const framesCache = useRef<(HTMLImageElement | null)[]>(new Array(MANIFEST.frameCount).fill(null));
   
@@ -266,6 +267,16 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
     let isReady = s.realProgress > 0.99 && s.elapsedMs >= config.minDurationMs;
     if (s.elapsedMs > config.maxDurationMs) isReady = true;
 
+    // Premium UI Smooth Countdown Update
+    s.displayProgress += (s.realProgress - s.displayProgress) * config.progressEase;
+    if (s.realProgress < 1) {
+      s.realProgress += config.idleCreepPerSec * (dt / 1000) * (1 - s.realProgress);
+    }
+    if (counterRef.current) {
+      const pct = Math.min(100, Math.round(s.displayProgress * 100));
+      counterRef.current.innerText = `${pct}%`;
+    }
+
     const framesToAdvance = (dt / 1000) * config.baseFps * config.playbackRate;
     s.exactFrame += framesToAdvance;
 
@@ -324,34 +335,9 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
         // 1. Clear frame (transparent)
         ctx.clearRect(0, 0, cw, ch);
         
-        // 2. Draw the video frame
+        // 2. Draw the video frame unclipped! (Premium UI)
         ctx.globalCompositeOperation = "source-over";
         ctx.drawImage(img, x, y, drawW, drawH);
-
-        // 3. Apply perfect elliptical radial mask to seamlessly blend into black
-        ctx.globalCompositeOperation = "destination-in";
-        ctx.save();
-        
-        const cx = cw / 2;
-        const cy = ch / 2;
-        
-        // Scale context to match video aspect ratio (make the circular gradient elliptical)
-        ctx.translate(cx, cy);
-        ctx.scale(1, drawH / drawW);
-        
-        const r = drawW / 2;
-        // Start fading very early (0.05) and end early (0.65) for a tight, ultra-soft merge
-        const grad = ctx.createRadialGradient(0, 0, r * 0.05, 0, 0, r * 0.65);
-        grad.addColorStop(0, "rgba(0, 0, 0, 1)");    // Fully keep center
-        grad.addColorStop(1, "rgba(0, 0, 0, 0)");    // Fully erase edges
-        
-        ctx.fillStyle = grad;
-        ctx.fillRect(-drawW, -drawW, drawW * 2, drawW * 2);
-        
-        ctx.restore();
-        
-        // Reset composite operation for next frame
-        ctx.globalCompositeOperation = "source-over";
       }
     }
 
@@ -429,8 +415,17 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
           >
             <canvas
               ref={canvasRef}
-              className="absolute inset-0 size-full filter drop-shadow-[0_0_30px_rgba(255,80,80,0.15)]"
+              className="absolute inset-0 size-full filter drop-shadow-[0_0_40px_rgba(255,255,255,0.05)]"
             />
+            {/* Premium Typography Countdown */}
+            <div className="absolute inset-x-0 bottom-[15vh] flex justify-center items-center pointer-events-none">
+              <div 
+                ref={counterRef} 
+                className="text-white/40 font-mono text-sm tracking-widest uppercase tabular-nums"
+              >
+                0%
+              </div>
+            </div>
           </div>
 
           <style>{`

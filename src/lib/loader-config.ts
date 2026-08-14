@@ -33,11 +33,11 @@ export interface LoaderConfig {
 
 export const loaderConfig: LoaderConfig = {
   baseFps: 120,
-  playbackRate: 2.0,
+  playbackRate: 6.0,
   mode: "progress",
   gateFrame: 104,
   minDurationMs: 10,
-  maxDurationMs: 1000,
+  maxDurationMs: 3000,
   progressEase: 0.8,
   idleCreepPerSec: 0.12,
   sessionStorageKey: "hinton_loader_played",
