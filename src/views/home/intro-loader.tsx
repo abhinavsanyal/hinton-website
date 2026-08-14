@@ -101,11 +101,11 @@ export const IntroLoader = ({ minDuration = config.minDurationMs }: IntroLoaderP
     }
     stateRef.current.tier = selectedTier;
 
-    const played = sessionStorage.getItem(config.sessionStorageKey);
+    const played = false; // sessionStorage.getItem(config.sessionStorageKey);
     if (played) {
       stateRef.current.warmCache = true;
     } else {
-      sessionStorage.setItem(config.sessionStorageKey, "1");
+      // sessionStorage.setItem(config.sessionStorageKey, "1");
     }
 
     stopScroll();

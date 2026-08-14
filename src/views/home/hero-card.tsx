@@ -6,7 +6,7 @@ import { animated, type SpringValue } from "@react-spring/web";
 import { useUIStore } from "@/store/use-ui-store";
 import { ScrollLetters } from "@/views/home/scroll-letters";
 import { RotatingBullets } from "@/views/home/rotating-bullets";
-import { InViewVideo } from "@/components/ui/in-view-video";
+import { useWindowWidth } from "@/hooks/use-window-size";
 import {
   heroLetterStyle,
   templatesLetterStyle,
@@ -45,6 +45,9 @@ const REEL_VIDEOS = [
 ];
 
 export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlock, active = true }: HeroCardProps) => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth > 0 && windowWidth < 768;
+
   return (
     <div className="relative size-full overflow-hidden rounded-card bg-black">
 
@@ -52,7 +55,7 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
           6 videos arranged as diagonal strips, slowly scrolling L→R via CSS
           animation. Each strip is a skewed container with a counter-skewed
           video inside. No hard borders — each strip has blurred edges. */}
-      {active && (
+      {active && !isMobile && (
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Slow continuous scroll animation */}
           <div
@@ -71,7 +74,7 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
                 className="relative h-full shrink-0 overflow-hidden group"
                 style={{ width: "100vw" }}
               >
-                <InViewVideo
+                <video
                   className="absolute inset-0 size-full object-cover [transform:skewX(12deg)_scale(1.1)] pointer-events-none"
                   src={src}
                   autoPlay
@@ -94,6 +97,22 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Mobile Single Video Fallback */}
+      {active && isMobile && (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <video
+            className="absolute inset-0 size-full object-cover opacity-80 pointer-events-none"
+            src={REEL_VIDEOS[0]}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            aria-hidden="true"
+          />
         </div>
       )}
 

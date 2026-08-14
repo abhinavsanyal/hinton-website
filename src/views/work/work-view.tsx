@@ -6,7 +6,7 @@ import Link from "next/link";
 import { GlassPlayButton } from "@/components/common/glass-play-button";
 import { homeContent } from "@/data/mocks/home";
 import { SiteHeader } from "@/views/home/site-header";
-import { InViewVideo } from "@/components/ui/in-view-video";
+import { useWindowWidth } from "@/hooks/use-window-size";
 
 export type WorkVideo = {
   id: string;
@@ -19,6 +19,9 @@ export type WorkVideo = {
 };
 
 export const WorkView = ({ initialVideos }: { initialVideos: WorkVideo[] }) => {
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth > 0 && windowWidth < 768;
+
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -117,10 +120,10 @@ export const WorkView = ({ initialVideos }: { initialVideos: WorkVideo[] }) => {
               delayIn={(idx % 3) * 150}
               className="group relative flex flex-col justify-end overflow-hidden rounded-pf bg-white/5 aspect-[4/5] [backface-visibility:hidden] [transform:translateZ(0)] border border-white/5"
             >
-              <InViewVideo
+              <video
                 className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-1000 ease-out group-hover:opacity-100 group-hover:scale-105 [backface-visibility:hidden] [transform:translateZ(0)] pointer-events-none"
                 src={video.videoUrl}
-                autoPlay
+                autoPlay={!isMobile}
                 loop
                 muted
                 playsInline
