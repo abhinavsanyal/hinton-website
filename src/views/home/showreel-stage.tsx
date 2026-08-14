@@ -41,8 +41,14 @@ import {
   type SceneVisibility,
 } from "@/utils/showreel/timeline";
 
-const A = "/assets/showreel";
-const B = "/assets/brand";
+import { publicEnv } from "@/env";
+
+const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL 
+  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "") 
+  : "/assets";
+
+const A = `${MEDIA_BASE}/showreel`;
+const B = `${MEDIA_BASE}/brand`;
 
 export interface ShowreelStageProps {
   content: ShowreelContent;
