@@ -4,6 +4,7 @@ import { animated, type SpringValue } from "@react-spring/web";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import type { PortfolioItem } from "@/data/mocks/home";
 import { portfolioTransform, pfTrackTransform } from "@/utils/showreel/timeline";
+import { InViewVideo } from "@/components/ui/in-view-video";
 
 
 export interface PortfolioProps {
@@ -20,7 +21,7 @@ const PfCard = ({ item, active }: { item: PortfolioItem; active: boolean }) => (
   <article className="relative flex h-full w-[85vw] md:w-[65vw] max-w-[1200px] shrink-0 flex-col justify-between overflow-hidden rounded-pf bg-black p-[4vmin] text-white [backface-visibility:hidden] [transform:translateZ(0)]">
     {active && (
       <>
-        <video
+        <InViewVideo
           className="absolute inset-0 z-0 size-full object-cover opacity-90 [transform:scale(1.35)] [backface-visibility:hidden] pointer-events-none"
           src={item.video}
           autoPlay

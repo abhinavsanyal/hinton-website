@@ -3,6 +3,7 @@
 import { animated, useSpring } from "@react-spring/web";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useShowreelLayout } from "@/hooks/use-showreel-layout";
+import { useWindowWidth } from "@/hooks/use-window-size";
 import { ProgressTrigger } from "@/components/animation/springs/progress-trigger";
 import { FlameBackground } from "@/components/3d/flame-background";
 import { TargetStar } from "@/components/3d/target-star";
@@ -108,6 +109,9 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
     [p],
   );
 
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth > 0 && windowWidth < 768;
+
   // The 14 parallax-grid tiles are built ONCE. They're inline in this component,
   // which re-renders on every `setVis` flip below; without memoising, React would
   // reconcile all 14 `animated.div`s and re-apply their (static) 3D transforms
@@ -136,20 +140,24 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
             opacity: s.gridOpacity,
           }}
         >
-          <video
-            className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
-            src={item.video}
-            loop
-            muted
-            playsInline
-            preload="none"
-          />
+          {/* On mobile, we skip rendering the 14 grid videos entirely. 
+              This prevents a massive network choke on iOS Safari and saves huge amounts of memory. */}
+          {!isMobile && (
+            <video
+              className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
+              src={item.video}
+              loop
+              muted
+              playsInline
+              preload="none"
+            />
+          )}
 
           {/* Cinematic grain + gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
         </animated.div>
       )),
-    [s.gridOpacity],
+    [s.gridOpacity, isMobile],
   );
 
   // Which scenes are on-screen. Recomputed every scroll frame but only committed

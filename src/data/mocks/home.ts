@@ -107,7 +107,6 @@ export const homeContent: ShowreelContent = {
   brand: "Hinton Studios",
   logo: `${B}/hinton-studios-logo.png`,
   nav: [
-    { label: "Capabilities", href: "#capabilities" },
     { label: "Work", href: "/work" },
     {
       label: "Services",
@@ -118,7 +117,7 @@ export const homeContent: ShowreelContent = {
         blurb: service.navBlurb,
       })),
     },
-    { label: "Studio", href: "#studio" },
+    { label: "Originals", href: "#originals" },
   ],
   headerCta: { label: "Book a call", href: "#connect" },
   heroSubline:

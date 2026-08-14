@@ -6,6 +6,7 @@ import { animated, type SpringValue } from "@react-spring/web";
 import { useUIStore } from "@/store/use-ui-store";
 import { ScrollLetters } from "@/views/home/scroll-letters";
 import { RotatingBullets } from "@/views/home/rotating-bullets";
+import { InViewVideo } from "@/components/ui/in-view-video";
 import {
   heroLetterStyle,
   templatesLetterStyle,
@@ -70,7 +71,7 @@ export const HeroCard = memo(({ p, lines, heroSubline, templatesTitle, bottomBlo
                 className="relative h-full shrink-0 overflow-hidden group"
                 style={{ width: "100vw" }}
               >
-                <video
+                <InViewVideo
                   className="absolute inset-0 size-full object-cover [transform:skewX(12deg)_scale(1.1)] pointer-events-none"
                   src={src}
                   autoPlay
