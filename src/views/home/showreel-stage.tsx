@@ -41,51 +41,45 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
             muted
             playsInline
           />
-          {/* Cinematic gradient overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(38deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.3) 70%, transparent 90%)",
-            }}
-          />
+          {/* Cinematic gradient overlays for a softer, premium fade */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent opacity-80" />
         </div>
 
         {/* Hero content — bottom-left, massive heading */}
-        <div className="relative z-10 flex flex-col gap-6 p-8 pb-16 sm:p-[6vmin] sm:pb-[8vmin] max-w-[900px]">
+        <div className="relative z-10 flex flex-col gap-6 sm:gap-8 p-8 pb-16 sm:p-[8vmin] sm:pb-[10vmin] max-w-[1200px]">
           <Inview mode="once" from={{ opacity: 0, y: 40 }} to={{ opacity: 1, y: 0 }}>
-            <h1 className="flex flex-col items-start text-left leading-[0.9] text-white">
-              <span className="block text-[14vw] sm:text-[12vw] font-normal tracking-[-0.03em]">
+            <h1 className="flex flex-col items-start text-left text-white">
+              <span className="block text-[15vw] sm:text-[10vw] font-medium tracking-[-0.04em] leading-[0.85]">
                 AI films
               </span>
-              <span className="block text-[9vw] sm:text-[7.5vw] font-light italic opacity-80 tracking-[-0.01em] mt-2">
-                when Directed
-                <span className="inline-block relative text-accent ml-2">.</span>
+              <span className="block text-[9vw] sm:text-[6vw] font-light italic text-white/90 tracking-[-0.02em] leading-[1] mt-1 sm:mt-2">
+                when Directed<span className="text-accent">.</span>
               </span>
             </h1>
           </Inview>
 
           <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} delayIn={200}>
-            <p className="max-w-[600px] text-sm sm:text-base font-medium leading-relaxed text-white/80">
+            <p className="max-w-[700px] text-base sm:text-xl font-light leading-relaxed text-white/70">
               {content.heroSubline}
             </p>
           </Inview>
 
           <Inview mode="once" from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayIn={400}>
-            <div className="flex items-center gap-4">
-              <a
-                href="/work"
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-xs uppercase tracking-widest font-medium text-white/90 transition-all hover:bg-white/20 hover:border-white/40"
-              >
-                Our Work
-              </a>
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-2 sm:mt-4">
               <button
                 data-cal-link="abhinava-sanyal-jdq1dz/30min"
                 data-cal-config='{"layout":"month_view"}'
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-accent text-white font-semibold uppercase tracking-widest text-xs transition-transform hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-full bg-accent text-white font-semibold uppercase tracking-widest text-xs sm:text-sm transition-transform hover:scale-105 cursor-pointer"
               >
                 Book a call
               </button>
+              <a
+                href="/work"
+                className="inline-flex items-center justify-center px-7 py-4 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-xs sm:text-sm uppercase tracking-widest font-medium text-white transition-all hover:bg-white/20 hover:border-white/40"
+              >
+                Our Work
+              </a>
             </div>
           </Inview>
         </div>
