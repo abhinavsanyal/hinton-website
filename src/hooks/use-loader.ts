@@ -1,24 +1,19 @@
 import { create } from "zustand";
 
 /**
- * Global "intro loader finished" flag. The loader flips `ready` as it begins
- * its exit, which un-gates the staggered hero/header entrance reveals
- * (`Appear`). Mirrors the Zustand pattern in `use-scroll.ts`.
+ * Global loader state. With the intro loader removed, both flags default to
+ * `true` so any consumer (e.g. the header reveal spring) shows immediately.
  */
 export interface LoaderState {
-  /** Flips as the loader begins its exit — un-gates the page warm-up/uncover. */
   ready: boolean;
   setReady: (ready: boolean) => void;
-  /** Flips when the loader has FULLY lifted (its exit settled). Gate post-loader
-   *  entrances (e.g. the header) on this so their fade plays on the revealed
-   *  page, not behind the still-opaque overlay. */
   revealed: boolean;
   setRevealed: (revealed: boolean) => void;
 }
 
 export const useLoaderStore = create<LoaderState>((set) => ({
-  ready: false,
+  ready: true,
   setReady: (ready) => set({ ready }),
-  revealed: false,
+  revealed: true,
   setRevealed: (revealed) => set({ revealed }),
 }));

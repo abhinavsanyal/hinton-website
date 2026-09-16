@@ -1,430 +1,211 @@
 "use client";
 
-import { animated, useSpring } from "@react-spring/web";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useShowreelLayout } from "@/hooks/use-showreel-layout";
-import { useWindowWidth } from "@/hooks/use-window-size";
-import { ProgressTrigger } from "@/components/animation/springs/progress-trigger";
-import { FlameBackground } from "@/components/3d/flame-background";
-import { TargetStar } from "@/components/3d/target-star";
-import { HeroCard } from "@/views/home/hero-card";
-import { CatalistCard } from "@/views/home/catalist-card";
-import { SphereCard } from "@/views/home/sphere-card";
+import { Inview } from "@/components/animation/springs/in-view";
+import { GlassPlayButton } from "@/components/common/glass-play-button";
 import { Marquee } from "@/views/home/marquee";
-import { Portfolio } from "@/views/home/portfolio";
-
-import { CtaBlock } from "@/views/home/cta-block";
 import type { ShowreelContent } from "@/data/mocks/home";
-import {
-  GRID_ITEMS,
-  card1Width,
-  card1Height,
-  card1Transform,
-  card1Opacity,
-  sideCardTransform,
-  card4Opacity,
-  cardZIndex,
-  carouselTransform,
-  carouselCtaReveal,
-  cameraRigTransform,
-  gridItemTransform,
-  gridItemRadius,
-  gridOpacity,
-  targetTransform,
-  targetRadius,
-  targetOpacity,
-  finalFrameReveal,
-  marqueeOpacity,
-  marqueeBlur,
-  auroraOpacity,
-  stageBackdropOpacity,
-  sceneVisibility,
-  type SceneVisibility,
-} from "@/utils/showreel/timeline";
-
 import { publicEnv } from "@/env";
 
-const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL 
-  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "") 
+const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
+  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
   : "/assets";
-
-const A = `${MEDIA_BASE}/showreel`;
-const B = "/assets/brand";
 
 export interface ShowreelStageProps {
   content: ShowreelContent;
 }
 
 /**
- * The scroll-driven core. ONE spring (`p`, 0→1) is scrubbed by a single
- * `ProgressTrigger` off the tall track; every scene reads `p.to(selector)` from
- * the timeline. A sticky stage pins the 3D scene while the track scrolls:
- * hero → 4-card carousel (cosine z-sorted) → particle sphere → portfolio →
- * camera-flight through a parallax grid to the chrome-star target.
+ * Flat, fast home page — replaces the scroll-driven 3D showreel.
+ * Four clean sections: Hero → Services Marquee → Portfolio → CTA.
+ * Zero WebGL, zero autoplay videos, zero scroll-hijacking.
  */
 export const ShowreelStage = ({ content }: ShowreelStageProps) => {
-  // The stage relies on layout dimensions that might shift post-hydration.
-  // We remove the old `mounted` bailout to ensure SEO textual content is present in the initial HTML.
-  // document root by the hook) consumed by the card/sphere sizing + the timeline
-  // string builders; `geo` is passed to the sphere's JS-math counter-scales.
-  const { geo } = useShowreelLayout();
-
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [{ p }, api] = useSpring(() => ({ p: 0 }));
-
-  // Interpolations are created ONCE and kept stable across re-renders. The
-  // visibility `setVis` below re-renders this component a handful of times per
-  // scroll; if the `p.to(...)` selectors were created inline they'd be fresh
-  // instances every render, and react-spring would detach/reattach them — a
-  // one-frame reset where the whole camera-rig (and every grid image under it)
-  // visibly "teleports" and snaps back. Memoising keeps each `animated.div`
-  // bound to the same value, so a re-render never disturbs the live transforms.
-  const s = useMemo(
-    () => ({
-      aurora: p.to(auroraOpacity),
-      backdrop: p.to(stageBackdropOpacity),
-      marqueeOpacity: p.to(marqueeOpacity),
-      marqueeBlur: p.to((v) => `blur(${marqueeBlur(v)}px)`),
-      cameraRig: p.to(cameraRigTransform),
-      carousel: p.to(carouselTransform),
-      card1Width: p.to(card1Width),
-      card1Height: p.to(card1Height),
-      card1Transform: p.to(card1Transform),
-      card1Opacity: p.to(card1Opacity),
-      card4Opacity: p.to(card4Opacity),
-      z0: p.to((v) => cardZIndex(v, 0)),
-      z1: p.to((v) => cardZIndex(v, 1)),
-      z2: p.to((v) => cardZIndex(v, 2)),
-      z3: p.to((v) => cardZIndex(v, 3)),
-      side90: p.to((v) => sideCardTransform(v, 90)),
-      side180: p.to((v) => sideCardTransform(v, 180)),
-      side270: p.to((v) => sideCardTransform(v, 270)),
-      gridOpacity: p.to(gridOpacity),
-      targetRadius: p.to((v) => `${targetRadius(v)}px`),
-      targetOpacity: p.to(targetOpacity),
-      finalFrame: p.to(finalFrameReveal),
-      ctaReveal: p.to(carouselCtaReveal),
-      ctaTranslate: p.to((v) => `translateY(${(1 - carouselCtaReveal(v)) * 2.5}vh)`),
-    }),
-    [p],
-  );
-
-  const windowWidth = useWindowWidth();
-  const isMobile = windowWidth > 0 && windowWidth < 768;
-
-  // The 14 parallax-grid tiles are built ONCE. They're inline in this component,
-  // which re-renders on every `setVis` flip below; without memoising, React would
-  // reconcile all 14 `animated.div`s and re-apply their (static) 3D transforms
-  // each time, flashing the tiles for a frame as you scroll past scene
-  // boundaries. Only `opacity` is live (the stable `s.gridOpacity`), so the
-  // elements never need to change.
-  //
-  // NO `will-change`/`backface-visibility` layer-promotion here: the real
-  // scroll-flicker was the Lenis↔ticker rAF desync (ADR-0023). Promoting these
-  // tiles instead pinned each to a persistent GPU layer that the camera flight
-  // scales to many screens wide — 14 enormous layers re-compositing on scroll-back
-  // = severe lag. Plain tiles + the synced rAF render smoothly without the cost.
-  const gridTiles = useMemo(
-    () =>
-      GRID_ITEMS.map((item, i) => (
-        <animated.div
-          key={i}
-          aria-hidden="true"
-          suppressHydrationWarning
-          className="absolute left-1/2 top-1/2 z-[-1] overflow-hidden bg-black"
-          style={{
-            width: item.w,
-            height: item.h,
-            transform: gridItemTransform(item),
-            borderRadius: gridItemRadius(item),
-            opacity: s.gridOpacity,
-          }}
-        >
-          {/* On mobile, we render a pure static image instead of a video to prevent OS-level Play buttons. */}
-          {isMobile ? (
-            <img
-              className="grid-bg-image absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
-              src={item.image || "/assets/posters/portfolio-1.jpg"} // fallback if image is missing
-              alt=""
-            />
-          ) : (
-            <video
-              className="grid-bg-video absolute inset-0 size-full object-cover [transform:scale(1.35)] pointer-events-none"
-              src={item.video}
-              loop
-              muted
-              playsInline
-              preload="metadata"
-            />
-          )}
-
-          {/* Cinematic grain + gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-        </animated.div>
-      )),
-    [s.gridOpacity, isMobile],
-  );
-
-  // Which scenes are on-screen. Recomputed every scroll frame but only committed
-  // to state when a flag flips, so the (cheap) re-render happens a handful of
-  // times per full scroll — not every frame. Each flag gates one canvas's
-  // render loop (`frameloop`), so off-screen WebGL scenes stop rendering.
-  const [vis, setVis] = useState<SceneVisibility>(() => sceneVisibility(0));
-  const visRef = useRef(vis);
-  const updateVisibility = (progress: number) => {
-    const next = sceneVisibility(progress);
-    const prev = visRef.current;
-    if (
-      next.hero !== prev.hero ||
-      next.aurora !== prev.aurora ||
-      next.sphere !== prev.sphere ||
-      next.target !== prev.target ||
-      next.portfolio !== prev.portfolio
-    ) {
-      visRef.current = next;
-      setVis(next);
-    }
-  };
-
-  // Optimize video performance: only play the 14 grid background videos when the target scene is active.
-  // We do this via DOM query to avoid breaking the memoized gridTiles (which would cause a flash).
-  useEffect(() => {
-    if (isMobile) return; // Don't crash mobile by playing 14 videos at once
-    const videos = document.querySelectorAll('.grid-bg-video') as NodeListOf<HTMLVideoElement>;
-    videos.forEach((video) => {
-      if (vis.target) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    });
-  }, [vis.target, isMobile]);
-
-  // DEBUGGING: Log clicks to find what is intercepting the hero buttons
-  useEffect(() => {
-    const logger = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      console.log("[DEBUG CLICK CAUGHT ON]:", target);
-      console.log("- Tag:", target.tagName);
-      console.log("- Class:", target.className);
-      console.log("- ID:", target.id);
-      console.log("- Z-Index:", window.getComputedStyle(target).zIndex);
-    };
-    window.addEventListener("click", logger, true);
-    return () => window.removeEventListener("click", logger, true);
-  }, []);
-
   return (
     <>
-      {/* Single pinned "northern lights" corner shader shared by the sphere
-          scene and the portfolio. It's an OVERLAY (alpha — clear centre, glowing
-          corners) sitting above the black sphere panel but below the portfolio
-          (z-40) and nav (z-100), so the aurora wraps the corners while the
-          sphere/cards show through the clear centre. Fixed → stays put while the
-          blocks scroll over it (ADR-0018). */}
-      <animated.div
-        aria-hidden="true"
-          suppressHydrationWarning
-        className="pointer-events-none fixed inset-0 z-30"
-        style={{ opacity: s.aurora }}
-      >
-        <FlameBackground className="absolute inset-0" active={vis.aurora} />
-      </animated.div>
-
-      <div ref={trackRef} className="relative" style={{ height: `${geo.trackVh}vh` }} suppressHydrationWarning>
-        <div className="sticky top-0 h-screen overflow-hidden p-[4vmin]" suppressHydrationWarning>
-          {/* Black backdrop for phases 1–4 to maintain a pure cinematic darkness. */}
-          <animated.div
-            aria-hidden="true"
-          suppressHydrationWarning
-            className="absolute inset-0 z-0 bg-black"
-            style={{ opacity: s.backdrop }}
+      {/* ═══════════ SECTION 1 — HERO ═══════════ */}
+      <section className="relative flex min-h-screen flex-col justify-end overflow-hidden bg-black">
+        {/* Background poster image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            className="size-full object-cover opacity-50 pointer-events-none"
+            src="/assets/posters/portfolio-1.jpg"
+            alt=""
           />
-
-          {/* Services marquee — behind the carousel, visible through its gaps. */}
-          <animated.div
-            aria-hidden="true"
-          suppressHydrationWarning
-            className="pointer-events-none absolute left-0 top-1/2 z-[1] w-screen -translate-y-1/2"
+          {/* Cinematic gradient overlay */}
+          <div
+            className="absolute inset-0"
             style={{
-              opacity: s.marqueeOpacity,
-              filter: s.marqueeBlur,
+              background:
+                "linear-gradient(38deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.3) 70%, transparent 90%)",
             }}
-          >
-            <Marquee items={content.marquee} />
-          </animated.div>
+          />
+        </div>
 
-          {/* 3D scene. */}
-          <div className="relative z-[2] flex size-full items-center justify-center [perspective:1500px]">
-            <animated.div
-              className="absolute inset-0 [transform-style:preserve-3d]"
-              style={{ transform: s.cameraRig }}
-              suppressHydrationWarning
-            >
-              <animated.div
-                className="relative flex size-full items-center justify-center [transform-style:preserve-3d]"
-                style={{ transform: s.carousel }}
-                suppressHydrationWarning
+        {/* Hero content — bottom-left, massive heading */}
+        <div className="relative z-10 flex flex-col gap-6 p-8 pb-16 sm:p-[6vmin] sm:pb-[8vmin] max-w-[900px]">
+          <Inview mode="once" from={{ opacity: 0, y: 40 }} to={{ opacity: 1, y: 0 }}>
+            <h1 className="flex flex-col items-start text-left leading-[0.9] text-white">
+              <span className="block text-[14vw] sm:text-[12vw] font-normal tracking-[-0.03em]">
+                AI films
+              </span>
+              <span className="block text-[9vw] sm:text-[7.5vw] font-light italic opacity-80 tracking-[-0.01em] mt-2">
+                when Directed
+                <span className="inline-block relative text-accent ml-2">.</span>
+              </span>
+            </h1>
+          </Inview>
+
+          <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} delayIn={200}>
+            <p className="max-w-[600px] text-sm sm:text-base font-medium leading-relaxed text-white/80">
+              {content.heroSubline}
+            </p>
+          </Inview>
+
+          <Inview mode="once" from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayIn={400}>
+            <div className="flex items-center gap-4">
+              <a
+                href="/work"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-xs uppercase tracking-widest font-medium text-white/90 transition-all hover:bg-white/20 hover:border-white/40"
               >
-                {/* Card 1 — hero */}
-                <animated.div
-                  className="absolute overflow-hidden"
-                  style={{
-                    width: s.card1Width,
-                    height: s.card1Height,
-                    transform: s.card1Transform,
-                    zIndex: s.z0,
-                    opacity: s.card1Opacity,
-                  }}
-                  suppressHydrationWarning
-                >
-                  <HeroCard
-                    p={p}
-                    lines={content.hero.lines}
-                    heroSubline={content.heroSubline}
-                    templatesTitle={content.hero.templatesTitle}
-                    bottomBlock={content.hero.bottomBlock}
-                    images={{ stone: `${A}/stone.jpg`, rotated: `${A}/hero-image-2.png` }}
-                    active={vis.hero}
-                  />
-                </animated.div>
-
-                {/* Card 2 — Catalist (dark) */}
-                <animated.div
-                  className="absolute h-[var(--sr-card-h)] w-[var(--sr-card-w)]"
-                  style={{
-                    transform: s.side90,
-                    zIndex: s.z1,
-                    opacity: s.card1Opacity,
-                  }}
-                  suppressHydrationWarning
-                >
-                  <CatalistCard variant="dark" content={content.catalistDark} bg={`${A}/card-2.jpg`} />
-                </animated.div>
-
-                {/* Card 3 — Catalist (light) */}
-                <animated.div
-                  className="absolute h-[var(--sr-card-h)] w-[var(--sr-card-w)]"
-                  style={{
-                    transform: s.side180,
-                    zIndex: s.z2,
-                    opacity: s.card1Opacity,
-                  }}
-                  suppressHydrationWarning
-                >
-                  <CatalistCard variant="light" content={content.catalistLight} bg={`${A}/card-3.jpg`} />
-                </animated.div>
-
-                {/* Card 4 — sphere. The SphereCard renders the violet card face
-                    (so it reads as a real 4th card during the flip); its masked
-                    black panel escapes via overflow-visible. */}
-                <animated.div
-                  className="absolute flex h-[var(--sr-card-h)] w-[var(--sr-card-w)] items-center justify-center [overflow:visible]"
-                  style={{
-                    transform: s.side270,
-                    zIndex: s.z3,
-                    opacity: s.card4Opacity,
-                  }}
-                  suppressHydrationWarning
-                >
-                  <SphereCard
-                    p={p}
-                    geo={geo}
-                    headingTop={content.sphere.headingTop}
-                    headingBottom={content.sphere.headingBottom}
-                    body={content.sphere.body}
-                    star={`${B}/h-mask.png`}
-                    cardLabel={content.sphere.cardLabel}
-                    cardUrl={content.sphere.cardUrl}
-                    cardHeading={content.sphere.cardHeading}
-                    active={vis.sphere}
-                  />
-                </animated.div>
-              </animated.div>
-
-              {/* Parallax grid + target live in the CAMERA-RIG frame (siblings of
-                  the carousel, as in the original markup) so they don't inherit
-                  the carousel's rotateY/flyback — the camera flight reads true. */}
-              {gridTiles}
-
-              {/* Target block — the chrome star we fly into. */}
-              <animated.div
-                className="absolute left-1/2 top-1/2 z-[-1] h-screen w-screen overflow-hidden bg-ink"
-                style={{
-                  transform: targetTransform(),
-                  borderRadius: s.targetRadius,
-                  opacity: s.targetOpacity,
-                }}
-                suppressHydrationWarning
+                Our Work
+              </a>
+              <button
+                data-cal-link="abhinava-sanyal-jdq1dz/30min"
+                data-cal-config='{"layout":"month_view"}'
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full bg-accent text-white font-semibold uppercase tracking-widest text-xs transition-transform hover:scale-105 cursor-pointer"
               >
-                <TargetStar className="absolute inset-0" active={vis.target} />
-                {/* White margin band — the same ~4vmin white area between the
-                    screen edge and the content as the hero stage (its `p-[4vmin]`
-                    white backdrop), now with rounded INNER corners like the hero
-                    card. It overhangs the block by 4vmin so the rounded *outer*
-                    corners are clipped square by the block's overflow (the band
-                    still reaches the screen corners), while the inner radius
-                    (11−8=3vmin, matching `rounded-card`) stays visible. Visible
-                    band = 8−4 = 4vmin. Revealed at the very end (`finalFrameReveal`). */}
-                <animated.div
+                Book a call
+              </button>
+            </div>
+          </Inview>
+        </div>
+      </section>
+
+      {/* ═══════════ SECTION 2 — SERVICES MARQUEE ═══════════ */}
+      <section className="relative z-10 bg-white py-8 sm:py-12 overflow-hidden">
+        <Marquee items={content.marquee} />
+      </section>
+
+      {/* ═══════════ SECTION 3 — PORTFOLIO ═══════════ */}
+      <section className="bg-black py-16 sm:py-[10vmin] px-6 sm:px-[6vmin]">
+        <div className="max-w-[1400px] mx-auto">
+          <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }}>
+            <h2 className="text-[8vw] sm:text-[5vw] font-extralight tracking-[-0.03em] leading-[0.95] text-white mb-8 sm:mb-[6vmin]">
+              Selected <span className="italic font-light text-white/40">Work</span>
+            </h2>
+          </Inview>
+
+          {/* Horizontal scroll on mobile, grid on desktop */}
+          <div className="flex gap-5 overflow-x-auto pb-6 sm:pb-0 sm:grid sm:grid-cols-3 sm:gap-[3vmin] scrollbar-none snap-x snap-mandatory">
+            {content.portfolio.items.map((item, idx) => (
+              <Inview
+                key={item.title}
+                mode="once"
+                from={{ opacity: 0, y: 60 }}
+                to={{ opacity: 1, y: 0 }}
+                delayIn={idx * 150}
+                className="relative flex shrink-0 w-[85vw] sm:w-auto flex-col justify-end overflow-hidden rounded-[2.5vmin] bg-white/5 aspect-[4/5] border border-white/5 snap-center group"
+              >
+                {/* Poster image — no video autoplay */}
+                <img
+                  className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                  src={item.poster || "/assets/posters/portfolio-1.jpg"}
+                  alt={item.title}
+                />
+
+                {/* Play button */}
+                <GlassPlayButton videoSrc={item.video} />
+
+                {/* Grain */}
+                <div
                   aria-hidden="true"
-          suppressHydrationWarning
-                  className="pointer-events-none absolute inset-[-4vmin] z-[3] rounded-[11vmin] border-[8vmin] border-white"
-                  style={{ opacity: s.finalFrame }}
+                  className="absolute inset-0 z-[1] pointer-events-none opacity-[0.06] mix-blend-overlay"
+                  style={{
+                    backgroundImage:
+                      "url('data:image/svg+xml,%3Csvg viewBox=%220 0 512 512%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%221.2%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E')",
+                    backgroundSize: "256px 256px",
+                  }}
                 />
-                <CtaBlock
-                  p={p}
-                  heading={content.cta.heading}
-                  headingFaded={content.cta.headingFaded}
-                  sub={content.cta.sub}
-                  button={content.cta.button}
-                  href={content.cta.href}
-                />
-              </animated.div>
-            </animated.div>
+                {/* Gradient */}
+                <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 pointer-events-none" />
+
+                {/* Meta */}
+                <div className="relative z-[2] p-6 sm:p-[4vmin] pointer-events-none">
+                  <div className="flex items-center gap-3 text-[10px] sm:text-xs font-medium uppercase tracking-widest text-white/60 mb-3">
+                    <span>{item.client}</span>
+                    <span aria-hidden="true" className="opacity-40">·</span>
+                    <span>{item.year}</span>
+                  </div>
+                  <h3 className="text-2xl sm:text-[3.5vmin] font-extralight tracking-[-0.03em] leading-[1.1] text-white">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-white/50 mt-1">{item.discipline}</p>
+                </div>
+              </Inview>
+            ))}
           </div>
 
-          {/* Carousel CTA — pinned under the 4-card carousel (the second block).
-              A sibling overlay of the 3D scene (not inside its perspective
-              transform), revealed the moment the card snaps vertical. Its bottom
-              offset matches the header's top offset (2vmin from the screen edge). */}
-          <animated.div
-            className="pointer-events-none absolute left-1/2 bottom-[2vmin] z-[3] -translate-x-1/2"
-            style={{
-              opacity: s.ctaReveal,
-              transform: s.ctaTranslate,
-            }}
-          >
-            <a
-              href={content.carouselCta.href}
-              className="pointer-events-auto inline-flex items-center justify-center rounded-btn bg-ink px-[4.2vmin] py-[2vmin] text-[2.1vmin] leading-none text-paper"
-            >
-              {content.carouselCta.button}
-            </a>
-          </animated.div>
+          {/* View all work link */}
+          <Inview mode="once" from={{ opacity: 0 }} to={{ opacity: 1 }} delayIn={500}>
+            <div className="mt-8 sm:mt-[4vmin] flex justify-center">
+              <a
+                href="/work"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/15 text-sm uppercase tracking-widest text-white/80 transition-all hover:bg-white/10 hover:border-white/30"
+              >
+                View all work
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </Inview>
         </div>
-      </div>
+      </section>
 
-      {/* Fixed portfolio section (driven by the same spring). `active` gates the
-          heavy video loading to the portfolio's scroll range. */}
-      <Portfolio p={p} items={content.portfolio.items} active={vis.portfolio} />
+      {/* ═══════════ SECTION 4 — CTA ═══════════ */}
+      <section className="relative overflow-hidden bg-black py-20 sm:py-[14vmin] px-6 sm:px-[6vmin]">
+        {/* Red gradient glow */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 30% 60%, rgba(225,29,72,0.15) 0%, transparent 70%), radial-gradient(ellipse 60% 50% at 80% 30%, rgba(225,29,72,0.08) 0%, transparent 70%)",
+          }}
+        />
 
-      {/* Single scroll driver. `frameInterval={0}` updates progress EVERY frame
-          so it tracks the scroll 1:1 — the default 10ms throttle drops to ~60fps
-          on 120Hz/ProMotion displays while Lenis scrolls at 120fps, which reads
-          as jitter. Now scroll (ticker driver) and progress run in the same tick. */}
-      <ProgressTrigger
-        tag="span"
-        trigger={trackRef as React.RefObject<HTMLElement>}
-        start="top top"
-        end="bottom bottom"
-        className="hidden"
-        frameInterval={0}
-        onChange={({ progress }) => {
-          api.start({ p: progress, immediate: true });
-          updateVisibility(progress);
-        }}
-      />
+        <div className="relative z-10 max-w-[1400px] mx-auto">
+          <Inview mode="once" from={{ opacity: 0, y: 40 }} to={{ opacity: 1, y: 0 }}>
+            <h2 className="flex flex-col items-start text-[10vw] sm:text-[7vw] font-normal leading-[0.95] tracking-[-0.03em] text-white">
+              <span>{content.cta.heading}</span>
+              <span className="text-white/40">{content.cta.headingFaded}</span>
+            </h2>
+          </Inview>
+
+          <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} delayIn={200}>
+            <p className="mt-6 sm:mt-[3vmin] max-w-[500px] text-sm sm:text-base leading-relaxed text-white/60">
+              {content.cta.sub}
+            </p>
+          </Inview>
+
+          <Inview mode="once" from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayIn={400}>
+            <div className="mt-8 sm:mt-[4vmin] flex flex-wrap items-center gap-4">
+              <a
+                href={content.cta.href}
+                className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-transform hover:scale-105"
+              >
+                {content.cta.button}
+              </a>
+              <a
+                href="/work"
+                className="inline-flex items-center justify-center rounded-full border border-white/15 px-8 py-4 text-sm uppercase tracking-widest text-white/80 transition-all hover:bg-white/10 hover:border-white/30"
+              >
+                View our work
+              </a>
+            </div>
+          </Inview>
+        </div>
+      </section>
     </>
   );
 };

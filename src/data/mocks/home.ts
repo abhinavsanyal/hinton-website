@@ -119,7 +119,6 @@ export const homeContent: ShowreelContent = {
         blurb: service.navBlurb,
       })),
     },
-    { label: "Originals", href: "#originals" },
   ],
   headerCta: { label: "Book a call", href: "#connect" },
   heroSubline:

@@ -1,79 +1,61 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Design tokens — Showreel ("Prompts that think ahead").
-   A dark, full-bleed, scroll-driven WebGL showreel. Raw values live under
-   :root; @theme inline binds them to Tailwind utilities. Colours are tokenised;
-   the bespoke per-element sizing is viewport-unit based (vmin/vw/vh) to match
-   the original's proportional layout, so it uses arbitrary utilities inline.
+   Design tokens — Hinton Studios
+   Marvel red + white on black. A filmmaking studio's bold, minimal palette.
    Never hardcode a hex/rgba in className — add a token here first.
    ────────────────────────────────────────────────────────────────────────── */
 :root {
-  --background: #000000; /* page backdrop behind the fixed flame shader */
-  --foreground: #f5f1ec; /* default off-white ink */
+  --background: #000000;
+  --foreground: #ffffff;
+
+  /* Primary accent — Marvel red */
+  --accent: #E11D48;
+  --accent-light: #FF2D55;
+  --accent-dark: #9F1239;
 
   /* Surfaces */
-  --ink: #07031a; /* target-block deep navy-black */
-  --pf-card: #14110e; /* portfolio card surface */
-  --cc-search: #161310; /* catalist light-card search bar */
-  --paper: #f5f1ec; /* off-white card/UI text */
-  --paper-alt: #f3f1ec; /* portfolio section ink */
-  --nav-ink: #1a1a1a; /* nav-pill links (on light pill) */
-  --cc-dark-ink: #f5f1ec; /* catalist dark-card ink */
-  --cc-light-ink: #1a1714; /* catalist light-card ink */
-  --cc-light-muted: #9a948d; /* catalist light-card secondary copy */
+  --ink: #07031a;
+  --paper: #ffffff;
+  --paper-alt: #f3f1ec;
+  --nav-ink: #1a1a1a;
 
-  /* Header — opaque segmented bar. Base shows through the 1px gaps between
-     containers (reads as hairlines); items are the lightest, the logo container
-     a touch darker, the CTA black. */
-  --nav-surface: #e3e3e3; /* header base / 1px gap colour (neutral grey) */
-  --nav-item: #ffffff; /* link container fill (white) */
-  --nav-logo: #dadada; /* logo container — slightly darker than the items */
-  --nav-cta: #0d0d0d; /* black CTA */
-  --nav-cta-ink: #f4f4f4; /* CTA label */
+  /* Header */
+  --nav-surface: #e3e3e3;
+  --nav-item: #ffffff;
+  --nav-logo: #dadada;
+  --nav-cta: #E11D48;
+  --nav-cta-ink: #ffffff;
   --nav-border: rgba(255, 255, 255, 0.6);
   --nav-shadow: rgba(0, 0, 0, 0.12);
-  --glass-dark: rgba(40, 36, 33, 0.55); /* catalist dark pill */
+  --glass-dark: rgba(40, 36, 33, 0.55);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-border-soft: rgba(255, 255, 255, 0.14);
-  --hairline: rgba(255, 255, 255, 0.28); /* "See All" pill border */
-  --watermark: rgba(255, 255, 255, 0.85); /* portfolio card watermark */
+  --hairline: rgba(255, 255, 255, 0.28);
+  --watermark: rgba(255, 255, 255, 0.85);
 
-  /* Sphere (slot-4) card face — deep cinematic dark gradient (Hinton Studios) */
-  --card-violet: radial-gradient(95% 80% at 50% 28%, #2a0a0a 0%, #1a0505 38%, #0d0202 68%, #050101 100%);
-  /* Intro-loader chrome-star halo — subtle warm glow. */
-  --loader-glow: rgba(180, 60, 60, 0.45);
+  /* Portfolio card surface */
+  --pf-card: #14110e;
 
-  /* Showreel responsive geometry — DESKTOP defaults (SSR / no-JS fallback).
-     `useShowreelLayout` overrides these on `document.documentElement` for
-     portrait phones/tablets. Single source of truth: `utils/showreel/geometry.ts`
-     (keep the numbers here in sync with its `DESKTOP` set). The timeline's
-     pure-string builders and the JSX card/sphere sizes read these so the spring
-     selectors stay stable while the values swap live. */
-  --sr-card-w: 42vmin; /* side-card width (hero card height) */
-  --sr-card-h: 62vmin; /* side-card height (hero card width) */
-  --sr-carousel-r: 27vmin; /* carousel radius (card translateZ) */
-  --sr-flyback: 40vmin; /* carousel fly-back depth */
-  --sr-hero-pad: 8vmin; /* hero full-screen inset (2× stage padding) */
-  --sr-heading-1: 18vmin; /* sphere top heading */
-  --sr-heading-2: 24vmin; /* sphere bottom heading */
-  --sr-sphere-body-w: 52vmin; /* sphere supporting-copy max-width */
-  --sr-sphere-body-text: 2.4vmin; /* sphere supporting-copy text size */
+  /* Radii */
+  --radius-btn: 8px;
+  --radius-card: 3vmin;
+  --radius-pf: 2.5vmin;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+
   --color-ink: var(--ink);
   --color-pf-card: var(--pf-card);
-  --color-cc-search: var(--cc-search);
   --color-paper: var(--paper);
   --color-paper-alt: var(--paper-alt);
   --color-nav-ink: var(--nav-ink);
-  --color-cc-dark-ink: var(--cc-dark-ink);
-  --color-cc-light-ink: var(--cc-light-ink);
-  --color-cc-light-muted: var(--cc-light-muted);
 
   --color-nav-surface: var(--nav-surface);
   --color-nav-item: var(--nav-item);
@@ -87,17 +69,14 @@
   --color-hairline: var(--hairline);
   --color-watermark: var(--watermark);
 
-  /* Zen Kaku Gothic New (geometric sans) + Marck Script (handwritten accent) */
+  /* Fonts */
   --font-sans: var(--font-zen);
   --font-script: var(--font-marck);
 
-  /* Radii — viewport-proportional, matching the original card geometry. */
-  --radius-btn: 8px; /* buttons + header (fixed 8px, per design request) */
-  --radius-card: 3vmin; /* hero / carousel cards */
-  --radius-pf: 2.5vmin; /* portfolio cards */
-  --radius-slider: 1.6vmin; /* hero image slider */
-  --radius-grid: 12px; /* parallax grid items */
-  --radius-target: 30px; /* target block (pre-flythrough) */
+  /* Radii */
+  --radius-btn: 8px;
+  --radius-card: 3vmin;
+  --radius-pf: 2.5vmin;
 }
 
 body {
@@ -110,10 +89,6 @@ body {
 }
 
 @layer base {
-  /* Adaptive scaling grid — scales the root font-size with the viewport above
-     1920px (the AdaptiveGrid component takes over). The Showreel layout itself
-     is vmin/vw/vh based, so it stays proportional independently; this only
-     affects any rem-based UI. Keep in sync with grid.config.ts. */
   html {
     font-size: 16px;
   }
@@ -138,13 +113,12 @@ body {
 
   @media (max-width: 640px) {
     html {
-      font-size: 4.444444vw; /* 16 * 100 / 360 */
+      font-size: 16px; /* Fixed on small phones — no more 4.44vw blow-up */
     }
   }
 }
 
 @layer utilities {
-  /* The Showreel hides scrollbars globally (it is a scroll-driven canvas). */
   .scrollbar-none {
     scrollbar-width: none;
   }
