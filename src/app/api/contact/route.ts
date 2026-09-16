@@ -1,18 +1,8 @@
 import { z } from "zod";
-
+import nodemailer from "nodemailer";
 import { getServerEnv } from "@/env";
 import { ApiError, handle } from "@/lib/api";
 
-/**
- * Example `app/api` endpoint — a contact / lead submission.
- *
- * Demonstrates the convention: the handler owns the work — it validates input,
- * reads a secret env var, and calls an upstream service inline. Secrets are
- * safe here because `route.ts` is never bundled to the browser.
- */
-
-// Request schema — kept in the route since it isn't shared. Lift to a shared
-// module only once another route needs it.
 const contactSchema = z.object({
   name: z.string().max(100).optional(),
   email: z.email(),
@@ -21,22 +11,50 @@ const contactSchema = z.object({
 
 export const POST = handle(async (req) => {
   const input = contactSchema.parse(await req.json());
+  
+  // Try to get SMTP settings from environment variables
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
 
-  const { CONTACT_ENDPOINT } = getServerEnv();
+  const recipients = [
+    "abhinava@hintonstudios.com",
+    "avkash@hintonstudios.com",
+    "souvik@hintonstudios.com"
+  ].join(", ");
 
-  if (CONTACT_ENDPOINT) {
-    // Forward the lead to the configured upstream (CRM, webhook, …).
-    const upstream = await fetch(CONTACT_ENDPOINT, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(input),
+  if (smtpHost && smtpUser && smtpPass) {
+    // Send using nodemailer
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
     });
-    if (!upstream.ok) {
-      throw new ApiError(502, "upstream_error", "Failed to deliver the message.");
+
+    try {
+      await transporter.sendMail({
+        from: `"Hinton Studios Website" <${smtpUser}>`,
+        to: recipients,
+        subject: `New Contact Request from ${input.name || input.email}`,
+        text: `Name: ${input.name || 'Not provided'}\nEmail: ${input.email}\n\nMessage:\n${input.message}`,
+        html: `<p><strong>Name:</strong> ${input.name || 'Not provided'}</p>
+               <p><strong>Email:</strong> ${input.email}</p>
+               <p><strong>Message:</strong><br/>${input.message.replace(/\n/g, '<br/>')}</p>`,
+      });
+    } catch (error) {
+      console.error("[api/contact] Email send error:", error);
+      throw new ApiError(500, "email_error", "Failed to deliver the message.");
     }
   } else {
-    // No upstream configured — log server-side so the starter runs as-is.
-    console.log("[api/contact] submission:", input);
+    // No SMTP configured — log server-side
+    console.log("[api/contact] Simulated submission (No SMTP configured):");
+    console.log(`To: ${recipients}`);
+    console.log("Payload:", input);
   }
 
   return { received: true };

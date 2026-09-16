@@ -93,4 +93,14 @@ export const workVideos: WorkVideo[] = [
     duration: "40s",
     year: "2024",
   },
+  {
+    id: "video-7",
+    title: "Zepto Raksha Bandhan",
+    videoUrl: `${MEDIA_BASE}/all-content/${encodeURIComponent("Zepto-Raksha-Bandhan-2026.mov")}`,
+    posterUrl: "/assets/posters/zepto.jpg",
+    categories: ["Commercial"],
+    client: "Zepto",
+    duration: "TBD",
+    year: "2026",
+  },
 ];

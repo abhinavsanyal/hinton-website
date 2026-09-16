@@ -24,12 +24,22 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
     <>
       {/* ═══════════ SECTION 1 — HERO ═══════════ */}
       <section className="relative flex min-h-screen flex-col justify-end overflow-hidden bg-black">
-        {/* Background poster image */}
+        {/* Background media */}
         <div className="absolute inset-0 z-0">
+          {/* Mobile: Static poster image only */}
           <img
-            className="size-full object-cover opacity-50 pointer-events-none"
+            className="sm:hidden size-full object-cover opacity-50 pointer-events-none"
             src="/assets/posters/portfolio-1.jpg"
             alt=""
+          />
+          {/* Desktop: Autoplaying video */}
+          <video
+            className="hidden sm:block size-full object-cover opacity-60 pointer-events-none"
+            src={`${MEDIA_BASE}/showreel/portfolio-1.mp4`}
+            autoPlay
+            loop
+            muted
+            playsInline
           />
           {/* Cinematic gradient overlay */}
           <div
