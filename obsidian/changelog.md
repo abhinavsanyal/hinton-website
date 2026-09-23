@@ -30,3 +30,10 @@
 - Added `hidden: true` on the two film records. The public catalogue excludes them from the work gallery, watch routes, metadata and sitemap; service examples and legacy showreel exports use the same visibility setting.
 - Homepage selections now use stable film IDs instead of array indexes, preserving the existing three featured films when other films are hidden.
 - Restore either film by removing its `hidden: true` line in `src/data/mocks/work.ts`. Video files, thumbnails and descriptions remain intact.
+
+## 2026-09-23 — Google tag duplicate page-view fix
+- Confirmed from Google's served tag configuration that G-J75JY1GDPW, GT-TNSSVPSG and AW-18469066667 identify one Google tag. The live website had one loader, not a separate GT-TNSSVPSG installation.
+- Reproduced two GA4 page_view requests for one client-side navigation to About: automatic Enhanced Measurement plus our manual route event.
+- Removed manual route page views and let the existing enabled Google history tracking own them. Google initialization/configuration is now once per document, independent of Clarity, with consent-upgrade handling and duplicate alias protection for optional Ads configuration.
+- Explicitly route custom analytics events to GA4. Keep Ads conversion events targeted to their configured conversion label.
+- Added four regression tests for denied consent, repeated initialization, consent upgrades and distinct Ads destinations (`node --experimental-strip-types --test scripts/google-tag.test.ts`).

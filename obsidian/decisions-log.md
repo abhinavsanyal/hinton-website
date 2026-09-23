@@ -7,3 +7,8 @@ Marketing/analytics integrations are gated by the visitor's chosen categories. C
 Each portfolio film has a stable `/work/[slug]` page and a 2026 poster extracted from its own source media. Social sharing uses the production canonical URL and a film-specific OG image. Native dialog sharing is rendered through a portal so card overflow and the video overlay cannot clip it. Native share supports installed apps; Instagram is served by device sharing/copy-link rather than a fabricated web-share endpoint. Verified exact upload dates remain outstanding; no dates or review ratings are invented for schema.
 
 Legacy animation and combined brand/product service routes permanently redirect to canonical services. Navigation generation excludes the retired entries, while related links are remapped. The old animation examples and production detail are retained in the consolidated animation page.
+
+## Google tag: one owner for page views
+The public Google configuration enables Enhanced Measurement history events. Use Google automatic initial/history page views; do not combine these with manual per-route events. `lib/google-tag.ts` owns a per-document state reused through `window.hintonGoogleTagState` so remounts, route effects and consent changes do not configure the same tag twice. Only a transition from marketing-only initialization to analytics consent requires one explicit initial page view. Connected GT/G/AW IDs are aliases, not extra installations. A separate Ads account remains supported with one configuration and `send_page_view: false`.
+
+References: https://support.google.com/analytics/answer/12326985 and https://developers.google.com/analytics/devguides/collection/ga4/views .

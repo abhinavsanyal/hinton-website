@@ -1,5 +1,6 @@
 "use client";
 
+import { GA_ID, configureGoogleTag, createGoogleTagState, type GoogleTagState } from "@/lib/google-tag";
 import { publicEnv } from "@/env";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
@@ -9,21 +10,12 @@ type Pixel = ((...args: unknown[]) => void) & { callMethod?: (...args: unknown[]
 declare global {
   interface Window {
     dataLayer: unknown[];
+    hintonGoogleTagState?: GoogleTagState;
     fbq?: Pixel;
     _fbq?: Pixel;
     gtag?: (...args: unknown[]) => void;
     clarity?: (...args: unknown[]) => void;
   }
-}
-const GA_ID = "G-J75JY1GDPW";
-function measurementUrl(pathname: string) {
-  const url = new URL(pathname, location.origin);
-  const query = new URLSearchParams(location.search);
-  for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "gbraid", "wbraid"]) {
-    const value = query.get(key);
-    if (value && value.length <= 200 && !value.includes("@")) url.searchParams.set(key, value);
-  }
-  return url.toString();
 }
 function loadScript(id: string, src: string) {
   if (document.getElementById(id)) return;
@@ -33,7 +25,7 @@ function loadScript(id: string, src: string) {
 }
 export function trackEvent(name: string, params: Record<string, string> = {}) {
   if (!useCookieStore.getState().consent?.analytics) return;
-  window.gtag?.("event", name, params);
+  window.gtag?.("event", name, { ...params, send_to: GA_ID });
 }
 export function trackLead(method: string, eventId: string) {
   trackEvent("generate_lead", { method });
@@ -68,28 +60,26 @@ export function Analytics() {
       window.fbq("consent", "grant");
       if (lastMetaPage.current !== pathname) { window.fbq("track", "PageView"); lastMetaPage.current = pathname; }
     } else window.fbq?.("consent", "revoke");
-    if (consent?.marketing && publicEnv.NEXT_PUBLIC_GOOGLE_ADS_ID && !document.getElementById("hinton-google")) {
-      window.gtag("js", new Date());
+    const googleState = window.hintonGoogleTagState ||= createGoogleTagState();
+    if (configureGoogleTag(googleState, window.gtag, {
+      analytics: consent?.analytics ?? false,
+      marketing: consent?.marketing ?? false,
+    }, publicEnv.NEXT_PUBLIC_GOOGLE_ADS_ID)) {
       loadScript("hinton-google", `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`);
     }
-    if (consent?.marketing && publicEnv.NEXT_PUBLIC_GOOGLE_ADS_ID) window.gtag("config", publicEnv.NEXT_PUBLIC_GOOGLE_ADS_ID);
     if (!consent?.analytics) {
       window.clarity?.("consentv2", { analytics_Storage: "denied", ad_Storage: "denied" });
       return;
     }
     if (!document.getElementById("hinton-clarity")) {
-      window.gtag("js", new Date());
-      window.gtag("config", GA_ID, { send_page_view: false });
-      loadScript("hinton-google", `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`);
       const queue: unknown[][] = [];
       window.clarity ||= Object.assign((...args: unknown[]) => { queue.push(args); }, { q: queue });
       loadScript("hinton-clarity", "https://www.clarity.ms/tag/ymm8snva5u");
     }
     window.clarity?.("consentv2", { analytics_Storage: "granted", ad_Storage: consent.marketing ? "granted" : "denied" });
-    // Preserve allowlisted campaign attribution; exclude other query values and fragments.
+    // Only custom engagement is manual. Google tracks page views on load/history.
     if (lastPage.current === pathname) return;
     lastPage.current = pathname;
-    trackEvent("page_view", { page_location: measurementUrl(pathname), page_path: pathname });
     if (pathname === "/work" || pathname.startsWith("/work/") || pathname === "/audio-samples") trackEvent("view_work", { page_path: pathname });
   }, [consent, pathname]);
   useEffect(() => {

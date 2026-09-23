@@ -119,3 +119,5 @@ async component must mirror its final layout with one of these
 - `SocialLinks`: shared data manifest for Instagram, Facebook, X, LinkedIn and YouTube with accessible icons/handles; source also feeds Organization sameAs.
 - `ProjectPlanner`: project format selection, stage/timing/brief, bounded input and existing contact API; no success until the server accepts the enquiry.
 - `StartingPoints`: small conversion paths to audit, feature-film service, work and journal.
+
+- `lib/google-tag.ts`: consent-aware, idempotent initialization of the single Google tag; automatic history page views are owned by Enhanced Measurement. Tested separately from React with Node’s built-in test runner.
