@@ -194,9 +194,9 @@ export const homeContent: ShowreelContent = {
 
   /* ── Portfolio ─────────────────────────────────────────────────────── */
   portfolio: {
-    items: [6, 1, 0].map(index => {
-      const film = workVideos[index];
-      return { slug: film.slug, year: film.year, client: film.client, title: film.title, discipline: film.categories.join(" · "), video: film.videoUrl, poster: film.posterUrl };
+    items: ["video-6", "video-1", "video-0"].flatMap(id => {
+      const film = workVideos.find(video => video.id === id);
+      return film ? [{ slug: film.slug, year: film.year, client: film.client, title: film.title, discipline: film.categories.join(" · "), video: film.videoUrl, poster: film.posterUrl }] : [];
     }),
   },
 

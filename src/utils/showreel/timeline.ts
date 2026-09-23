@@ -353,31 +353,19 @@ export interface GridItem {
   video: string;
 }
 
+import { isWorkVideoHiddenSource } from "@/data/mocks/work";
+import { posterFor } from "@/lib/media-posters";
 import { publicEnv } from "@/env";
 
 const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
   ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
   : "https://pub-fc6cefbd1ab24e1fb85d8851c0271332.r2.dev";
 
-/** All 6 portfolio videos distributed across the 14 grid tiles so every film
- *  from the Hinton Studios catalogue is represented in the parallax flyby. */
-const GRID_VIDEOS = [
-  `${MEDIA_BASE}/showreel/portfolio-1.mp4`,
-  `${MEDIA_BASE}/showreel/portfolio-2.mp4`,
-  `${MEDIA_BASE}/showreel/portfolio-3.mp4`,
-  `${MEDIA_BASE}/showreel/portfolio-4.mp4`,
-  `${MEDIA_BASE}/showreel/portfolio-5.mp4`,
-  `${MEDIA_BASE}/showreel/portfolio-6.mp4`,
-];
-
-const GRID_POSTERS = [
-  "/assets/posters/portfolio-1.jpg",
-  "/assets/posters/portfolio-2.jpg",
-  "/assets/posters/portfolio-3.jpg",
-  "/assets/posters/portfolio-4.jpg",
-  "/assets/posters/portfolio-5.jpg",
-  "/assets/posters/portfolio-6.jpg",
-];
+/** Retained legacy flyby uses only currently visible films. */
+const GRID_VIDEOS = [1, 2, 3, 4, 5, 6]
+  .map(number => `${MEDIA_BASE}/showreel/portfolio-${number}.mp4`)
+  .filter(src => !isWorkVideoHiddenSource(src));
+const GRID_POSTERS = GRID_VIDEOS.map(src => posterFor(src) || "");
 
 /** The 14 placeholder positions from the original markup, with deterministic
  *  pseudo-random depth (so the parallax pattern is fixed across reloads). */

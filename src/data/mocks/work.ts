@@ -8,6 +8,8 @@ const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
 
 export interface WorkVideo {
   id: string;
+  /** Remove hidden: true to restore this film throughout the site. */
+  hidden?: boolean;
   title: string;
   slug: string;
   description: string;
@@ -24,7 +26,7 @@ export interface WorkVideo {
  * This replaces the previous `fs.readdirSync` approach, which fails on Vercel's Edge
  * since serverless functions cannot read static assets from the CDN layer.
  */
-export const workVideos: WorkVideo[] = [
+const allWorkVideos: WorkVideo[] = [
   {
     id: "video-0",
     slug: "kookie-kandy-animation",
@@ -75,6 +77,7 @@ export const workVideos: WorkVideo[] = [
   },
   {
     id: "video-4",
+    hidden: true,
     slug: "nishiddham-previz",
     title: "Nishiddham — From script to screen",
     description: "A four-minute previsualisation exploring scene geography, visual atmosphere and shot progression before full production.",
@@ -87,6 +90,7 @@ export const workVideos: WorkVideo[] = [
   },
   {
     id: "video-5",
+    hidden: true,
     slug: "superstar-previz",
     title: "Superstar — Visualising the story",
     description: "A three-minute previsualisation exploring cinematic staging, camera choices and editorial rhythm for narrative filmmaking.",
@@ -123,6 +127,9 @@ export const workVideos: WorkVideo[] = [
   },
 ];
 
+/** Public catalogue used by galleries, watch pages, metadata and the sitemap. */
+export const workVideos = allWorkVideos.filter(video => !video.hidden);
+
 /** Earlier showreel exports are alternate encodes of these same portfolio films. */
 const legacyFilmIds: Record<string, string> = {
   "portfolio-1.mp4": "video-6",
@@ -135,4 +142,10 @@ const legacyFilmIds: Record<string, string> = {
 export function getWorkVideoBySource(src: string) {
   const file = decodeURIComponent(src.split("/").pop()?.split("?")[0] || "");
   return workVideos.find(video => video.videoUrl === src || video.id === legacyFilmIds[file]);
+}
+
+/** Covers original media and alternate showreel encodes without deleting assets. */
+export function isWorkVideoHiddenSource(src: string) {
+  const file = decodeURIComponent(src.split("/").pop()?.split("?")[0] || "");
+  return allWorkVideos.some(video => video.hidden && (video.videoUrl === src || video.id === legacyFilmIds[file]));
 }

@@ -25,3 +25,8 @@
 
 ## 2026-09-23 — Temporarily hide client logos
 - Removed the client logo section from the homepage render at the owner’s request. The component and assets remain available for restoration.
+
+## 2026-09-23 — Temporarily hide Nishiddham and Superstar
+- Added `hidden: true` on the two film records. The public catalogue excludes them from the work gallery, watch routes, metadata and sitemap; service examples and legacy showreel exports use the same visibility setting.
+- Homepage selections now use stable film IDs instead of array indexes, preserving the existing three featured films when other films are hidden.
+- Restore either film by removing its `hidden: true` line in `src/data/mocks/work.ts`. Video files, thumbnails and descriptions remain intact.

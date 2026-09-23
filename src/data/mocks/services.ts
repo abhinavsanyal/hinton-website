@@ -7,7 +7,7 @@
  * service page comes from here — components stay content-free.
  */
 
-import { getWorkVideoBySource } from "@/data/mocks/work";
+import { getWorkVideoBySource, isWorkVideoHiddenSource } from "@/data/mocks/work";
 import { publicEnv } from "@/env";
 
 const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
@@ -1110,7 +1110,7 @@ const retiredServices: Record<string, string> = {
 };
 export const servicesContent: ServiceContent[] = serviceEntries
   .filter(service => !retiredServices[service.slug])
-  .map(service => ({ ...service, media: service.media.map(item => {
+  .map(service => ({ ...service, media: service.media.filter(item => !item.src || !isWorkVideoHiddenSource(item.src)).map(item => {
     const film = item.src ? getWorkVideoBySource(item.src) : undefined;
     return film ? { ...item, label: film.title, meta: `${film.categories.join(" · ")} · ${film.year}` } : item;
   }), related: [...new Set(service.related.map(slug => retiredServices[slug] || slug))].filter(slug => slug !== service.slug) }));
