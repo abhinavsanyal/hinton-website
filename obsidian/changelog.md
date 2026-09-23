@@ -22,3 +22,6 @@
 - Follow-up thumbnail audit found black first frames in three legacy showreel exports. Extracted fresh 8-second frames for all six legacy encodes, verified they match existing portfolio films, and mapped their share targets to the corresponding watch pages. Removed incorrectly labelled commercial/previz clips from micro-drama and animation examples. All visible service sample titles now derive from the verified film manifest.
 - Form success now moves focus and scrolls to the confirmation panel after the form collapses. Service-page scheduling no longer loads Cal before interaction.
 - Fixed a service CTA hydration warning by moving its static background colour out of the spring's initial inline state; hover remains spring-based and protected animation engine files are unchanged.
+
+## 2026-09-23 — Temporarily hide client logos
+- Removed the client logo section from the homepage render at the owner’s request. The component and assets remain available for restoration.

@@ -4,7 +4,6 @@
  */
 import { ProjectPlanner } from "@/views/home/project-planner";
 import { StartingPoints } from "@/views/home/starting-points";
-import { ClientStrip } from "@/views/home/client-strip";
 import { homeContent } from "@/data/mocks/home";
 import { SiteHeader } from "@/views/home/site-header";
 import { ShowreelStage } from "@/views/home/showreel-stage";
@@ -18,7 +17,7 @@ export const HomeView = () => (
     <SiteHeader nav={homeContent.nav} logo={homeContent.logo} cta={homeContent.headerCta} awaitLoader={false} />
     <main id="main">
       <ShowreelStage content={homeContent} />
-      <ClientStrip />
+      {/* Client logos temporarily hidden at the owner’s request. Restore ClientStrip here when ready. */}
       <ProjectPlanner />
       <SeoCapabilities />
       <SeoHowTo />
