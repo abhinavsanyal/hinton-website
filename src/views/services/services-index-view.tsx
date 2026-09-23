@@ -40,12 +40,12 @@ export const ServicesIndexView = () => (
               delayIn={(i % 2) * 140}
               className="flex flex-col gap-[2.5vmin]"
             >
-              <FlareMedia
+              {service.media[0]?.src && <FlareMedia
                 src={service.media[0]?.src}
                 label={service.navLabel}
                 meta={service.eyebrow}
                 ratio={service.media[0]?.ratio}
-              />
+              />}
               <Link
                 href={`/services/${service.slug}`}
                 className="group flex flex-col gap-[1.2vmin] rounded-card border border-white/10 bg-white/[0.03] p-[3.5vmin] max-sm:p-6 hover:border-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"

@@ -42,3 +42,7 @@ next-env.d.ts
 public/assets/showreel/
 public/assets/brand/*.mp4
 public/assets/all-content/
+
+.env.*
+!.env.example
+/work/

@@ -1,6 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import Image from "next/image";
+import { ShareVideo } from "@/components/common/share-video";
+import { getWorkVideoBySource } from "@/data/mocks/work";
+import { posterFor } from "@/lib/media-posters";
 import { animated, to, useSpring } from "@react-spring/web";
 import { GlassPlayButton } from "@/components/common/glass-play-button";
 
@@ -21,6 +24,7 @@ const GRAIN =
  * Shows a poster frame — no video autoplay. Play button opens the fullscreen modal.
  */
 export const FlareMedia = ({ src, label, meta, ratio = "landscape", className }: FlareMediaProps) => {
+  const film = src ? getWorkVideoBySource(src) : undefined;
   const [{ rx, ry, glow, lift }, api] = useSpring(() => ({
     rx: 0,
     ry: 0,
@@ -64,17 +68,10 @@ export const FlareMedia = ({ src, label, meta, ratio = "landscape", className }:
         {src ? (
           <>
             {/* Poster image — no video, no autoplay */}
-            <img
-              className="absolute inset-0 size-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500 pointer-events-none"
-              src={src.replace(/\.(mp4|mov|webm)$/i, '.jpg').replace('/showreel/', '/posters/').replace('/all-content/', '/posters/')}
-              alt={label}
-              onError={(e) => {
-                // Fallback if poster doesn't exist
-                (e.target as HTMLImageElement).src = "/assets/posters/portfolio-1.jpg";
-              }}
-            />
+            {posterFor(src) && <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-70" src={posterFor(src)!} alt={label} />}
             {/* Play button always visible when there's a video */}
             <GlassPlayButton videoSrc={src} />
+            {film && <div className="home-film-share"><ShareVideo slug={film.slug} title={film.title} /></div>}
           </>
         ) : (
           <span

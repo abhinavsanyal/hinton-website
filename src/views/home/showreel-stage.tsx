@@ -1,14 +1,12 @@
 "use client";
 
 import { Inview } from "@/components/animation/springs/in-view";
+import { ShareVideo } from "@/components/common/share-video";
 import { GlassPlayButton } from "@/components/common/glass-play-button";
 import { Marquee } from "@/views/home/marquee";
 import type { ShowreelContent } from "@/data/mocks/home";
-import { publicEnv } from "@/env";
-
-const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
-  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
-  : "/assets";
+import Image from "next/image";
+import Link from "next/link";
 
 export interface ShowreelStageProps {
   content: ShowreelContent;
@@ -26,21 +24,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
       <section className="relative flex min-h-screen flex-col justify-end overflow-hidden bg-black">
         {/* Background media */}
         <div className="absolute inset-0 z-0">
-          {/* Mobile: Static poster image only */}
-          <img
-            className="sm:hidden size-full object-cover opacity-50 pointer-events-none"
-            src="/assets/posters/portfolio-1.jpg"
-            alt=""
-          />
-          {/* Desktop: Autoplaying video */}
-          <video
-            className="hidden sm:block size-full object-cover opacity-60 pointer-events-none"
-            src={`${MEDIA_BASE}/showreel/portfolio-1.mp4`}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
+          <Image fill priority sizes="100vw" className="object-cover opacity-60" src="/assets/posters/portfolio-1-2026.jpg" alt="" />
           {/* Cinematic gradient overlays for a softer, premium fade */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent opacity-80" />
@@ -48,7 +32,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
 
         {/* Hero content — bottom-left, massive heading */}
         <div className="relative z-10 flex flex-col gap-6 sm:gap-8 p-8 pb-16 sm:p-[8vmin] sm:pb-[10vmin] max-w-[1200px]">
-          <Inview mode="once" from={{ opacity: 0, y: 40 }} to={{ opacity: 1, y: 0 }}>
+          <div>
             <h1 className="flex flex-col items-start text-left text-white">
               <span className="block text-[15vw] sm:text-[10vw] font-medium tracking-[-0.04em] leading-[0.85]">
                 AI films
@@ -57,15 +41,15 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
                 when Directed<span className="text-accent">.</span>
               </span>
             </h1>
-          </Inview>
+          </div>
 
-          <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} delayIn={200}>
+          <div>
             <p className="max-w-[700px] text-base sm:text-xl font-light leading-relaxed text-white/70">
               {content.heroSubline}
             </p>
-          </Inview>
+          </div>
 
-          <Inview mode="once" from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayIn={400}>
+          <div>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-2 sm:mt-4">
               <button
                 data-cal-link="abhinava-sanyal-jdq1dz/30min"
@@ -74,19 +58,19 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
               >
                 Book a call
               </button>
-              <a
+              <Link
                 href="/work"
                 className="inline-flex items-center justify-center px-7 py-4 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-xs sm:text-sm uppercase tracking-widest font-medium text-white transition-all hover:bg-white/20 hover:border-white/40"
               >
                 Our Work
-              </a>
+              </Link>
             </div>
-          </Inview>
+          </div>
         </div>
       </section>
 
       {/* ═══════════ SECTION 2 — SERVICES MARQUEE ═══════════ */}
-      <section className="relative z-10 bg-white py-8 sm:py-12 overflow-hidden">
+      <section className="relative z-10 bg-white py-4 sm:py-6 overflow-hidden">
         <Marquee items={content.marquee} />
       </section>
 
@@ -111,14 +95,15 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
                 className="relative flex shrink-0 w-[85vw] sm:w-auto flex-col justify-end overflow-hidden rounded-[2.5vmin] bg-white/5 aspect-[4/5] border border-white/5 snap-center group"
               >
                 {/* Poster image — no video autoplay */}
-                <img
+                <Image fill sizes="(max-width: 640px) 85vw, 33vw"
                   className="absolute inset-0 z-0 size-full object-cover opacity-70 transition-all duration-700 group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
-                  src={item.poster || "/assets/posters/portfolio-1.jpg"}
+                  src={item.poster || "/assets/posters/portfolio-1-2026.jpg"}
                   alt={item.title}
                 />
 
                 {/* Play button */}
                 <GlassPlayButton videoSrc={item.video} />
+                <div className="home-film-share"><ShareVideo slug={item.slug} title={item.title} /></div>
 
                 {/* Grain */}
                 <div
@@ -152,7 +137,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
           {/* View all work link */}
           <Inview mode="once" from={{ opacity: 0 }} to={{ opacity: 1 }} delayIn={500}>
             <div className="mt-8 sm:mt-[4vmin] flex justify-center">
-              <a
+              <Link
                 href="/work"
                 className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/15 text-sm uppercase tracking-widest text-white/80 transition-all hover:bg-white/10 hover:border-white/30"
               >
@@ -160,7 +145,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-              </a>
+              </Link>
             </div>
           </Inview>
         </div>
@@ -196,16 +181,17 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
             <div className="mt-8 sm:mt-[4vmin] flex flex-wrap items-center gap-4">
               <a
                 href={content.cta.href}
+                data-cta
                 className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-transform hover:scale-105"
               >
                 {content.cta.button}
               </a>
-              <a
+              <Link
                 href="/work"
                 className="inline-flex items-center justify-center rounded-full border border-white/15 px-8 py-4 text-sm uppercase tracking-widest text-white/80 transition-all hover:bg-white/10 hover:border-white/30"
               >
                 View our work
-              </a>
+              </Link>
             </div>
           </Inview>
         </div>

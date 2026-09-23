@@ -3,6 +3,7 @@ import { homeContent } from "@/data/mocks/home";
 import { SeoFooter } from "@/views/home/seo-footer";
 
 export const metadata = {
+  alternates: { canonical: "/privacy-policy" },
   title: "Privacy Policy — Hinton Studios",
   description: "Privacy policy for Hinton Studios.",
 };
@@ -11,16 +12,17 @@ export default function PrivacyPolicy() {
   return (
     <>
       <SiteHeader nav={homeContent.nav} logo={homeContent.logo} cta={homeContent.headerCta} awaitLoader={false} />
-      
+
       <main className="min-h-screen bg-black text-white pt-32 sm:pt-[24vmin] pb-16 sm:pb-[10vmin] px-6 sm:px-[6vmin]">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-extralight tracking-[-0.02em] mb-8 sm:mb-12">Privacy Policy</h1>
-          
+
           <div className="space-y-6 text-white/70 leading-relaxed text-sm sm:text-base">
             <p>
-              <strong>Effective Date:</strong> [Date]
+              <strong>Effective Date:</strong> 23 September 2026
             </p>
 
+            <section><h2 className="text-white text-xl mt-8 mb-4 font-medium">Analytics and cookie choices</h2><p>With your analytics consent, we use Google Analytics 4 and Microsoft Clarity to understand page visits, interactions and website usability. We do not send contact-form contents or email addresses as analytics event parameters. You can accept, reject or change optional cookies using Cookie settings in the footer. Website reviews use the public HTML of the address you submit; your email is used for the requested report and enquiry follow-up.</p></section>
             <section>
               <h2 className="text-white text-xl mt-8 mb-4 font-medium">1. Information We Collect</h2>
               <p>We may collect personal information such as your name, email address, phone number, and company details when you submit an inquiry through our contact form or book a call via our scheduling link. We also automatically collect certain technical information (like IP addresses and browser types) to ensure our website functions correctly and to analyze site traffic.</p>
@@ -67,7 +69,7 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </main>
-      
+
       <SeoFooter />
     </>
   );

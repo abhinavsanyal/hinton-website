@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site";
 /**
  * Generated web app manifest (served at `/manifest.webmanifest`). Icons point
  * at the generated `app/icon.tsx` route so the PWA mark stays in sync with the
- * favicon and share images — all derived from the brand star.
+ * favicon and share images — all derived from the Hinton mark.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     icons: [
       {
         src: "/icon",
-        sizes: "512x512",
+        sizes: "64x64",
         type: "image/png",
         purpose: "any",
       },

@@ -108,3 +108,14 @@ async component must mirror its final layout with one of these
 ## Related
 
 [[component-conventions]] · [[components/animation-springs]]
+
+## September 2026 additions
+
+`SiteOverlays` loads video/contact overlays on demand. `Analytics` subscribes to cookie preferences for GA4, Clarity and optional ad integrations; `trackLead` fires only after successful delivery. `AudioPlayer` renders approved audio with no native download control. Editorial views, client credits and the website report form are documented in [[launch-readiness]].
+
+### Film sharing and conversion components
+- `ShareVideo`: native modal dialog, platform links, native share/copy fallback, consent-aware share event. Uses canonical watch URL.
+- `FilmPlayer`: click-to-play native controls with real poster, error fallback and consent-aware video events.
+- `SocialLinks`: shared data manifest for Instagram, Facebook, X, LinkedIn and YouTube with accessible icons/handles; source also feeds Organization sameAs.
+- `ProjectPlanner`: project format selection, stage/timing/brief, bounded input and existing contact API; no success until the server accepts the enquiry.
+- `StartingPoints`: small conversion paths to audit, feature-film service, work and journal.

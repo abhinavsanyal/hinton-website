@@ -7,7 +7,7 @@ export const SeoHowTo = () => {
           {[
             { title: "The Brief", desc: "We receive your brand requirements, budget constraints, and delivery formats." },
             { title: "Script & Shot List", desc: "Human directors craft a cinematic screenplay and precise shot list." },
-            { title: "Animatic Generation", desc: "Initial storyboards and animatics are generated within 48 hours for review." },
+            { title: "Animatic Generation", desc: "Storyboards and animatics establish the pacing and visual direction for review." },
             { title: "AI Execution", desc: "Generative AI pipeline across Seedance, Veo, Kling and Sora creates the raw footage." },
             { title: "VFX & Compositing", desc: "Character consistency and complex VFX are enforced through human-guided compositing." },
             { title: "Grade & Finish", desc: "Final color grade and finish in DaVinci Resolve for broadcast-ready 4K delivery." },

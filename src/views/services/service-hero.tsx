@@ -1,6 +1,5 @@
 "use client";
 
-import { Inview } from "@/components/animation/springs/in-view";
 
 export interface ServiceHeroProps {
   eyebrow: string;
@@ -29,13 +28,13 @@ export const ServiceHero = ({ eyebrow, headingLines, lede, plates }: ServiceHero
       />
 
       <div className="relative z-10 mx-auto max-w-[1400px]">
-        <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }}>
+        <div>
           <p className="mb-6 text-xs sm:text-[1.4vmin] font-medium uppercase tracking-[0.28em] text-accent">
             {eyebrow}
           </p>
-        </Inview>
+        </div>
 
-        <Inview mode="once" from={{ opacity: 0, y: 40 }} to={{ opacity: 1, y: 0 }} delayIn={100}>
+        <div>
           <h1 className="font-zen text-[13vw] sm:text-[9vw] font-extralight leading-[0.92] tracking-[-0.04em] text-white">
             {headingLines.map((line, i) => (
               <span key={line} className={`block ${i > 0 ? "text-white/40" : ""}`}>
@@ -43,17 +42,17 @@ export const ServiceHero = ({ eyebrow, headingLines, lede, plates }: ServiceHero
               </span>
             ))}
           </h1>
-        </Inview>
+        </div>
 
-        <Inview mode="once" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} delayIn={200}>
+        <div>
           <p className="mt-6 sm:mt-[4vmin] max-w-[80ch] text-sm sm:text-base leading-relaxed text-white/65">
             {lede}
           </p>
-        </Inview>
+        </div>
 
         {/* Deliverable pills */}
         {plates.length > 0 && (
-          <Inview mode="once" from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayIn={350}>
+          <div>
             <div className="mt-8 sm:mt-[5vmin] flex flex-wrap gap-3">
               {plates.map((plate) => (
                 <span
@@ -64,7 +63,7 @@ export const ServiceHero = ({ eyebrow, headingLines, lede, plates }: ServiceHero
                 </span>
               ))}
             </div>
-          </Inview>
+          </div>
         )}
       </div>
 

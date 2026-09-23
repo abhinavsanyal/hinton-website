@@ -3,6 +3,7 @@ import { homeContent } from "@/data/mocks/home";
 import { SeoFooter } from "@/views/home/seo-footer";
 
 export const metadata = {
+  alternates: { canonical: "/terms-and-conditions" },
   title: "Terms and Conditions — Hinton Studios",
   description: "Terms and conditions for Hinton Studios.",
 };
@@ -11,14 +12,14 @@ export default function TermsAndConditions() {
   return (
     <>
       <SiteHeader nav={homeContent.nav} logo={homeContent.logo} cta={homeContent.headerCta} awaitLoader={false} />
-      
+
       <main className="min-h-screen bg-black text-white pt-32 sm:pt-[24vmin] pb-16 sm:pb-[10vmin] px-6 sm:px-[6vmin]">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-extralight tracking-[-0.02em] mb-8 sm:mb-12">Terms & Conditions</h1>
-          
+
           <div className="space-y-6 text-white/70 leading-relaxed text-sm sm:text-base">
             <p>
-              <strong>Effective Date:</strong> [Date]
+              <strong>Effective Date:</strong> 23 September 2026
             </p>
 
             <section>
@@ -62,7 +63,7 @@ export default function TermsAndConditions() {
           </div>
         </div>
       </main>
-      
+
       <SeoFooter />
     </>
   );

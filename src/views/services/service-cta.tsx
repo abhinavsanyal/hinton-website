@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import { getCalApi } from "@calcom/embed-react";
+import { useRef } from "react";
 import { Hover } from "@/components/animation/springs/hover";
 import { Inview } from "@/components/animation/springs/in-view";
 
@@ -19,12 +18,6 @@ export const ServiceCta = ({ heading, headingFaded, sub, book, work }: ServiceCt
   const bookRef = useRef<HTMLButtonElement>(null);
   const workRef = useRef<HTMLAnchorElement>(null);
 
-  useEffect(() => {
-    (async () => {
-      const cal = await getCalApi();
-      cal("ui", { styles: { branding: { brandColor: "#000000" } }, hideEventTypeDetails: false, layout: "month_view" });
-    })();
-  }, []);
 
   return (
     <section aria-labelledby="service-cta" className="relative z-[2] bg-background px-[6vmin] pb-[16vmin]">
@@ -72,10 +65,10 @@ export const ServiceCta = ({ heading, headingFaded, sub, book, work }: ServiceCt
             <Hover
               tag="span"
               trigger={workRef as React.RefObject<HTMLElement>}
-              from={{ backgroundColor: "rgba(255,255,255,0.08)", scale: 1 }}
-              to={{ backgroundColor: "rgba(255,255,255,0.18)", scale: 1.04 }}
+              from={{ scale: 1 }}
+              to={{ scale: 1.04 }}
               config={{ tension: 320, friction: 22 }}
-              className="flex h-[52px] items-center rounded-full border border-white/20 px-8 text-[15px] font-semibold text-white backdrop-blur-md"
+              className="flex h-[52px] items-center rounded-full bg-white/10 border border-white/20 px-8 text-[15px] font-semibold text-white backdrop-blur-md"
             >
               {work.label}
             </Hover>

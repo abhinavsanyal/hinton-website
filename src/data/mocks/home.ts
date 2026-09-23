@@ -9,7 +9,8 @@
  * Fed to the view via props so no string is hardcoded in a component.
  */
 
-import { servicesContent } from "@/data/mocks/services";
+import { workVideos } from "@/data/mocks/work";
+import { serviceNavigation } from "@/data/service-navigation";
 
 export interface NavMenuItem {
   label: string;
@@ -39,6 +40,7 @@ export interface CatalistContent {
 }
 
 export interface PortfolioItem {
+  slug: string;
   year: string;
   client: string;
   title: string;
@@ -98,22 +100,22 @@ export interface ShowreelContent {
 
 import { publicEnv } from "@/env";
 
-const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL 
-  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "") 
-  : "/assets";
+const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
+  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
+  : "https://pub-fc6cefbd1ab24e1fb85d8851c0271332.r2.dev";
 
 const A = `${MEDIA_BASE}/showreel`;
 const B = `${MEDIA_BASE}/brand`;
 
 export const homeContent: ShowreelContent = {
   brand: "Hinton Studios",
-  logo: `${B}/hinton-studios-logo.png`,
+  logo: "/assets/brand/hinton-studios-logo.png",
   nav: [
     { label: "Work", href: "/work" },
     {
       label: "Services",
       href: "/services",
-      menu: servicesContent.map((service) => ({
+      menu: serviceNavigation.map((service) => ({
         label: service.navLabel,
         href: `/services/${service.slug}`,
         blurb: service.navBlurb,
@@ -122,10 +124,11 @@ export const homeContent: ShowreelContent = {
   ],
   headerCta: { label: "Book a call", href: "#connect" },
   heroSubline:
-    "Broadcast-grade Brand Films, TV Commercials, Animation, Previz, Vertical Micro Dramas and more. Directed by human filmmakers. We bet you cannot tell the difference between a shot made with a camera or a frame made by us.",
+    "Feature Films, Brand Films, TV Commercials, Animation, Previz and Vertical Micro Dramas. Directed by human filmmakers. We bet you cannot tell the difference between a shot made with a camera or a frame made by us.",
   marquee: [
     "AI ad film production",
     "AI TVC production house",
+    "AI feature films",
     "Micro drama & vertical series",
     "AI storyboards & animatics",
     "Human-directed, AI-executed",
@@ -168,7 +171,7 @@ export const homeContent: ShowreelContent = {
     lead: "From script to screen. ",
     leadStrong: "One AI pipeline.",
     video: `${A}/portfolio-1.mp4`,
-    poster: "/assets/posters/portfolio-1.jpg",
+    poster: "/assets/posters/tata1mg-2026.jpg",
   },
 
   carouselCta: {
@@ -191,40 +194,18 @@ export const homeContent: ShowreelContent = {
 
   /* ── Portfolio ─────────────────────────────────────────────────────── */
   portfolio: {
-    items: [
-      {
-        year: "2025",
-        client: "Tata 1mg",
-        title: "Tata 1mg",
-        discipline: "AI TVC · Comedy Ad Film · VFX",
-        video: `${A}/portfolio-1.mp4`,
-        poster: "/assets/posters/portfolio-1.jpg",
-      },
-      {
-        year: "2025",
-        client: "Domino's",
-        title: "Domino's",
-        discipline: "AI Ad Film · 3D Animation · Product Film",
-        video: `${A}/portfolio-2.mp4`,
-        poster: "/assets/posters/portfolio-2.jpg",
-      },
-      {
-        year: "2025",
-        client: "Kookie & Kandy",
-        title: "Kookie & Kandy",
-        discipline: "AI Animated Series · 2D Character Animation",
-        video: `${MEDIA_BASE}/all-content/3D%20Animation%20Kookie%20Kandy%5B30sec%5D.mov`,
-        poster: "/assets/posters/kookie.jpg",
-      },
-    ],
+    items: [6, 1, 0].map(index => {
+      const film = workVideos[index];
+      return { slug: film.slug, year: film.year, client: film.client, title: film.title, discipline: film.categories.join(" · "), video: film.videoUrl, poster: film.posterUrl };
+    }),
   },
 
   /* ── Closing beat (CTA) ────────────────────────────────────────────── */
   cta: {
     heading: "Dream at the",
     headingFaded: "speed of AI",
-    sub: "Campaign films, TVCs, and micro dramas. Briefed today, delivered in days. With budgets that make sense. Mail us your madness.",
-    button: "Get in touch",
-    href: "mailto:hello@hintonstudios.com",
+    sub: "Campaigns, feature films and micro-dramas. Bring us your idea, your audience and your ambition. We’ll shape the production plan together.",
+    button: "Start your project",
+    href: "#start-a-project",
   },
 };

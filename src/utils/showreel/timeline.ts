@@ -178,7 +178,7 @@ export const sphereSceneScale = (p: number, vmin: number, geo: ShowreelGeo = DES
   return (PERSP - fly - radius) / (PERSP - fly);
 };
 
-/** Mask size: starts exactly matching the metallic logo's scaled size, 
+/** Mask size: starts exactly matching the metallic logo's scaled size,
  *  grows with an eased acceleration curve so the expansion feels grand and organic. */
 export const starMaskSize = (p: number, vmin: number, geo: ShowreelGeo = DESKTOP_GEO) => {
   const t = phase4(p);
@@ -217,11 +217,11 @@ export const sphereLogoOpacity = (p: number) => {
   // Fade IN smoothly for the grand reveal
   const base = sphereLogoEase(p);
   const revealFade = base * base * (3 - 2 * base);
-  
+
   // Fade OUT as the mask zooms in (phase4), so we fly through the hole
   // smoothly without the metallic logo blocking the view.
   const flyThroughFade = 1 - smooth(clamp01(phase4(p) / 0.5));
-  
+
   return revealFade * flyThroughFade;
 };
 
@@ -355,9 +355,9 @@ export interface GridItem {
 
 import { publicEnv } from "@/env";
 
-const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL 
-  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "") 
-  : "/assets";
+const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
+  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
+  : "https://pub-fc6cefbd1ab24e1fb85d8851c0271332.r2.dev";
 
 /** All 6 portfolio videos distributed across the 14 grid tiles so every film
  *  from the Hinton Studios catalogue is represented in the parallax flyby. */
@@ -402,7 +402,7 @@ export const GRID_ITEMS: GridItem[] = RAW_GRID.map((it, index) => {
   const pseudoRandom = Math.abs(Math.sin((index + 1) * 12.9898) * 43758.5453) % 1;
   const z = Math.round((-500 - pseudoRandom * 2500) * 1000) / 1000;
   const scale = Math.round((PERSP / (PERSP - z)) * 1000) / 1000;
-  
+
   // Cycle through all 6 videos so every film is represented
   const video = GRID_VIDEOS[index % GRID_VIDEOS.length];
   const image = GRID_POSTERS[index % GRID_POSTERS.length];

@@ -1,5 +1,7 @@
 "use client";
 
+import { useCookieStore } from "@/components/common/Cookie/cookieStore";
+import { trackLead } from "@/components/analytics/analytics";
 import { useEffect, useState } from "react";
 import { useUIStore } from "@/store/use-ui-store";
 import { animated, useSpring } from "@react-spring/web";
@@ -17,6 +19,7 @@ export const ConnectModal = () => {
   });
 
   useEffect(() => {
+    if (!isConnectModalOpen) return;
     (async function () {
       const cal = await getCalApi({});
       cal("ui", {
@@ -25,7 +28,7 @@ export const ConnectModal = () => {
         layout: "month_view"
       });
     })();
-  }, []);
+  }, [isConnectModalOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -51,10 +54,12 @@ export const ConnectModal = () => {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, message: description }),
+        body: JSON.stringify({ email, message: description, marketingConsent: useCookieStore.getState().consent?.marketing ?? false }),
       });
       if (!res.ok) throw new Error("Failed to send");
       setStatus("success");
+      const body = await res.json();
+      trackLead("contact_modal", body.data.eventId);
       setEmail("");
       setDescription("");
     } catch (err) {
@@ -83,8 +88,8 @@ export const ConnectModal = () => {
           <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clipRule="evenodd" />
         </svg>
       </button>
-      
-      <div 
+
+      <div
         className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white/5 border border-white/10 shadow-2xl flex flex-col lg:flex-row backdrop-blur-2xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -93,15 +98,15 @@ export const ConnectModal = () => {
           <h2 className="text-3xl lg:text-5xl font-zen font-extralight tracking-tight text-white mb-8">
             Talk to the founders
           </h2>
-          
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 flex-1">
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-sm font-medium tracking-widest uppercase text-white/60">
                 Email Address
               </label>
-              <input 
+              <input
                 id="email"
-                type="email" 
+                type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -113,7 +118,7 @@ export const ConnectModal = () => {
               <label htmlFor="desc" className="text-sm font-medium tracking-widest uppercase text-white/60">
                 Brief Description
               </label>
-              <textarea 
+              <textarea
                 id="desc"
                 required
                 value={description}
@@ -122,9 +127,9 @@ export const ConnectModal = () => {
                 placeholder="Tell us about your project..."
               />
             </div>
-            
-            <button 
-              type="submit" 
+
+            <button
+              type="submit"
               disabled={status === "loading"}
               className="mt-4 rounded-full bg-white text-black font-semibold uppercase tracking-widest py-4 px-8 text-sm transition-transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
             >
@@ -145,7 +150,7 @@ export const ConnectModal = () => {
 
         {/* Right Side: Cal.com Embed */}
         <div className="flex-1 p-4 lg:p-8 bg-white/5 rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none min-h-[500px]">
-          <Cal 
+          <Cal
             namespace="15min"
             calLink="rick/15min" // Note: Fallback link. Change to your specific link.
             style={{ width: "100%", height: "100%", overflow: "scroll" }}

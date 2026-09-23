@@ -7,11 +7,12 @@
  * service page comes from here — components stay content-free.
  */
 
+import { getWorkVideoBySource } from "@/data/mocks/work";
 import { publicEnv } from "@/env";
 
-const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL 
-  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "") 
-  : "/assets";
+const MEDIA_BASE = publicEnv.NEXT_PUBLIC_MEDIA_URL
+  ? publicEnv.NEXT_PUBLIC_MEDIA_URL.replace(/\/$/, "")
+  : "https://pub-fc6cefbd1ab24e1fb85d8851c0271332.r2.dev";
 
 /** Videos in `all-content` carry spaces and brackets, so paths are encoded. */
 const allContent = (file: string) => `${MEDIA_BASE}/all-content/${encodeURIComponent(file)}`;
@@ -69,7 +70,7 @@ export interface ServiceContent {
   related: string[];
 }
 
-export const servicesContent: ServiceContent[] = [
+const serviceEntries: ServiceContent[] = [
   {
     slug: "ai-tvc-production",
     navLabel: "AI TVC Production",
@@ -90,7 +91,7 @@ export const servicesContent: ServiceContent[] = [
       ],
     },
     stats: [
-      { value: "11 days", label: "Median brief to 4K master" },
+      { value: "Brief-led", label: "Schedule agreed for your project" },
       { value: "4K / UHD", label: "Broadcast delivery spec" },
       { value: "40+", label: "Shots per 30-second cut" },
       { value: "6 models", label: "In the generation stack" },
@@ -102,7 +103,7 @@ export const servicesContent: ServiceContent[] = [
       { label: "Reserved for next campaign", meta: "Master in grade" },
     ],
     pipeline: [
-      { title: "The brief", body: "Product, audience, media plan and budget band. We come back with a one-page treatment inside 48 hours." },
+      { title: "The brief", body: "Product, audience, media plan and budget band. We develop a treatment and agree the production schedule." },
       { title: "Script and shot list", body: "A filmmaker writes the screenplay and breaks it into a numbered shot list with lens, movement and grain noted per frame." },
       { title: "Animatic", body: "A timed animatic locks the cut before a single hero frame is generated, so revisions cost minutes, not days." },
       { title: "Generation", body: "Shots run across the model stack, chosen per shot for motion, character fidelity or product accuracy. Typically 8–12 generations per keeper." },
@@ -129,7 +130,7 @@ export const servicesContent: ServiceContent[] = [
       {
         question: "What is the turnaround time for an AI ad film?",
         answer:
-          "Median brief-to-master is around 11 days. A locked script and a single approval round can compress that to a week; heavy product VFX or six language versions extend it.",
+          "The schedule depends on script readiness, shot complexity, approval rounds and language versions. We provide a scoped production timeline after reviewing your brief.",
       },
       {
         question: "How do AI film studios keep characters consistent across shots?",
@@ -417,6 +418,703 @@ export const servicesContent: ServiceContent[] = [
   },
 ];
 
+
+// Focused service pages for distinct buyer needs.
+serviceEntries.push(
+{
+  "slug": "ai-ad-film-production",
+  "navLabel": "AI Ad Film Production",
+  "navBlurb": "Campaign ideas built for digital screens",
+  "eyebrow": "AI Ad Film Production",
+  "headingLines": [
+    "AI Ad Film Production"
+  ],
+  "lede": "Turn one campaign idea into a clear, memorable advertising film. Hinton combines script development, art direction, AI image generation and editorial finishing for paid social, online video and brand launches.",
+  "metaTitle": "AI Ad Film Production Studio in Bengaluru",
+  "metaDescription": "Turn one campaign idea into a clear, memorable advertising film. Hinton combines script development, art direction, AI image generation and editorial finishing for paid social, online video and brand launches.",
+  "intro": {
+    "heading": "Build the message before generating the image",
+    "body": [
+      "Start with the audience problem, the single promise and the action you want viewers to take. We develop a treatment and shot plan around those decisions, rather than asking a model to invent the campaign.",
+      "An ad film needs more than attractive frames. Product identity, continuity, believable performance and legible brand assets need human review. We plan those checks during preproduction and agree the delivery formats before production starts."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Creative treatment and script",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Hero film and cutdowns",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Platform-specific end cards",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ai-brand-films",
+  "navLabel": "AI Brand Films",
+  "navBlurb": "Tell the story behind your brand",
+  "eyebrow": "AI Brand Films",
+  "headingLines": [
+    "AI Brand Films"
+  ],
+  "lede": "Human-directed AI brand films for company stories, positioning campaigns and launches. Hinton helps translate brand values into a cinematic narrative with a consistent visual language.",
+  "metaTitle": "AI Brand Films Studio in Bengaluru",
+  "metaDescription": "Human-directed AI brand films for company stories, positioning campaigns and launches. Hinton helps translate brand values into a cinematic narrative with a consistent visual language.",
+  "intro": {
+    "heading": "Make the brand recognisable without relying on a logo",
+    "body": [
+      "A brand film should establish a point of view. We begin with the company story, approved claims, tone and intended audience, then develop a narrative that has a reason to exist beyond a product demonstration.",
+      "AI can support imagined environments, visual metaphors and transitions that would otherwise require complex shoots. When an authentic founder interview or real location is essential, we plan a hybrid approach and preserve the distinction between real footage and generated imagery."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Narrative and visual treatment",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Brand film master",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Social edits and subtitle versions",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ai-product-films",
+  "navLabel": "AI Product Films",
+  "navBlurb": "Show the product. Make the benefit clear.",
+  "eyebrow": "AI Product Films",
+  "headingLines": [
+    "AI Product Films"
+  ],
+  "lede": "AI-assisted product films for launches, ecommerce and advertising. Hinton builds product stories around approved references, practical benefits and consistent brand presentation.",
+  "metaTitle": "AI Product Films Studio in Bengaluru",
+  "metaDescription": "AI-assisted product films for launches, ecommerce and advertising. Hinton builds product stories around approved references, practical benefits and consistent brand presentation.",
+  "intro": {
+    "heading": "Accuracy is part of the creative brief",
+    "body": [
+      "A product film must show what the product actually does. Supply pack shots, dimensions, logo files, materials and approved claims so the production can distinguish creative atmosphere from details that must be reproduced exactly.",
+      "We plan hero shots, demonstrations and feature callouts as separate sequences. Real product photography or 3D assets can anchor the edit where generated footage cannot reliably reproduce packaging, typography or mechanical details."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Product hero sequences",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Feature demonstrations",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Ecommerce and launch edits",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ai-animation",
+  "navLabel": "AI Animation",
+  "navBlurb": "2D and 3D characters, worlds and ideas in motion",
+  "eyebrow": "AI Animation",
+  "headingLines": [
+    "AI Animation"
+  ],
+  "lede": "AI-assisted animation for explainers, branded stories and entertainment. Hinton develops style, character references and editorial rhythm around the story you need to tell.",
+  "metaTitle": "AI Animation Studio in Bengaluru",
+  "metaDescription": "AI-assisted animation for explainers, branded stories and entertainment. Hinton develops style, character references and editorial rhythm around the story you need to tell.",
+  "intro": {
+    "heading": "Choose the animation language that serves the story",
+    "body": [
+      "Animation can explain an invisible process, build a fictional world or give a brand its own character. We establish the visual rules before production: shapes, palettes, movement, shot design and the intended balance between stylisation and realism.",
+      "Character sheets and approved keyframes guide each sequence. Human review catches changing proportions, costume drift and inconsistent screen direction. Complex movement may need conventional animation or compositing alongside generated footage."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Style frames and character references",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Animated sequences",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Sound-designed final edits",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ai-vfx-cgi",
+  "navLabel": "AI VFX & CGI",
+  "navBlurb": "Impossible scenes, carefully finished",
+  "eyebrow": "AI VFX & CGI",
+  "headingLines": [
+    "AI VFX & CGI"
+  ],
+  "lede": "AI-assisted VFX and CGI for advertising and films. Hinton combines visual development, compositing and finishing to integrate ambitious imagery with the needs of a real campaign.",
+  "metaTitle": "AI VFX & CGI Studio in Bengaluru",
+  "metaDescription": "AI-assisted VFX and CGI for advertising and films. Hinton combines visual development, compositing and finishing to integrate ambitious imagery with the needs of a real campaign.",
+  "intro": {
+    "heading": "Plan the composite, not just the spectacle",
+    "body": [
+      "A convincing effects shot depends on lighting, perspective, scale and the relationship between foreground and background. We assess source footage and references before choosing generation, 3D or compositing techniques.",
+      "Brand-critical elements should remain controlled assets. We use approved product imagery and graphic layers where fidelity matters, then review edges, reflections, motion and continuity at delivery resolution."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "VFX concept development",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "CGI and composite sequences",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Graded delivery masters",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ai-reels",
+  "navLabel": "AI Reels",
+  "navBlurb": "Short stories that earn attention",
+  "eyebrow": "AI Reels",
+  "headingLines": [
+    "AI Reels"
+  ],
+  "lede": "AI reels and short-form video for brand channels and campaigns. Hinton helps structure an opening hook, a clear message and a useful next step for mobile viewing.",
+  "metaTitle": "AI Reels Studio in Bengaluru",
+  "metaDescription": "AI reels and short-form video for brand channels and campaigns. Hinton helps structure an opening hook, a clear message and a useful next step for mobile viewing.",
+  "intro": {
+    "heading": "Design for a small screen and a short attention window",
+    "body": [
+      "The opening needs to establish context quickly. We plan the first frame, on-screen copy and visual progression together so the reel still makes sense when a viewer starts with sound off.",
+      "A series works best with repeatable visual rules and different ideas. We can develop alternate openings, aspect-ratio versions and concise edits for testing. Performance depends on creative, audience, placement and the offer; no single format guarantees results."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Vertical-first scripts",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Captioned reel edits",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Alternative opening hooks",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+{
+  "slug": "ugc-style-ads",
+  "navLabel": "UGC-Style Ads",
+  "navBlurb": "Conversational creative with a clear point",
+  "eyebrow": "UGC-Style Ads",
+  "headingLines": [
+    "UGC-Style Ads"
+  ],
+  "lede": "UGC-style advertising creative for product explanations and paid social. Hinton develops relatable scripts and mobile-first edits without presenting synthetic performances as genuine customer reviews.",
+  "metaTitle": "UGC-Style Ads Studio in Bengaluru",
+  "metaDescription": "UGC-style advertising creative for product explanations and paid social. Hinton develops relatable scripts and mobile-first edits without presenting synthetic performances as genuine customer reviews.",
+  "intro": {
+    "heading": "Keep the conversational tone and the evidence honest",
+    "body": [
+      "UGC-style describes a visual and editorial approach: direct address, everyday language and a simple demonstration. It should not imply that a performer is a real customer or that a scripted claim is an independent testimonial.",
+      "We work from approved benefits and substantiated claims. Real creators, licensed performances and clearly disclosed synthetic material can each have a role, depending on the campaign and platform requirements."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Human-led",
+      "label": "Creative direction"
+    },
+    {
+      "value": "Brief-first",
+      "label": "Production planning"
+    },
+    {
+      "value": "Multi-format",
+      "label": "Delivery options"
+    }
+  ],
+  "media": [],
+  "pipeline": [
+    {
+      "title": "Define the brief",
+      "body": "Agree the audience, message, references, rights and delivery requirements."
+    },
+    {
+      "title": "Approve the treatment",
+      "body": "Review scripts and visual references before committing to the full production."
+    },
+    {
+      "title": "Produce and review",
+      "body": "Develop the footage and refine continuity, product details and editorial rhythm."
+    },
+    {
+      "title": "Finish and deliver",
+      "body": "Review the grade, sound, captions and agreed format versions."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Direct-response scripts",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Mobile-first ad edits",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    },
+    {
+      "title": "Caption and CTA variations",
+      "body": "Scope, formats and review rounds agreed in the project brief."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What do you need to estimate the project?",
+      "answer": "Share your brief, desired duration, reference films, brand assets, delivery formats and target date. We recommend a production approach and quote the agreed scope."
+    },
+    {
+      "question": "Can this be adapted for several markets?",
+      "answer": "We can plan subtitles, voiceover and alternate edits. Language review, usage rights and local requirements should be agreed before production."
+    }
+  ],
+  "related": [
+    "ai-tvc-production",
+    "brand-and-product-films",
+    "vertical-micro-dramas"
+  ]
+},
+);
+
+serviceEntries.push({
+  "slug": "ai-feature-films",
+  "navLabel": "AI Feature Films",
+  "navBlurb": "Long-form storytelling, from screenplay and previz to the finished film",
+  "eyebrow": "AI feature film production",
+  "headingLines": [
+    "Big stories.",
+    "Feature-length ambition."
+  ],
+  "lede": "Hinton Studios develops AI feature films and hybrid narrative productions, combining human-led writing and direction with AI-assisted visual development, previsualisation and production.",
+  "metaTitle": "AI Feature Film Production & Previsualisation",
+  "metaDescription": "Develop an AI feature film with Hinton Studios: screenplay development, visual worlds, character continuity, previsualisation, editing and sound. Discuss your film.",
+  "intro": {
+    "heading": "A film begins with a story worth telling",
+    "body": [
+      "We work with filmmakers, producers and storytellers to turn a screenplay or early concept into a practical production plan. The first step is understanding the story, its audience, its visual ambition and the resources needed to deliver it.",
+      "Our approach brings together script development, character and environment design, previsualisation, AI-assisted sequences and a considered edit. Some projects suit an AI-led pipeline; others benefit from live action, animation or a hybrid approach. We establish that approach through a treatment and proof of concept.",
+      "Long-form work demands continuity across scenes. We plan recurring characters, locations, visual references, shot language and review milestones before committing to full production. Rights, voice permissions, delivery requirements and the final scope are agreed for each film."
+    ]
+  },
+  "stats": [
+    {
+      "value": "Story first",
+      "label": "Human writing and direction"
+    },
+    {
+      "value": "Long form",
+      "label": "Feature-length narratives"
+    },
+    {
+      "value": "Hybrid",
+      "label": "AI, live action and animation"
+    },
+    {
+      "value": "Scene by scene",
+      "label": "Continuity and editorial review"
+    }
+  ],
+  "media": [
+{ src: allContent("Nishiddham-previz[4mins].mov"), label: "Nishiddham — previsualisation", meta: "Narrative previz · 2026" },
+{ src: allContent("Superstar-previz[3mins].mov"), label: "Superstar — previsualisation", meta: "Narrative previz · 2026" }
+],
+  "pipeline": [
+    {
+      "title": "Develop the story",
+      "body": "Share a synopsis, screenplay or treatment. We review the narrative, intended audience and production ambitions."
+    },
+    {
+      "title": "Build the visual world",
+      "body": "Define characters, locations and look references, then test a representative scene or sequence."
+    },
+    {
+      "title": "Plan and produce",
+      "body": "Lock the agreed screenplay, shot plan and review milestones. Produce sequences with continuity checks throughout."
+    },
+    {
+      "title": "Edit, sound and finish",
+      "body": "Bring the film together through picture editing, sound design, music, grading and agreed delivery masters."
+    }
+  ],
+  "deliverables": [
+    {
+      "title": "Treatment and production roadmap",
+      "body": "An agreed creative approach, scope and staged production plan."
+    },
+    {
+      "title": "Visual development and previz",
+      "body": "Character references, world design and selected scene previsualisation."
+    },
+    {
+      "title": "Film and delivery masters",
+      "body": "Edited sequences or a complete film, with sound, grade and formats as scoped."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Can you help if I only have an idea?",
+      "answer": "Yes. Start with a synopsis or a short conversation. We can scope story development, a treatment or a proof of concept before a full production commitment."
+    },
+    {
+      "question": "Do you produce complete feature films?",
+      "answer": "Yes. We discuss complete AI-led and hybrid feature film productions as well as individual sequences and previsualisation. Scope, feasibility, rights and a realistic schedule are agreed after reviewing the script."
+    },
+    {
+      "question": "Can AI be combined with a live-action production?",
+      "answer": "Yes. We can plan visual development, environments, animation or selected sequences around live-action material, with the approach tested against your delivery requirements."
+    }
+  ],
+  "related": [
+    "ai-storyboards-and-moodboards",
+    "ai-vfx-cgi",
+    "ai-animation",
+    "vertical-micro-dramas"
+  ]
+});
+
+// Keep animation examples and production detail when consolidating the old hub.
+const animation = serviceEntries.find(service => service.slug === "ai-animation");
+const previousAnimation = serviceEntries.find(service => service.slug === "2d-and-3d-animation");
+if (animation && previousAnimation) {
+  animation.media = previousAnimation.media.filter(item => item.src?.includes("3D%20Animation"));
+  animation.pipeline = previousAnimation.pipeline;
+  animation.deliverables = previousAnimation.deliverables;
+  animation.navBlurb = "2D and 3D characters, worlds and ideas in motion";
+}
+
+// The inherited episode/title-sequence labels referred to unrelated commercials.
+// Publish only examples of the stated format; approved micro-drama samples are pending.
+const microDramas = serviceEntries.find(service => service.slug === "vertical-micro-dramas");
+if (microDramas) microDramas.media = [];
+const storyboards = serviceEntries.find(service => service.slug === "ai-storyboards-and-moodboards");
+if (storyboards) storyboards.media = storyboards.media.filter(item => !item.src?.includes("/showreel/"));
+
+// Consolidated services keep a single index entry per distinct offering.
+const retiredServices: Record<string, string> = {
+  "2d-and-3d-animation": "ai-animation",
+  "brand-and-product-films": "ai-brand-films",
+};
+export const servicesContent: ServiceContent[] = serviceEntries
+  .filter(service => !retiredServices[service.slug])
+  .map(service => ({ ...service, media: service.media.map(item => {
+    const film = item.src ? getWorkVideoBySource(item.src) : undefined;
+    return film ? { ...item, label: film.title, meta: `${film.categories.join(" · ")} · ${film.year}` } : item;
+  }), related: [...new Set(service.related.map(slug => retiredServices[slug] || slug))].filter(slug => slug !== service.slug) }));
+
 export const getServiceBySlug = (slug: string): ServiceContent | undefined =>
   servicesContent.find((service) => service.slug === slug);
 
@@ -433,8 +1131,8 @@ export const serviceSections = {
 /** Shared CTA pair rendered at the foot of every service page. */
 export const serviceCta = {
   heading: "Brief us this week.",
-  headingFaded: "Previz by the weekend.",
-  sub: "Tell us the product, the audience and the budget band. We come back with a one-page treatment inside 48 hours.",
+  headingFaded: "Let’s shape the story.",
+  sub: "Tell us the product, the audience and the budget band. We develop a treatment and agree the production schedule.",
   book: { label: "Book a call", href: "#connect" },
   work: { label: "View all work", href: "/work" },
 };
@@ -443,7 +1141,7 @@ export const servicesIndex = {
   eyebrow: "Capabilities",
   heading: "What we make",
   lede:
-    "Hinton Studios is an AI filmmaking and AI video production studio in Bengaluru. Five capabilities, one human-directed, AI-executed pipeline.",
+    "Hinton Studios is an AI filmmaking and AI video production studio in Bengaluru. Commercials, feature films, animation and episodic storytelling — directed by humans, enabled by AI.",
   metaTitle: "Services — AI Film & Video Production Capabilities",
   metaDescription:
     "AI TVC production, brand and product films, vertical micro dramas, AI storyboards and previz, and 2D & 3D animation. The full capability index of Hinton Studios, Bengaluru.",

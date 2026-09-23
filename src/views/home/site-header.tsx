@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { Hover } from "@/components/animation/springs/hover";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getCalApi } from "@calcom/embed-react";
-import { Hover } from "@/components/animation/springs/hover";
 import { ServicesMenu } from "@/views/home/services-menu";
 import type { NavLink } from "@/data/mocks/home";
 
@@ -17,10 +16,21 @@ export interface SiteHeaderProps {
 
 export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
   useEffect(() => {
-    (async function () {
-      const cal = await getCalApi();
-      cal("ui", { styles: { branding: { brandColor: "#E11D48" } }, hideEventTypeDetails: false, layout: "month_view" });
-    })();
+    const book = async (event: MouseEvent) => {
+      const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-cal-link]") : null;
+      if (!target) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      const calLink = target.dataset.calLink;
+      if (!calLink) return;
+      try {
+        const { getCalApi } = await import("@calcom/embed-react");
+        const cal = await getCalApi();
+        cal("ui", { styles: { branding: { brandColor: "#E11D48" } }, hideEventTypeDetails: false, layout: "month_view" });
+        cal("modal", { calLink });
+      } catch { window.location.assign(`https://cal.com/${calLink}`); }
+    };
+    document.addEventListener("click", book, true);
+    return () => document.removeEventListener("click", book, true);
   }, []);
 
   const isHome = usePathname() === "/";
@@ -39,15 +49,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
             aria-label="Home"
             className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-transparent hover:bg-white/10 transition-colors"
           >
-            <Hover
-              tag="span"
-              from={{ transform: "rotate(0deg)" }}
-              to={{ transform: "rotate(90deg)" }}
-              config={{ tension: 200, friction: 18 }}
-              className="flex items-center justify-center"
-            >
-              <Image src={logo} alt="Hinton Studios" width={100} height={100} priority className="brightness-0 invert" />
-            </Hover>
+            <span className="brand-nav-mark"><Image src={logo} alt="Hinton Studios" width={100} height={56} priority /></span>
           </a>
 
           {/* Desktop nav links */}
@@ -76,6 +78,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
                 </li>
               ),
             )}
+            <li><button type="button" disabled className="originals-nav">Originals <span>Coming soon</span></button></li>
           </ul>
 
           {/* Mobile hamburger */}
@@ -123,9 +126,10 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
       {/* Mobile dropdown */}
       {open && (
         <div
-          className="pointer-events-auto mt-3 w-[calc(100%-2rem)] max-w-[420px] overflow-hidden rounded-2xl bg-black/60 backdrop-blur-2xl border border-white/10 p-2 sm:hidden shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
+          className="pointer-events-auto mt-3 w-[calc(100%-2rem)] max-w-[420px] max-h-[70dvh] overflow-y-auto rounded-2xl bg-black/60 backdrop-blur-2xl border border-white/10 p-2 sm:hidden shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
         >
           <ul className="flex flex-col gap-1">
+            <li><button type="button" disabled className="originals-nav">Originals <span>Coming soon</span></button></li>
             {nav.map((link) => (
               <li key={link.label} className="flex flex-col">
                 <a

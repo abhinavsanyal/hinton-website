@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:nav && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:nav": "node scripts/generate-service-navigation.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

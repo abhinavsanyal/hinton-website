@@ -2,6 +2,9 @@
  * Home view — clean, flat landing page. No intro loader, no 3D.
  * Server Component composing the header, main sections, and SEO blocks.
  */
+import { ProjectPlanner } from "@/views/home/project-planner";
+import { StartingPoints } from "@/views/home/starting-points";
+import { ClientStrip } from "@/views/home/client-strip";
 import { homeContent } from "@/data/mocks/home";
 import { SiteHeader } from "@/views/home/site-header";
 import { ShowreelStage } from "@/views/home/showreel-stage";
@@ -13,12 +16,15 @@ import { SeoFooter } from "@/views/home/seo-footer";
 export const HomeView = () => (
   <>
     <SiteHeader nav={homeContent.nav} logo={homeContent.logo} cta={homeContent.headerCta} awaitLoader={false} />
-    <main>
+    <main id="main">
       <ShowreelStage content={homeContent} />
+      <ClientStrip />
+      <ProjectPlanner />
       <SeoCapabilities />
       <SeoHowTo />
       <SeoFaq />
-      <SeoFooter />
+      <StartingPoints />
     </main>
+    <SeoFooter />
   </>
 );

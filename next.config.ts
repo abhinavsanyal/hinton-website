@@ -21,6 +21,13 @@ const nextConfig: NextConfig = {
         : false,
   },
 
+  async redirects() {
+    return [
+      { source: "/services/2d-and-3d-animation", destination: "/services/ai-animation", permanent: true },
+      { source: "/services/brand-and-product-films", destination: "/services/ai-brand-films", permanent: true },
+    ];
+  },
+
   images: {
     // Modern formats — smaller than JPEG/PNG; the browser picks what it supports.
     formats: ["image/avif", "image/webp"],

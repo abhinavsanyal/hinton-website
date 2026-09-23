@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Zen_Kaku_Gothic_New, Marck_Script } from "next/font/google";
 
 import {
   generateMetadata,
@@ -11,30 +10,14 @@ import { LazyCookie } from "@/components/common/Cookie";
 import { AdaptiveGrid } from "@/components/common/grid";
 import { ReducedMotion } from "@/components/common/reduced-motion";
 import { ScrollLayout } from "@/layouts/scroll-layout";
-import { VideoModal } from "@/components/common/video-modal";
-import { ConnectModal } from "@/components/common/connect-modal";
+import { SiteOverlays } from "@/components/common/site-overlays";
 
 import "@/app/globals.css";
-
-// Primary geometric sans for all UI/headings (original Showreel font).
-const zenKaku = Zen_Kaku_Gothic_New({
-  variable: "--font-zen",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "700"],
-});
-
-// Handwritten accent face — the italic "Works" in the portfolio title.
-const marckScript = Marck_Script({
-  variable: "--font-marck",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400"],
-});
+import { Analytics } from "@/components/analytics/analytics";
 
 export const metadata: Metadata = generateMetadata({
   title: "AI Filmmaking Studio & AI Video Production Company | Hinton Studios, Bengaluru",
-  description: "Hinton Studios is an AI filmmaking studio in Bengaluru producing AI TVCs, brand films, micro dramas and animatics for brands worldwide. Human-directed, AI-executed. Campaign films in days, not months."
+  description: "Human-directed AI video production in Bengaluru. Explore Hinton Studios’ TV commercials, brand films, product videos, animation and vertical micro-dramas."
 });
 export const viewport: Viewport = generateViewport();
 
@@ -45,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${zenKaku.variable} ${marckScript.variable}`}>
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -56,9 +39,9 @@ export default function RootLayout({
           <AdaptiveGrid />
           <ReducedMotion />
           <LazyCookie />
+          <Analytics />
           {children}
-          <VideoModal />
-          <ConnectModal />
+          <SiteOverlays />
         </ScrollLayout>
       </body>
     </html>

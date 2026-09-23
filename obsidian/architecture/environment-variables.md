@@ -40,3 +40,7 @@ When the next variable is introduced:
 ## Related
 
 [[tech-stack]] · [[seo-metadata]] · [[backend/README]]
+
+## September 2026 integrations
+
+See `.env.example` and `frontend/launch-readiness.md`: optional public Google Ads ID/label and Meta Pixel ID; server-only SMTP settings and Meta CAPI token/API version/test-event code. GA4 and Clarity IDs supplied by the site owner are configured in the shared analytics component. Never put SMTP passwords or CAPI tokens in public variables.

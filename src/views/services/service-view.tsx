@@ -69,7 +69,7 @@ export const ServiceView = ({ service }: ServiceViewProps) => {
         </nav>
 
         <ServiceNarrative heading={service.intro.heading} body={service.intro.body} stats={service.stats} />
-        <ServiceMediaWall heading={serviceSections.media} media={service.media} />
+        {service.media.length > 0 && <ServiceMediaWall heading={serviceSections.media} media={service.media} />}
         <ServiceProcess
           pipelineHeading={serviceSections.pipeline}
           pipeline={service.pipeline}
@@ -89,8 +89,8 @@ export const ServiceView = ({ service }: ServiceViewProps) => {
           book={serviceCta.book}
           work={serviceCta.work}
         />
-        <SeoFooter />
       </main>
+      <SeoFooter />
     </>
   );
 };

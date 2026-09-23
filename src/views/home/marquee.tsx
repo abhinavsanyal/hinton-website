@@ -11,7 +11,7 @@ const Strip = ({ items }: MarqueeProps) => (
   <>
     {items.map((item, i) => (
       <Fragment key={i}>
-        <span className="px-[3vw] text-[7vw] tracking-[-0.03em] text-black">
+        <span className="px-[3vw] text-[length:var(--marquee-type)] tracking-[-0.03em] text-black">
           {item}
         </span>
         <span
@@ -35,13 +35,13 @@ export const Marquee = memo(({ items }: MarqueeProps) => {
     from: { x: 0 },
     to: { x: -50 },
     loop: true,
-    config: { duration: 25000, easing: easings.linear },
+    config: { duration: 60000, easing: easings.linear },
   }));
 
   return (
     <div className="flex w-screen overflow-hidden whitespace-nowrap">
       <animated.div
-        className="flex items-center"
+        className="marquee-track flex items-center"
         style={{ transform: styles.x.to((x) => `translateX(${x}%)`) }}
       >
         <Strip items={items} />

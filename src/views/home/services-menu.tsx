@@ -25,8 +25,8 @@ const ServicesMenuItem = ({ item, onNavigate }: { item: NavMenuItem; onNavigate:
         <Hover
           tag="span"
           trigger={ref as React.RefObject<HTMLElement>}
-          from={{ backgroundColor: "rgba(255,255,255,0)", x: 0 }}
-          to={{ backgroundColor: "rgba(255,255,255,0.09)", x: 4 }}
+          from={{ backgroundColor: "rgba(255, 255, 255, 0)", x: 0 }}
+          to={{ backgroundColor: "rgba(255, 255, 255, 0.09)", x: 4 }}
           config={{ tension: 320, friction: 26 }}
           className="flex flex-col gap-1 rounded-2xl px-4 py-3"
         >
@@ -126,6 +126,7 @@ export const ServicesMenu = ({ label, items }: ServicesMenuProps) => {
       <animated.div
         id={panelId}
         className="absolute left-1/2 top-[calc(100%+0.75rem)] w-[320px] -translate-x-1/2 overflow-hidden rounded-3xl border border-white/12 bg-black/70 p-2 shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
+        inert={!open}
         style={{
           opacity: panel.opacity,
           pointerEvents: open ? "auto" : "none",
@@ -138,7 +139,7 @@ export const ServicesMenu = ({ label, items }: ServicesMenuProps) => {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
         />
-        <ul className="flex flex-col gap-0.5">
+        <ul className="service-menu-list flex flex-col gap-0.5">
           {items.map((item) => (
             <ServicesMenuItem key={item.href} item={item} onNavigate={() => setOpen(false)} />
           ))}

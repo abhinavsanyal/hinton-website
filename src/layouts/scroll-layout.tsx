@@ -36,7 +36,7 @@ function ScrollController() {
     if (typeof window === "undefined") return;
     window.scrollTo(0, 0);
     const lenis = new Lenis({
-      smoothWheel: true,
+      smoothWheel: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       // syncTouch: true,
     });
     (window as typeof window & { lenis: Lenis }).lenis = lenis;

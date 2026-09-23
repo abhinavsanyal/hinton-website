@@ -16,8 +16,8 @@ export const siteConfig = {
    * Public origin, no trailing slash. Drives canonical URLs, OG tags, the
    * sitemap, and JSON-LD. Set `NEXT_PUBLIC_SITE_URL` in production.
    */
-  url: publicEnv.NEXT_PUBLIC_SITE_URL ?? "https://hintonstudios.com",
-  twitterHandle: "@hintonstudios",
+  url: publicEnv.NEXT_PUBLIC_SITE_URL ?? "https://www.hintonstudios.com",
+  twitterHandle: "@HintonStudios",
   author: "Hinton Studios",
   /** Browser theme-color (address bar / PWA) — matches the page backdrop. */
   themeColor: "#000000",
