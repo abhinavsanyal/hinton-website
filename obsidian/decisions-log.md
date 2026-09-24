@@ -1,3 +1,7 @@
+## Promo video: code-rendered motion graphics, outside the site build
+
+Promotional video lives in `video/<project>/`, outside `src/` and `public/`, and is excluded from lint. Each project keeps its own composition (HTML/JS rendered frame-by-frame by headless Chromium), preproduction scripts and prompts, audio stems (FLAC) and final encodes. Frame rendering is a pure function of time, so any frame re-renders identically. The site's spring-only animation rule (ADR-0002) governs the website runtime; the video composition uses its own closed-form spring/ease helpers and never ships to visitors. Generative APIs are called from local scripts with `GEMINI_API_KEY` from the environment. Keys are never committed.
+
 
 ## 2026-09-23 — Consent-aware measurement and honest delivery status
 

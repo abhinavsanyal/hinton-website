@@ -1,3 +1,10 @@
+## 2026-09-24 — "Dream in 4K" Instagram reel (video/hinton-reel-2026)
+
+- Added a self-contained motion-graphics project under `video/hinton-reel-2026/`: a 59.9 s Vox-style history of Indian cinema (1913 → 2026) ending on Hinton Studios. It is delivered as a 1080×1920 Reel master and a 1080×1440 feed cut, H.264/AAC, −14 LUFS.
+- Composition is deterministic HTML/JS rendered frame-by-frame in headless Chromium (`tools/render.mjs`). Narration is Gemini 3.8 Flash TTS (voice Charon), the score is Lyria 3 Pro, archival-style stills are Gemini 3 Pro Image, and the SFX are synthesised procedurally. The brand logo sting is `public/assets/reload-animation/logo-90.mp4`.
+- Only publicly visible portfolio frames are used. Nishiddham, Superstar and portfolio-5/6 are excluded, matching the 2026-09-23 hide. No real person's likeness is generated, and maps are drawn without political borders. Rights notes are in the project README.
+- `eslint.config.mjs` now ignores `video/**`; the site build is unaffected.
+
 
 ## 2026-09-23 — SEO, measurement and launch-readiness improvements
 

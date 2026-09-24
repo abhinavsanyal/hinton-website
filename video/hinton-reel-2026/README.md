@@ -1,0 +1,97 @@
+# Hinton Studios — "Dream in 4K" Instagram reel (2026)
+
+A 59.9-second Vox-style motion-graphics promo that runs from Dadasaheb Phalke's 1913 hand-cranked
+camera through India's talkies, many-language film industries and superstar era to 2026. It ends on
+Hinton Studios, Bengaluru: *Dream in 4K. Create with AI.*
+
+This folder is self-contained and is **not part of the Next.js site build** (eslint ignores `video/**`).
+
+| Deliverable | File | Use |
+|---|---|---|
+| Reel master, 1080×1920 (9:16), 30 fps, H.264 + AAC 48 kHz, −14 LUFS | `out/hinton-reel-9x16.mp4` | Instagram Reels, Stories, YouTube Shorts |
+| Feed cut, 1080×1440 (3:4) | `out/hinton-reel-3x4.mp4` | Instagram feed post / carousel (3:4 grid) |
+| Cover options | `out/cover-gods.jpg`, `out/cover-dream-in-4k.jpg` | Reel cover image |
+
+**Why 9:16 with a 3:4 core.** The picture is built at 9:16 so it fills the phone in Reels. All
+essential type and action stays inside the central 1080×1440 band (y = 240–1680). The profile grid
+and feed show that band as 3:4, and the 3:4 feed cut is exactly that crop. Captions sit above
+Instagram's bottom UI, and the HUD sits below the top bar. Captions are burned in for sound-off
+viewing.
+
+## Screenplay (as recorded)
+
+| Time | Narration (Gemini 3.8 Flash TTS · voice *Charon*) | Picture |
+|---|---|---|
+| 0.0 | — | Film-leader countdown, projector spins up |
+| 0.95 | "Nineteen thirteen." | **1913** slams in over a projection booth, B&W, grain, flicker |
+| 3.0 | "A man in Bombay bet everything he had…" | Hand-cranked camera print, Vox red circle, *Raja Harishchandra* clipping, Phalke label |
+| 6.2 | "…on pictures that move." | Racing 35 mm strip + silent-film intertitle |
+| 8.6 | "Then, they learned to speak," | *Alam Ara* 1931, live voice waveform, "100% TALKING!" |
+| 10.9 | "to sing," | Hand-tinted 1950s dance print (colour begins to bleed in) |
+| 12.0 | "in every language we dream in." | Dotted subcontinent; Bengali, Tamil, Telugu, Marathi, Kannada, Malayalam, Bhojpuri and Hindi pins, each with its first film and year |
+| 14.7 | "We turned our heroes into gods," | Colour slam on the music hit: sunburst, milk abhishekam on a cut-out, billboard painter, marquee of legends, **GODS.** |
+| 18.0 | "queued before sunrise, whistled, wept," | FDFS queue + HOUSEFULL stamp → WHISTLED! → *Wept.* |
+| 21.5 | "threw coins at the screen." | Coins fly at the lens; clippings flurry (Pather Panchali 1956 … Naatu Naatu 2023) |
+| 23.8 | "But every dream needed permission." | Cold grade; scripts stamped REJECTED / NO BUDGET / NOT NOW |
+| 26.4 | "For every film that got made, a thousand never did." | Data viz: one lit frame, then 1,000 dark ones |
+| 31.6 | "Until now." | Silence; Hinton crosshair; the 1,000 frames ignite red; white-out |
+| 34.9 | "Nothing has changed. Only now, the camera is your imagination." | **2026**; the 1913 camera turns into a prompt → generate → image resolves |
+| 39.8 | "Here's to the ones with small budgets… and impossible dreams." | Accelerating strip of real Hinton frames under SMALL BUDGETS / IMPOSSIBLE DREAMS |
+| 44.3 | "Made in India. For the world." | Bengaluru HQ pin → dotted globe, arcs to 14 world cities |
+| 47.5 | "Hinton Studios. Dream in 4K. Create with AI." | Hinton's own 3D metal logo sting (retimed so the H locks on "Studios") + tagline |
+| 53.3 | "The visionaries are already here… Are you?" | Muskan (mascot) on a Bengaluru rooftop, viewfinder overlay; hard cut, ARE YOU?; end card + hintonstudios.com |
+
+The spine borrows the "Think Different" cadence: history as a roll call, one turn ("Until now"),
+then an invitation.
+
+## Pipeline
+
+```
+preproduction (tools/preproduction)          composition (comp/)                 finishing (tools/)
+────────────────────────────────────         ──────────────────────────          ───────────────────────────
+tts.py      Gemini 3.8 Flash TTS, 3 takes    index.html + lib.js + scenes.js     render.mjs  headless Chromium,
+            + 4 pickups; picked by ear       + main.js: every frame is a pure    4 workers → JPEG frames
+vo_build.py cut take 3 at silences, 1.07×    function of t (springs, eases,      sfx.py      procedural SFX + logo
+            rubberband, re-spaced to picture seeded noise); no CSS transitions   sting audio
+genmusic.py Lyria 3 Pro score (instrumental)                                     mix.sh      VO chain, side-chain duck,
+music_edit.py bar-accurate edit: +1 bar                                                      −14 LUFS / −1 dBTP
+            celebration, drop moved to 34.57 s                                   ffmpeg      2-pass H.264, 9:16 + 3:4
+genimg.py   Gemini 3 Pro Image archival stills
+land.mjs    Natural Earth land → dot grid (no borders drawn)
+```
+
+### Re-render
+
+Requires Node 22 with Playwright's Chromium, ffmpeg (with librubberband), Python 3.11 with `numpy`,
+`scipy` and `soundfile`, and `google-genai` only for preproduction. Fonts are bundled in
+`comp/assets/fonts` (OFL/Apache).
+
+```bash
+cd video/hinton-reel-2026
+node tools/render.mjs --out frames --workers 4            # ~4 min, 1796 frames
+node tools/render.mjs --out stills --times 17.2,49.8      # spot-check stills
+python3 tools/sfx.py ../../public/assets/reload-animation/logo-90.mp4 audio/sfx.flac
+tools/mix.sh                                              # → audio/mix.wav + mix.flac
+ffmpeg -framerate 30 -i frames/f_%05d.jpg -i audio/mix.wav -c:v libx264 -b:v 7M -pix_fmt yuv420p \
+       -c:a aac -b:a 256k -movflags +faststart out/hinton-reel-9x16.mp4
+# 3:4: add -vf crop=1080:1440:0:240
+```
+
+The preproduction scripts read `GEMINI_API_KEY` from the environment. **Never commit a key.**
+Prompts used are in `tools/preproduction/prompts/`.
+
+## Rights & review notes
+
+- **No real people are depicted.** All archival-looking stills are AI-generated. They show
+  anonymous crew, crowds and fictional painted heroes. Real directors, stars and musicians appear
+  **only as names** in the tribute marquee. Have the painted cut-out face in `milk.jpg` reviewed
+  for accidental resemblance before paid promotion.
+- Newspaper mastheads are invented ("The Picture Herald", "Film Gazette", "The Screen Daily"). The
+  headlines are historical facts: Raja Harishchandra 1913, Alam Ara 1931, Pather Panchali at Cannes
+  1956, Mayabazar 1957, Mother India's Oscar nomination 1958, Sholay's five-year Minerva run,
+  Baahubali 2 passing ₹1,000 crore in 2017, and Naatu Naatu's Oscar in 2023.
+- The subcontinent and globe are drawn as land-only dot fields with **no political borders**.
+- The montage uses only portfolio frames that are currently public on the site. Nishiddham,
+  Superstar and the related portfolio-5/6 frames are excluded. Brand names are not shown on cards.
+- Music was generated with Lyria 3 Pro as an instrumental. SFX were synthesised procedurally. The
+  logo sting audio is Hinton's own asset.
