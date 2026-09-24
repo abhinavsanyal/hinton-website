@@ -10,6 +10,17 @@ consequences. Use [[templates/adr-note]] for new entries. Newest first.
 
 ---
 
+## ADR-0026 — Promo video is code-rendered and lives outside the site build
+
+- **Status:** Accepted
+- **Date:** 2026-09-24
+
+**Context.** Hinton needed a 60 s Instagram reel with Vox-style motion graphics, AI narration and AI music. The work had to be reproducible and editable in the repo, without affecting the Next.js site.
+
+**Decision.** Each video project lives in `video/<project>/` and is excluded from lint. The composition is an HTML/JS page in which every frame is a pure function of time. Closed-form springs and eases replace CSS transitions. Headless Chromium renders the frames (`tools/render.mjs`) and ffmpeg encodes them. Generative calls (Gemini TTS, Lyria, Gemini image) run in local preproduction scripts that read `GEMINI_API_KEY` from the environment. Audio stems are committed as FLAC. WAVs and frame dumps are gitignored.
+
+**Consequences.** Any frame can be re-rendered identically, and edits are text diffs. ADR-0002 (spring-only runtime motion) still governs the website, because the video code never ships to visitors. The final MP4s (~50 MB each) are committed directly. Move them to external hosting if the repo size becomes a concern.
+
 ## ADR-0025 — Service pages: `/services` hub-and-spoke, no GSAP camera
 
 - **Status:** Accepted

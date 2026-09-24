@@ -8,6 +8,13 @@ updated: 2026-08-12
 Chronological log of notable changes to the project. Newest first.
 This is a human-curated log — not a mirror of `git log`.
 
+## 2026-09-24 ("Dream in 4K" Instagram reel)
+
+- **New `video/hinton-reel-2026/`**: a self-contained 59.9 s motion-graphics promo covering Indian cinema from 1913 to 2026, ending on Hinton Studios. Deliverables are a 1080×1920 Reel master and a 1080×1440 feed cut. The folder also holds the deterministic HTML/JS composition, the Chromium frame renderer, procedural SFX, the mix chain, preproduction scripts and prompts, and FLAC stems. See the project README and
+  [[decisions-log]] ADR-0026.
+- `eslint.config.mjs` ignores `video/**`. The site runtime, `src/` and the animation
+  engine are untouched.
+
 ## 2026-08-12 (Service pages + site-wide navbar)
 
 - **Six new pages** — a `/services` hub plus five capability pages
