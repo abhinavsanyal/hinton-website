@@ -1,24 +1,56 @@
 # Hinton Studios — "Dream in 4K" Instagram reel (2026)
 
-A 59.9-second Vox-style motion-graphics promo that runs from Dadasaheb Phalke's 1913 hand-cranked
-camera through India's talkies, many-language film industries and superstar era to 2026. It ends on
-Hinton Studios, Bengaluru: *Dream in 4K. Create with AI.*
+**v2 — 90 seconds.** A Vox-style motion-graphics promo that runs from Dadasaheb Phalke's 1913
+hand-cranked camera through the talkies, India's many-language industries, the superstar era and
+2026. It ends on a 2D-animated Hinton Studios logo: *Dream in 4K. Create with AI.*
+(v1 was the 60-second cut. Its encodes are superseded, and it remains in git history.)
 
-This folder is self-contained and is **not part of the Next.js site build** (eslint ignores `video/**`).
+This folder is self-contained and is **not part of the Next.js site build**; eslint ignores `video/**`.
 
-| Deliverable | File | Use |
+| Deliverable | File |
+|---|---|
+| Reel master · 1080×1920 (9:16) · 30 fps · H.264 + AAC 48 kHz · −14 LUFS | `out/hinton-reel-9x16.mp4` |
+| Feed cut · 1080×1440 (3:4 centre crop, the whole layout is built to survive it) | `out/hinton-reel-3x4.mp4` |
+| Cover options | `out/cover-*.jpg` |
+
+## v2 structure (90.0 s)
+
+| Time | Beat | What's new in v2 |
 |---|---|---|
-| Reel master, 1080×1920 (9:16), 30 fps, H.264 + AAC 48 kHz, −14 LUFS | `out/hinton-reel-9x16.mp4` | Instagram Reels, Stories, YouTube Shorts |
-| Feed cut, 1080×1440 (3:4) | `out/hinton-reel-3x4.mp4` | Instagram feed post / carousel (3:4 grid) |
-| Cover options | `out/cover-gods.jpg`, `out/cover-dream-in-4k.jpg` | Reel cover image |
+| 0.0–13.4 | Silence → sound (1913, Alam Ara, first film song) | Video slots inside the prints and filmstrip; data chips (₹15,000 budget, ≈40 min, ≈16 fps hand-cranked; Majestic Cinema, 14 Mar 1931; first film song) |
+| 13.3–17.0 | Every language | Map dots heat up around each pin; "More films than any nation on Earth" stat card |
+| 17.5–23.5 | Heroes into gods | Colour slam on the hit; full-bleed billboard-painter and milk-abhishekam shots; kinetic type; "temples for their stars" insert |
+| 23.5–30.0 | **Star wall (new)** | 16 superstar cards from the 1970s to the 2000s across 7 languages: name, signature film, year and verified notes (Deewaar's Angry Young Man, Nayakan on TIME's All-Time 100, DDLJ's 1,000+ weeks, Lagaan's Oscar nomination, Bhojpuri revival…), one per beat at 124 BPM |
+| 30.0–38.9 | Queued · whistled · wept · coins | FDFS clock (03:00 → 05:40), HOUSEFULL stamp, shockwave, the tear, slow-motion coins, then a Vox timeline of six real headlines, 1956 → 2023 |
+| 38.9–49.9 | Permission → 1 in 1,000 → Until now | Scripts shot, four gatekeeper stamps; the "one film" is a live clip that shrinks into the grid |
+| 49.9–58.7 | 2026 · the camera is your imagination | New "only the tools changed" camera-evolution row (flat Vox icons); a denoise generation with a live progress readout |
+| 58.6–67.7 | Small budgets · impossible dreams · made in India | 3D tilted parallax wall of Hinton frames; the globe now has shading, graticule, atmosphere and city labels |
+| 67.7–74.7 | Hinton Studios · Dream in 4K · Create with AI | Pixel-mosaic → 4K resolve; nine "generated worlds" tiles resolving from noise |
+| 74.6–80.5 | The visionaries… Are you? | Muskan with focus pull and viewfinder; "Are you?" over her portrait |
+| 80.5–90.0 | **2D logo finale (new)** | The 17 real H-mask shards fly in on springs, the crosshair zips, brackets snap, shine sweep, wordmark, tagline, URL. The 3D sting clip is no longer used |
 
-**Why 9:16 with a 3:4 core.** The picture is built at 9:16 so it fills the phone in Reels. All
-essential type and action stays inside the central 1080×1440 band (y = 240–1680). The profile grid
-and feed show that band as 3:4, and the 3:4 feed cut is exactly that crop. Captions sit above
-Instagram's bottom UI, and the HUD sits below the top bar. Captions are burned in for sound-off
-viewing.
+### Motion clips (Higgsfield · Kling 3.0)
 
-## Screenplay (as recorded)
+Fourteen image-to-video / text-to-video clips were generated for v2. They are listed in
+`tools/media_urls.tsv`: projector, crank camera, talkie, dance, billboard painter, milk abhishekam,
+dawn queue, whistling audience, the tear, slow-motion coins, dreamer, Muskan, a first-day-first-show
+crowd and the scripts desk. Three extra stills are also listed: Muskan in the studio, Muskan's
+portrait, and a star seen from behind.
+
+The composition has a slot for each clip and falls back to the source still with a camera move.
+This cloud environment's egress policy blocks the Higgsfield result host
+(`d8j0ntlcm91z4.cloudfront.net`), so **the committed v2 encode uses the still fallbacks**. To drop
+the clips in:
+
+```bash
+tools/prep_media.sh          # downloads the clips, extracts 30 fps frames, writes assets/data/manifest.js
+node tools/render.mjs --out frames --workers 4
+```
+
+Then re-mux with the ffmpeg line below. It needs network access to that host: allow it in the
+environment settings, or run the two commands on any machine.
+
+## v1 screenplay (60 s, as recorded; v2 re-times the same narration with longer pauses)
 
 | Time | Narration (Gemini 3.8 Flash TTS · voice *Charon*) | Picture |
 |---|---|---|
@@ -68,10 +100,11 @@ Requires Node 22 with Playwright's Chromium, ffmpeg (with librubberband), Python
 
 ```bash
 cd video/hinton-reel-2026
-node tools/render.mjs --out frames --workers 4            # ~4 min, 1796 frames
+node tools/render.mjs --out frames --workers 4            # ~6 min, 2700 frames
 node tools/render.mjs --out stills --times 17.2,49.8      # spot-check stills
-python3 tools/sfx.py ../../public/assets/reload-animation/logo-90.mp4 audio/sfx.flac
-tools/mix.sh                                              # → audio/mix.wav + mix.flac
+python3 tools/vo_build_v2.py && python3 tools/music_edit_v2.py   # narration + score (90 s)
+python3 tools/sfx_v2.py x audio/sfx.wav
+tools/mix_v2.sh                                           # → audio/mix.wav + mix.flac
 ffmpeg -framerate 30 -i frames/f_%05d.jpg -i audio/mix.wav -c:v libx264 -b:v 7M -pix_fmt yuv420p \
        -c:a aac -b:a 256k -movflags +faststart out/hinton-reel-9x16.mp4
 # 3:4: add -vf crop=1080:1440:0:240
@@ -95,3 +128,14 @@ Prompts used are in `tools/preproduction/prompts/`.
   Superstar and the related portfolio-5/6 frames are excluded. Brand names are not shown on cards.
 - Music was generated with Lyria 3 Pro as an instrumental. SFX were synthesised procedurally. The
   logo sting audio is Hinton's own asset.
+
+### v2 notes
+
+- **Star wall:** real names appear as text only, with signature films and years. No photographs or
+  AI likenesses of real actors are used; that would need licensed photography and personality
+  rights. Licensed stills can go into the card slots in `STARS` in `comp/scenes.js`.
+- **Narration:** v2 re-times the original Charon take. The Gemini key's prepaid credits were
+  exhausted, so no new lines were recorded.
+- **Score:** built only from the three Lyria cues in `audio/sources/`, edited on hits
+  (`tools/music_edit_v2.py`). Lyria was unavailable for new music.
+- **GSAP:** GSAP 3.15 (`comp/vendor/`) is used only as a deterministic easing library.

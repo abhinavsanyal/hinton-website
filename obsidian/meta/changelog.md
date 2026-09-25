@@ -8,6 +8,10 @@ updated: 2026-08-12
 Chronological log of notable changes to the project. Newest first.
 This is a human-curated log — not a mirror of `git log`.
 
+## 2026-09-25 ("Dream in 4K" reel v2)
+
+- `video/hinton-reel-2026/` is now 90 s: star wall, headlines timeline, camera-evolution row, a 2D H-shard logo finale and video-clip slots with still fallbacks (`clipSlot` in `comp/lib.js`, `tools/prep_media.sh`). GSAP is vendored in `comp/vendor/` as an easing library. See [[decisions-log]] ADR-0027.
+
 ## 2026-09-24 ("Dream in 4K" Instagram reel)
 
 - **New `video/hinton-reel-2026/`**: a self-contained 59.9 s motion-graphics promo covering Indian cinema from 1913 to 2026, ending on Hinton Studios. Deliverables are a 1080×1920 Reel master and a 1080×1440 feed cut. The folder also holds the deterministic HTML/JS composition, the Chromium frame renderer, procedural SFX, the mix chain, preproduction scripts and prompts, and FLAC stems. See the project README and

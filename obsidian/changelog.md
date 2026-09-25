@@ -1,3 +1,9 @@
+## 2026-09-25 — "Dream in 4K" reel v2 (90 s)
+
+- The reel is now 90 s. New beats: a superstar "star wall" (16 stars, 1970s–2000s, 7 languages; names and verified film facts only), a Vox headlines timeline (1956–2023), a camera-evolution row, a denoise generation, 3D parallax work wall, pixel-to-4K resolve, "generated worlds" grid, and a 2D logo finale built from the real H-mask shards. The 3D sting clip is no longer used.
+- The narration is the same take, re-timed with longer pauses. The score is re-edited from the three original Lyria cues.
+- Fourteen Kling 3.0 motion clips and three stills were generated on Higgsfield (`video/hinton-reel-2026/tools/media_urls.tsv`). This environment cannot download from the Higgsfield CDN, so the committed encode uses still fallbacks. `tools/prep_media.sh` drops the clips in where that host is reachable.
+
 ## 2026-09-24 — "Dream in 4K" Instagram reel (video/hinton-reel-2026)
 
 - Added a self-contained motion-graphics project under `video/hinton-reel-2026/`: a 59.9 s Vox-style history of Indian cinema (1913 → 2026) ending on Hinton Studios. It is delivered as a 1080×1920 Reel master and a 1080×1440 feed cut, H.264/AAC, −14 LUFS.

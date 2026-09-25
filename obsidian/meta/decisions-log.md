@@ -10,6 +10,19 @@ consequences. Use [[templates/adr-note]] for new entries. Newest first.
 
 ---
 
+## ADR-0027 — Reel v2: video slots with still fallbacks; text-only star tributes
+
+- **Status:** Accepted
+- **Date:** 2026-09-25
+
+**Context.** v2 needed moving footage, but stock and generator CDNs are not reachable from the cloud render environment. The brief also asked for photos of real superstars.
+
+**Decision.** Each footage shot is a `clipSlot`: a 30 fps JPEG sequence when `assets/data/manifest.js` lists the clip, otherwise the source still with a deterministic camera move. `seek()` awaits image decodes, so frames never capture half-loaded media. Real actors appear only as names, films and verified facts. No photographs or AI likenesses are used without licences and personality rights. GSAP is used only for ease curves, never as a running timeline, which keeps rendering deterministic.
+
+**Consequences.** The same composition renders with or without the clips, and `tools/prep_media.sh` switches it over. Licensed photographs can later fill the star cards.
+
+---
+
 ## ADR-0026 — Promo video is code-rendered and lives outside the site build
 
 - **Status:** Accepted

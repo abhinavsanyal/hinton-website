@@ -204,3 +204,34 @@ const CAP = {
     st(this.el, { opacity: a.toFixed(3), transform: `translateY(${(1 - a) * 10}px)` });
   },
 };
+
+/* ---------- v2: video clip slots (image sequences) with still-image fallback ---------- */
+let CLIPS = {};              // name -> frame count, from assets/data/clips.json (absent => fallback still)
+const PENDING = [];          // image decodes the renderer must wait for before capturing a frame
+function setSrc(el, src) {
+  if (el.__src === src) return;
+  el.__src = src; el.src = src;
+  PENDING.push(el.decode().catch(() => {}));
+}
+/* A full-bleed or boxed video slot. `still` is shown (with drift) when the clip isn't available. */
+function clipSlot(parent, name, still, style = {}, opts = {}) {
+  const box = mk("div", { cls: "abs", style: Object.assign({ left: "0", top: "0", width: "1080px", height: "1920px", overflow: "hidden" }, style) }, parent);
+  const el = mk("img", { cls: "abs", style: { left: "0", top: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: opts.pos || "50% 50%", transformOrigin: "50% 50%" } }, box);
+  const slot = { box, el, name, still, t0: 0, speed: opts.speed || 1, offset: opts.offset || 0 };
+  slot.set = (t, extraScale = 1) => {
+    const lt = Math.max(0, t - slot.t0);
+    const n = CLIPS[name];
+    if (n) {
+      const idx = clamp(Math.floor((lt * slot.speed + slot.offset) * FPS), 0, n - 1);
+      setSrc(el, `assets/clips/${name}/${String(idx + 1).padStart(4, "0")}.jpg`);
+      st(el, { transform: `scale(${extraScale.toFixed(4)})` });
+    } else {
+      setSrc(el, img(still));
+      const d = opts.drift || [0.06, 0, -18];      // scale/sec, x px/sec, y px/sec
+      st(el, { transform: `translate(${(d[1] * lt).toFixed(2)}px, ${(d[2] * lt).toFixed(2)}px) scale(${((1.04 + d[0] * lt) * extraScale).toFixed(4)})` });
+    }
+  };
+  return slot;
+}
+/* GSAP eases as plain functions (deterministic; GSAP is only used as an easing/timeline library). */
+const G = (name) => (window.gsap ? gsap.parseEase(name) : (x) => x);
