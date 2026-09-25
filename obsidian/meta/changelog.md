@@ -20,6 +20,7 @@ This is a human-curated log — not a mirror of `git log`.
   - a 2026 shockwave
   - an SD → HD → 4K resolve that match-cuts into a 15-tile AI wall
 - The Muskan ending is one continuous take of her clip.
+- `tools/encode.sh` makes the 2-pass 9:16 master and 3:4 crop. The v3 (90 s) encodes are kept as `out/hinton-reel-v3-90s-*.mp4`.
 - See [[decisions-log]] ADR-0029.
 
 ## 2026-09-25 (reel v3)
