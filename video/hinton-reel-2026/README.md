@@ -12,6 +12,7 @@ This folder is self-contained and is **not part of the Next.js site build**; esl
 | Reel master · 1080×1920 (9:16) · 30 fps · H.264 + AAC 48 kHz · −14 LUFS | `out/hinton-reel-9x16.mp4` |
 | Feed cut · 1080×1440 (3:4 centre crop, the whole layout is built to survive it) | `out/hinton-reel-3x4.mp4` |
 | Cover options | `out/cover-*.jpg` |
+| v1 (60 s) Reel + feed cut, kept for reference | `out/hinton-reel-v1-60s-9x16.mp4`, `out/hinton-reel-v1-60s-3x4.mp4` |
 
 ## v2 structure (90.0 s)
 

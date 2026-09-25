@@ -11,6 +11,7 @@ This is a human-curated log — not a mirror of `git log`.
 ## 2026-09-25 ("Dream in 4K" reel v2)
 
 - `video/hinton-reel-2026/` is now 90 s: star wall, headlines timeline, camera-evolution row, a 2D H-shard logo finale and video-clip slots with still fallbacks (`clipSlot` in `comp/lib.js`, `tools/prep_media.sh`). GSAP is vendored in `comp/vendor/` as an easing library. See [[decisions-log]] ADR-0027.
+- The 60 s v1 encodes are kept beside v2 as `out/hinton-reel-v1-60s-*.mp4`.
 
 ## 2026-09-24 ("Dream in 4K" Instagram reel)
 
