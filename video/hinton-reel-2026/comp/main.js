@@ -20,7 +20,7 @@ const CAPTIONS = [
 
 /* camera shake [t, amount] and white flashes [t, peak, decay s] — each sits on a musical hit */
 const IMPACTS = [[1.1, 0.6], [17.63, 1.0], [20.62, 0.8], [23.26, 0.35], [31.72, 0.6], [32.47, 0.5], [38.9, 0.6], [39.75, 0.35], [40.1, 0.35], [40.45, 0.35], [40.8, 0.35], [46.4, 0.5], [49.88, 1.3], [68.12, 0.35], [76.12, 0.9]];
-const FLASHES = [[1.1, 0.85, 0.28], [17.63, 0.5, 0.35], [20.62, 0.3, 0.2], [32.45, 0.25, 0.12], [46.4, 0.25, 0.3], [49.88, 1.0, 0.45], [76.12, 0.3, 0.35]];
+const FLASHES = [[1.1, 0.85, 0.28], [17.63, 0.5, 0.35], [20.62, 0.3, 0.2], [32.45, 0.25, 0.12], [46.4, 0.1, 0.25], [49.88, 0.95, 0.3], [76.12, 0.3, 0.35]];
 
 function era(t) {
   if (t < 12.05) return { f: "grayscale(1) contrast(1.14) sepia(.12)", fx: { grain: 0.2, dust: 1, flicker: 0.16 }, v: 0.8 };
@@ -36,7 +36,7 @@ function hudState(t) {
   if (t < 1.1 || (t >= 23.22 && t < 30.08) || (t >= 46.4 && t < 49.88) || t >= 65.81) return null;
   if (t < 9.68) return { y: 1913, c: "01 — SILENCE" };
   if (t < 13.3) return { y: lerp(1913, 1931, E.outC(P(t, 9.75, 10.2))), c: "02 — SOUND" };
-  if (t < 17.63) return { y: lerp(1931, 1963, P(t, 13.45, 15.4)), c: "02 — SOUND" };
+  if (t < 17.63) { let y = 1931; LANGS.forEach((L, i) => { if (t >= 13.45 + i * 0.26) y = L.y; }); return { y, c: "02 — SOUND" }; }
   if (t < 23.22) return { y: lerp(1963, 1975, E.outC(P(t, 17.63, 18.2))), c: "03 — STARDOM" };
   if (t < 36.7) return { y: "70s–90s", c: "03 — STARDOM" };
   if (t < 38.85) { let y = 1956; CLIPS_NEWS.forEach((c, i) => { if (t >= 36.7 + i * 0.33) y = c[4]; }); return { y, c: "03 — STARDOM" }; }

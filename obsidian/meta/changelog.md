@@ -8,6 +8,18 @@ updated: 2026-09-25
 Chronological log of notable changes to the project. Newest first.
 This is a human-curated log — not a mirror of `git log`.
 
+## 2026-09-25 (reel v4.1 — final polish)
+
+- A frame-by-frame review of `video/hinton-reel-2026/` led to these fixes:
+  - The logo lands on the final chord: a glow of the whole mark on the hit, then a faster trace and fill.
+  - The studio title sits over an LED-wall backdrop, and the resolution labels are synced to their frames.
+  - The AI tiles use a diffusion-style reveal.
+  - The HUD year follows the languages map, now ordered by each language's first talkie.
+  - Dialogue-card attributions are more legible, and the S16 labels no longer collide.
+  - The "Until now" and 2026 flashes are softer.
+- Sound: soft swishes on the SD/HD steps, and the logo chime and swell are re-timed.
+- No new dependencies.
+
 ## 2026-09-25 (reel v4)
 
 - `video/hinton-reel-2026/` is now 83.6 s, with the same narration.

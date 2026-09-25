@@ -64,14 +64,16 @@ w = whoosh(0.8, 160, 2800, 0.6, -1); place(w, lead_in(w, 62.5, 0.6), 0.13)
 place(swell(1.0, 120, 4000), 63.0, 0.07)
 w = whoosh(0.9, 140, 2400, 0.6, 1); place(w, lead_in(w, 65.82, 0.6), 0.12)
 place(swell(0.9, 300, 10000), 67.3, 0.06)
+place(card_swish(0.3, -0.25), 67.38 - 0.12, 0.05, 0.3)                 # SD frame pops in
+place(card_swish(0.3, 0.25), 67.72 - 0.12, 0.06, 0.3)                  # HD
 place(card_swish(0.3, 0.0), 68.12, 0.1, 0.3)                           # 4K chip
 w = whoosh(0.7, 200, 3600, 0.6, -1); place(w, lead_in(w, 69.06, 0.6), 0.13)
 place(swell(1.3, 120, 6000), 69.75, 0.06)
 place(swell(1.1, 100, 3000), 70.0, 0.05)                                # into Muskan
 # logo
 place(sub_drop(2.8, 60, 28), 76.12, 0.36, 0.55)
-place(chime(3.0, 1100), 77.35, 0.05, 0.7)
-place(swell(1.2, 400, 12000), 77.4, 0.05, 0.6)
+place(chime(3.0, 1100), 76.86, 0.05, 0.7)                             # the H fills with light
+place(swell(1.2, 400, 12000), 76.5, 0.05, 0.6)                         # air rising into the wordmark (77.62)
 
 dry = dry[: int(DUR * SR)]
 wet = reverb(send)[: int(DUR * SR)]

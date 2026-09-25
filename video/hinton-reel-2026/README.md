@@ -67,6 +67,17 @@ The narration and screenplay are unchanged. v4 tightens the cut to the music and
 - A moving layer under every graphics scene: the projector behind the map, the dreamer behind 2026,
   a drifting star field behind the globe, and Ken Burns inside every portfolio tile.
 
+### v4.1 final polish (from a frame-by-frame review)
+- **Logo lands on the chord.** The whole H glows on the final hit, then the blueprint trace, light fill and wordmark play about 35% faster. The chime and air swell are re-timed to the fill and the wordmark.
+- **"Hinton Studios":** the title now sits over a moving LED wall (one rounded bulb per pixel of the festival clip) instead of a blurry mosaic. Viewfinder ticks replace the lines that crossed the title.
+- **SD → HD → 4K:** each resolution label appears as its frame arrives. A soft swish marks each step.
+- **Create with AI:** the tiles resolve like a diffusion model (grain over a blurred, colour-rich picture, sharpening into the clip) instead of TV static.
+- **Languages map:** pins run in order of each language's first talkie, and the HUD year follows them (1931 → 1963).
+- **Dialogue cards:** a darker base and shadows under every name and film line. The DDLJ sky and horizon haze are calmer behind the text.
+- **The camera is your imagination:** the labels no longer overlap, and the generation readout sits inside the frame as a pill.
+- **Flashes:** the white flash under "Until now" is almost gone. The 2026 flash clears faster, so the red slam stays saturated.
+- **Holds:** the "one film that got made" clip now breathes with a slow push and projector glow, and the intertitle keeps drifting.
+
 ### v4 structure (83.6 s)
 
 | Time | Beat |

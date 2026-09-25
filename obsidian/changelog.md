@@ -1,3 +1,12 @@
+## 2026-09-25 — Reel v4.1: final polish
+
+- The logo lands on the final chord.
+- An LED-wall title card replaces the muddy mosaic.
+- The SD → HD → 4K labels are synced, and the AI tiles use a diffusion-style reveal.
+- The HUD year follows the languages map.
+- Dialogue cards are more legible, the S16 labels are cleaner, and the flashes are softer.
+- The "1 film" shot and the intertitle keep moving while they hold.
+
 ## 2026-09-25 — Reel v4: music-first sound, dialogue wall, one-take Muskan ending (83.6 s)
 
 - The sound is rebuilt so nothing starts or stops abruptly:
