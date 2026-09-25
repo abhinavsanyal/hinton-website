@@ -1,12 +1,34 @@
 ---
 tags: [meta, decision]
-updated: 2026-08-12
+updated: 2026-09-25
 ---
 
 # Decisions Log (ADRs)
 
 Architecture Decision Records. Each entry captures a choice, its context, and its
 consequences. Use [[templates/adr-note]] for new entries. Newest first.
+
+---
+
+## ADR-0029 — Reel v4: a music-first sound design and a burn/iris/match-cut picture grammar
+
+- **Status:** Accepted
+- **Date:** 2026-09-25
+
+**Context.** Owner feedback on v3: the sound design felt abrupt and disconnected, the Muskan ending mixed a still, a clip and a slow-motion zoom, some scenes were too static, and famous star faces were requested.
+
+**Decision.**
+- *Score.* The score is edited music-first. Joins are bar-locked equal-power crossfades on beat-tracked downbeats. Entrances rise out of reverse swells built from the incoming music, and a seamless 3-bar jump extends the anthem instead of stretching it. A paulstretched drone and bloom sustain the quiet passages and the finale (`music_edit_v4.py`).
+- *SFX.* Every SFX is designed with a smooth attack and shares one synthetic hall with the score (`audiokit.py`, `sfx_v4.py`). An ambience bed built from each clip's own sound carries every cut.
+- *Mix.* Dialogue is clip-gain ridden per line (±4 dB, only in the gaps), and music ducks slowly with a 1–4 kHz spectral dip (`mix_v4.py`).
+- *Picture.* Transitions are motivated by the story. Irises serve the silent era. For the colour era, the reel jams and a burn hole (`clip-path: path()`, one polygon shared with the overlay canvas) reveals the colour scene beneath. The 4K frame match-cuts into the AI tile wall.
+- *Muskan.* She appears only in her own continuous clip, at natural speed.
+- *Stars.* Their famous dialogues appear as attributed quotations in their original scripts. There are no photographs or likenesses, because of personality-rights orders and copyrighted, watermarked stills.
+
+**Consequences.**
+- The cut shortened to 83.6 s and is locked to the score's bar grid. Picture hits (17.63, 23.26 + k·0.9756, 49.88, 68.12, 76.12) must move with the score.
+- Canvases that draw video frames use the new `post` hook, which runs after decode in `seek()`.
+- Every line measures ≥ 10.6 dB voice-over-bed in the speech band.
 
 ---
 

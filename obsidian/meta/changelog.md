@@ -1,12 +1,26 @@
 ---
 tags: [meta, changelog]
-updated: 2026-08-12
+updated: 2026-09-25
 ---
 
 # Changelog
 
 Chronological log of notable changes to the project. Newest first.
 This is a human-curated log — not a mirror of `git log`.
+
+## 2026-09-25 (reel v4)
+
+- `video/hinton-reel-2026/` is now 83.6 s, with the same narration.
+- Sound is rebuilt music-first: `music_edit_v4.py` makes bar-locked joins with reverse swells and a paulstretch bloom; `audiokit.py` and `sfx_v4.py` design SFX in one shared hall; `mix_v4.py` adds per-line dialogue riding, slow ducking with a spectral dip, and an ambience bed built from the clips' own sound.
+- The picture gains:
+  - silent-era irises
+  - a film-burn transition into colour
+  - a dialogue wall of 7 marquee cards with animated motifs, native-script lines and a year ruler
+  - a neon HOUSEFULL sign
+  - a 2026 shockwave
+  - an SD → HD → 4K resolve that match-cuts into a 15-tile AI wall
+- The Muskan ending is one continuous take of her clip.
+- See [[decisions-log]] ADR-0029.
 
 ## 2026-09-25 (reel v3)
 

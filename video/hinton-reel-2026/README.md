@@ -1,9 +1,9 @@
 # Hinton Studios — "Dream in 4K" Instagram reel (2026)
 
-**v2 — 90 seconds.** A Vox-style motion-graphics promo that runs from Dadasaheb Phalke's 1913
-hand-cranked camera through the talkies, India's many-language industries, the superstar era and
-2026. It ends on a 2D-animated Hinton Studios logo: *Dream in 4K. Create with AI.*
-(v1 was the 60-second cut. Its encodes are superseded, and it remains in git history.)
+**v4 — 83.6 seconds.** A Vox-style motion-graphics promo that runs from Dadasaheb Phalke's 1913
+hand-cranked camera through the talkies, India's many-language industries, the dialogues a nation
+knows by heart, and 2026. It ends on Muskan and a 2D-animated Hinton Studios logo: *Dream in 4K.
+Create with AI.* Earlier cuts (v1 60 s, v3 90 s) are kept in `out/` for reference.
 
 This folder is self-contained and is **not part of the Next.js site build**; eslint ignores `video/**`.
 
@@ -12,9 +12,90 @@ This folder is self-contained and is **not part of the Next.js site build**; esl
 | Reel master · 1080×1920 (9:16) · 30 fps · H.264 + AAC 48 kHz · −14 LUFS | `out/hinton-reel-9x16.mp4` |
 | Feed cut · 1080×1440 (3:4 centre crop, the whole layout is built to survive it) | `out/hinton-reel-3x4.mp4` |
 | Cover options | `out/cover-*.jpg` |
-| v1 (60 s) Reel + feed cut, kept for reference | `out/hinton-reel-v1-60s-9x16.mp4`, `out/hinton-reel-v1-60s-3x4.mp4` |
+| v3 (90 s) and v1 (60 s), kept for reference | `out/hinton-reel-v3-90s-*.mp4`, `out/hinton-reel-v1-60s-*.mp4` |
 
-## v3 update (current encode)
+## v4 (current encode)
+
+The narration and screenplay are unchanged. v4 tightens the cut to the music and rebuilds the sound.
+
+### Sound: one continuous, resonant score
+- **Music first, bar-locked** (`tools/music_edit_v4.py`). Every join is an equal-power crossfade on
+  a downbeat found by beat tracking. Section entrances rise out of reverse-reverb swells built from
+  the incoming music, so nothing starts cold. A seamless three-bar jump (timbre match 0.92) extends
+  the anthem instead of time-stretching it.
+- **The music breathes with the story.** It inhales under "wept". A paulstretched drone grown from
+  the dark sting holds the tension under "a thousand never did". The last bar before the final chord
+  dissolves to a low-passed whisper for "Are you?", then the chord lands in full with the logo and
+  blooms into a seven-second sustain.
+- **Designed SFX in one room** (`tools/audiokit.py`, `tools/sfx_v4.py`). Every sound is drawn with
+  a smooth attack and sent to the same synthetic hall as the score:
+  - whooshes shaped to peak on the cut, sub drops only on the big hits
+  - the film burning, the HOUSEFULL neon buzzing on with its flicker, a marquee swish per dialogue card
+  - coin tings and paper for the headlines
+- **An ambience bed from the clips' own sound**: the projector, crank camera, painter's street,
+  festival crowd, dawn queue, whistles, rain and the Bengaluru rooftop. It is crossfaded shot to
+  shot, low-passed and lightly reverberant, so every cut is carried by sound and there is no dead air.
+- **Mix** (`tools/mix_v4.py`):
+  - Dialogue is ridden line by line to one level (±4 dB clip gain, moved only between lines).
+  - The music ducks slowly (−5.5 dB, 250 ms look-ahead, 700 ms hold, ≈0.85 s release) with a
+    1–4 kHz spectral dip, so the voice cuts through without pumping.
+  - Every line sits **≥ 10.6 dB above the bed in the speech band**.
+  - Glue compression, then two-pass loudness to −14 LUFS / −1.5 dBTP (LRA ≈ 6 LU).
+
+### Picture: motion in every frame
+- **Silent-era irises**: out of the camera print, and out of the intertitle into *Alam Ara*.
+- **The film burns into colour**: on the language map the projector jams, the frame freezes and
+  shudders, blisters, then burns open. Through the hole is the hand-painted billboard in full
+  colour, landing on the music's colour hit at 17.63 s.
+- **"Temples for their stars"** now plays over the festival mural clip instead of a still.
+- **The lines a nation knows by heart**: seven marquee cards, one every two beats, each with its
+  own animated motif, the dialogue in its original script, and a Vox year ruler:
+  - *Sholay* (hills at sunset) and *Deewaar* (coins thrown down)
+  - *DDLJ* (a swaying mustard field) and *Padayappa* (a sunrise)
+  - *Narasimham* (light from above) and *Wanted* (police tape)
+  - *Pushpa* (rising sparks)
+- **HOUSEFULL** is a neon sign that flickers on (buzz and thud in sync) above the dawn queue.
+- **2026** arrives with a shockwave ring and an anamorphic flare, over the rain-soaked dreamer.
+- **Hinton Studios. Dream in 4K.** The festival night plays as a moving colour mosaic behind the
+  title. The billboard clip then resolves SD → HD → 4K with scan wipes, nested resolution outlines
+  and a live megapixel counter.
+- **Create with AI.** A match cut makes the 4K frame one tile in a wall of fifteen generated worlds,
+  which denoise with typed prompts as the camera pulls back.
+- **Muskan**: one continuous take of her video only (no stills, no slow motion). A focus pull opens
+  on the beat. "The visionaries are already here" rises word by word; "Are you?" lands as she turns
+  to camera and smiles. Cut to the logo on the final chord.
+- A moving layer under every graphics scene: the projector behind the map, the dreamer behind 2026,
+  a drifting star field behind the globe, and Ken Burns inside every portfolio tile.
+
+### v4 structure (83.6 s)
+
+| Time | Beat |
+|---|---|
+| 0.0–6.8 | Leader → **1913** → Phalke's camera, *Raja Harishchandra* (iris out) |
+| 6.8–13.4 | Pictures that move (iris) → *Alam Ara* 1931 → first film song |
+| 13.3–17.6 | Every language we dream in → the reel jams and **burns into colour** |
+| 17.3–23.3 | We turned our heroes… into **Gods.** → temples for their stars |
+| 23.2–30.1 | **The lines a nation knows by heart** (7 cards, 1975 → 2021) |
+| 30.0–38.9 | Queued before sunrise (neon HOUSEFULL) · Whistled · Wept · coins at the screen → headlines 1956–2023 |
+| 38.9–49.9 | Permission → 1 in 1,000 → Until now |
+| 49.9–58.4 | **2026** · nothing has changed → the camera is your imagination |
+| 58.3–65.9 | Small budgets · impossible dreams → Made in India, for the world |
+| 65.8–71.0 | Hinton Studios · Dream in **4K** (SD → HD → 4K) → Create with **AI** (tile wall) |
+| 71.0–76.1 | Muskan: the visionaries are already here. *Are you?* |
+| 76.1–83.6 | Logo on the final chord; tagline, hintonstudios.com |
+
+### Why the stars appear as their words, not their faces
+The brief asked for photos of Shah Rukh Khan, Salman Khan, Amitabh Bachchan and others. They are
+not used. Indian courts have granted these actors personality-rights protection against
+unauthorised commercial use of their name, image and likeness (Amitabh Bachchan, Delhi High Court,
+2022, and later orders for other stars), and the supplied film stills are copyrighted frames with
+third-party watermarks. Using them in an ad would imply an endorsement.
+
+The wall instead quotes each star's most famous line, short and attributed, with the film and year.
+It uses no likeness and no film frames. Before paid promotion, have counsel confirm the quotations
+and names. Licensed photography can replace a card's motif in `LINES` in `comp/scenes.js`.
+
+## v3 update (90 s, superseded by v4)
 
 - **All 14 Kling 3.0 motion clips are in the cut** (sources in `media/`, frame sequences built by `tools/prep_media.sh` at native aspect), with their diegetic sound: projector, crank camera, talkie, dance, billboard painter, milk abhishekam, first-day-first-show crowd (from 3.5 s, past the AI signage), dawn queue, whistling audience, the tear, scripts desk, dreamer, and Muskan (her smile to camera also carries "Are you?").
 - **The coin shot is pure motion graphics now**, replacing the coin clip: a perspective cinema screen playing the abhishekam, a projector beam with dust, rows of silhouetted fans, 46 vector coins (25 paise / 50 paise / ₹1) arcing into the screen with motion trails and spark hits, Vox labels, and a "single-screen ovation" card.
@@ -113,15 +194,14 @@ Requires Node 22 with Playwright's Chromium, ffmpeg (with librubberband), Python
 
 ```bash
 cd video/hinton-reel-2026
-node tools/render.mjs --out frames --workers 4            # ~6 min, 2700 frames
-node tools/render.mjs --out stills --times 17.2,49.8      # spot-check stills
-tools/prep_media.sh                                       # clips in media/ → frame sequences + manifest
-python3 tools/vo_build_v2.py && python3 tools/music_edit_v3.py   # narration + score (90 s)
-python3 tools/sfx_v3.py x audio/sfx.wav
-python3 tools/mix_v3.py                                   # → audio/mix.wav + mix.flac (−14 LUFS)
-ffmpeg -framerate 30 -i frames/f_%05d.jpg -i audio/mix.wav -c:v libx264 -b:v 7M -pix_fmt yuv420p \
-       -c:a aac -b:a 256k -movflags +faststart out/hinton-reel-9x16.mp4
-# 3:4: add -vf crop=1080:1440:0:240
+tools/prep_media.sh                                       # clips in media/ → 30 fps frame sequences + manifest
+node tools/render.mjs --out frames --workers 4            # ~11 min, 2508 frames
+node tools/render.mjs --out stills --times 17.5,68.4      # spot-check stills
+python3 tools/vo_build_v3.py                              # narration re-timed to the 83.6 s picture
+python3 tools/music_edit_v4.py                            # bar-locked score
+python3 tools/sfx_v4.py                                   # designed SFX + hall send
+python3 tools/mix_v4.py                                   # → audio/mix.wav + mix.flac (−14 LUFS)
+tools/encode.sh                                           # 2-pass H.264: 9:16 master (4.8 Mb/s) + 3:4 crop (4.2 Mb/s)
 ```
 
 The preproduction scripts read `GEMINI_API_KEY` from the environment. **Never commit a key.**
@@ -153,3 +233,14 @@ Prompts used are in `tools/preproduction/prompts/`.
 - **Score:** built only from the three Lyria cues in `audio/sources/`, edited on hits
   (`tools/music_edit_v2.py`). Lyria was unavailable for new music.
 - **GSAP:** GSAP 3.15 (`comp/vendor/`) is used only as a deterministic easing library.
+
+### v4 notes
+
+- **Dialogue wall:** seven short, attributed quotations (Sholay, Deewaar, DDLJ, Padayappa,
+  Narasimham, Wanted, Pushpa), shown in romanised form and in their original script, with the
+  film and year. No photographs, film frames or likenesses of the actors are used.
+- **Footage:** all motion footage is AI-generated with Kling 3.0 (Higgsfield) for this reel. The
+  milk-abhishekam clip shows a painted cut-out hero; have it checked for accidental resemblance to
+  a real actor before paid promotion. Muskan is Hinton's own mascot.
+- **Narration:** the original Charon take, re-timed (`tools/vo_build_v3.py`). Every splice falls
+  in a natural pause (−51 to −84 dB at the cut).

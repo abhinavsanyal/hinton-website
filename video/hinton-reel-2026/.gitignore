@@ -3,3 +3,4 @@ frames/
 media/*.wav
 media/*.png
 comp/assets/clips/
+tools/__pycache__/

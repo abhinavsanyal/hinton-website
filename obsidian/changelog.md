@@ -1,3 +1,17 @@
+## 2026-09-25 — Reel v4: music-first sound, dialogue wall, one-take Muskan ending (83.6 s)
+
+- The sound is rebuilt so nothing starts or stops abruptly:
+  - Bar-locked score joins with reverse swells, a paulstretch drone under "a thousand never did", and a bloom under the logo.
+  - Designed SFX share one hall, and an ambience bed is built from each clip's own sound.
+  - Dialogue is ridden line by line, and ducking is slow with a spectral dip. Every line is ≥ 10.6 dB above the bed in the speech band.
+- Picture:
+  - irises in the silent era, and the reel jamming and burning into colour
+  - "The lines a nation knows by heart", seven dialogue cards (Sholay → Pushpa) with motifs, original-script lines and a year ruler
+  - a neon HOUSEFULL sign and a 2026 shockwave
+  - SD → HD → 4K, then a match cut into a wall of AI-generated worlds
+- Muskan now appears only in her own video, as one take, with "Are you?" on her smile.
+- Stars appear through their famous lines, not their faces, because of personality rights and copyrighted, watermarked stills. See `video/hinton-reel-2026/README.md`.
+
 ## 2026-09-25 — Reel v3.1: all 14 clips, motion-graphics coin shot
 
 - All 14 Kling clips supplied by the owner are integrated with diegetic sound. Clip frames keep their native aspect. The coin clip is replaced by a Vox motion-graphics sequence (screen, beam, silhouettes, vector coins, labels).
