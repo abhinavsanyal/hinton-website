@@ -8,6 +8,10 @@ updated: 2026-08-12
 Chronological log of notable changes to the project. Newest first.
 This is a human-curated log — not a mirror of `git log`.
 
+## 2026-09-25 (reel v3)
+
+- `video/hinton-reel-2026/`: five real clips with their diegetic audio; `music_edit_v3.py` (continuous passes, no stretching), `mix_v3.py` (smooth ducking, dry vocal, −14 LUFS), `sfx_v3.py` (leaner). The logo finale is a blueprint-trace/light-fill reveal. See [[decisions-log]] ADR-0028.
+
 ## 2026-09-25 ("Dream in 4K" reel v2)
 
 - `video/hinton-reel-2026/` is now 90 s: star wall, headlines timeline, camera-evolution row, a 2D H-shard logo finale and video-clip slots with still fallbacks (`clipSlot` in `comp/lib.js`, `tools/prep_media.sh`). GSAP is vendored in `comp/vendor/` as an easing library. See [[decisions-log]] ADR-0027.

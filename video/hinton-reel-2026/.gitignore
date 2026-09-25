@@ -1,4 +1,5 @@
 audio/*.wav
 frames/
-media/
+media/*.wav
+media/*.png
 comp/assets/clips/

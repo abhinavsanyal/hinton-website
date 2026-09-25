@@ -14,6 +14,17 @@ This folder is self-contained and is **not part of the Next.js site build**; esl
 | Cover options | `out/cover-*.jpg` |
 | v1 (60 s) Reel + feed cut, kept for reference | `out/hinton-reel-v1-60s-9x16.mp4`, `out/hinton-reel-v1-60s-3x4.mp4` |
 
+## v3 update (current encode)
+
+- **Real motion clips:** five Kling 3.0 clips are now in the cut: billboard painter, milk abhishekam, whistling audience, the tear, and coins (as a 2× motion-interpolated slow-motion payoff). They sit in `media/`, and their own diegetic sound (street, drums and crowd, cinema cheer, coin clinks) replaces the synthesised crowd. The other clips in `tools/media_urls.tsv` still use still fallbacks until they are placed in `media/` (then run `tools/prep_media.sh`).
+- **Score rebuilt** (`tools/music_edit_v3.py`): five long, continuous passes from the original Lyria cues, with no time-stretching. Joins fall only on hits or in silence. The vintage theme now starts after "1913" so its hit lands exactly on the colour slam.
+- **Mix and master rebuilt** (`tools/mix_v3.py`):
+  - Dry vocal chain: high-pass, de-mud, presence, de-esser, gentle compression; the echo is removed.
+  - Smooth voice-driven ducking (look-ahead, about 50 ms down and 280 ms up) instead of the pumping sidechain. The voice sits ≥7.6 dB above the bed in the speech band on every line.
+  - A leaner SFX pass (`tools/sfx_v3.py`).
+  - Glue compression, then two-pass loudness to −14 LUFS / −1.5 dBTP (LRA ≈ 4 LU).
+- **Logo finale redone:** no fragment assembly. The crosshair extends, the H is traced as fine blueprint lines and then fills with light while settling into focus. The brackets glide in from the corners, one light sweep crosses the mark, and the wordmark's tracking closes as it rises.
+
 ## v2 structure (90.0 s)
 
 | Time | Beat | What's new in v2 |
@@ -103,9 +114,10 @@ Requires Node 22 with Playwright's Chromium, ffmpeg (with librubberband), Python
 cd video/hinton-reel-2026
 node tools/render.mjs --out frames --workers 4            # ~6 min, 2700 frames
 node tools/render.mjs --out stills --times 17.2,49.8      # spot-check stills
-python3 tools/vo_build_v2.py && python3 tools/music_edit_v2.py   # narration + score (90 s)
-python3 tools/sfx_v2.py x audio/sfx.wav
-tools/mix_v2.sh                                           # → audio/mix.wav + mix.flac
+tools/prep_media.sh                                       # clips in media/ → frame sequences + manifest
+python3 tools/vo_build_v2.py && python3 tools/music_edit_v3.py   # narration + score (90 s)
+python3 tools/sfx_v3.py x audio/sfx.wav
+python3 tools/mix_v3.py                                   # → audio/mix.wav + mix.flac (−14 LUFS)
 ffmpeg -framerate 30 -i frames/f_%05d.jpg -i audio/mix.wav -c:v libx264 -b:v 7M -pix_fmt yuv420p \
        -c:a aac -b:a 256k -movflags +faststart out/hinton-reel-9x16.mp4
 # 3:4: add -vf crop=1080:1440:0:240

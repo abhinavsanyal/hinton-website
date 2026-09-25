@@ -467,10 +467,10 @@ scene(32.45, 33.62, (s, r) => {
 
 /* ============ S11 — Wept (33.55 – 34.95) ============ */
 scene(33.55, 34.97, (s, r) => {
-  s.bg = clipSlot(r, "v09_tear", "audience.jpg", {}, { drift: [0.04, 0, 0], pos: "20% 30%" });
+  s.bg = clipSlot(r, "v09_tear", "audience.jpg", {}, { drift: [0.04, 0, 0], pos: "20% 30%", offset: 1.5 });
   s.bg.t0 = 33.55;
   s.tint = mk("div", { cls: "fill", style: { background: "linear-gradient(180deg, rgba(20,30,60,.25), rgba(0,0,0,.45))" } }, r);
-  s.word = mk("div", { cls: "abs center-x serif", text: "Wept.", style: { top: "1100px", fontStyle: "italic", fontSize: "240px", lineHeight: "1", color: "#f6f0e2", textShadow: "0 20px 60px rgba(0,0,0,.8)" } }, r);
+  s.word = mk("div", { cls: "abs center-x serif", text: "Wept.", style: { top: "1200px", fontStyle: "italic", fontSize: "240px", lineHeight: "1", color: "#f6f0e2", textShadow: "0 20px 60px rgba(0,0,0,.8)" } }, r);
 }, (s, t) => {
   s.bg.set(t);
   if (!CLIPS.v09_tear) st(s.bg.el, { filter: "saturate(.6) brightness(.85) sepia(.2)" });
@@ -489,8 +489,10 @@ const CLIPS_NEWS = [
 ];
 scene(34.9, 38.95, (s, r) => {
   st(r, { background: "#0d0907" });
-  s.bg = clipSlot(r, "v10_coins", "audience.jpg", {}, { drift: [0.05, 0, 0] });
+  s.bg = clipSlot(r, "v08_audience", "audience.jpg", {}, { drift: [0.05, 0, 0], offset: 2.5 });
   s.bg.t0 = 34.9;
+  s.bg2 = clipSlot(r, "v10_coins_slow", "audience.jpg", { opacity: "0" }, { drift: [0.03, 0, 0] });
+  s.bg2.t0 = 35.75;
   s.cv = mk("canvas", { attrs: { width: 1080, height: 1920 }, cls: "full" }, r);
   s.ctx = s.cv.getContext("2d");
   const rr = rng(2024);
@@ -505,10 +507,12 @@ scene(34.9, 38.95, (s, r) => {
     return { dot, yr, cl };
   });
 }, (s, t) => {
-  s.bg.set(t);
-  if (!CLIPS.v10_coins) st(s.bg.el, { filter: "brightness(.5) blur(2px)" });
+  s.bg.set(t, 1.08 + (t - 34.9) * 0.05);
+  const haveCoins = !!CLIPS.v10_coins_slow;
+  if (haveCoins) { s.bg2.set(t, 1.04 + Math.max(0, t - 35.75) * 0.03); st(s.bg2.box, { opacity: String(clamp((t - 35.75) / 0.12)) }); }
+  else st(s.bg.el, { filter: "brightness(.5) blur(2px)" });
   const c = s.ctx; c.clearRect(0, 0, 1080, 1920);
-  if (!CLIPS.v10_coins) {
+  if (!haveCoins) {
     for (const q of s.coins) {
       const d = (t - q.t0) * 0.62; if (d < 0 || d > 1.7) continue;        // slow motion
       const x = q.x + q.vx * d, y = q.y + q.vy * d + 0.5 * 1100 * d * d;
@@ -1003,70 +1007,71 @@ const LOGO_PATHS = [
 const BRACKETS = new Set([0, 1, 15, 16]);
 const FIN = 80.5;
 scene(80.48, 90.2, (s, r) => {
-  st(r, { background: "radial-gradient(circle at 50% 40%, #d0142f 0%, #a10f23 45%, #4a0710 100%)" });
-  s.grain = mk("div", { cls: "fill", style: { backgroundImage: "radial-gradient(rgba(255,255,255,.06) 1.4px, transparent 1.8px)", backgroundSize: "14px 14px", opacity: ".6" } }, r);
-  s.sweep = mk("div", { cls: "abs", style: { left: "-1080px", top: "0", width: "1080px", height: "1920px", background: "linear-gradient(100deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.22) 50%, rgba(255,255,255,0) 70%)", mixBlendMode: "screen" } }, r);
-  const S_ = 640 / 745, LX = 540 - 320, LY = 330;
-  s.svg = mk("svg", { cls: "ov", attrs: { viewBox: "0 0 745 745", width: 640, height: 640 }, style: { left: LX + "px", top: LY + "px", width: "640px", height: "640px", overflow: "visible" } }, r);
-  // crosshair + ticks (drawn), as in the brand mark
+  st(r, { background: "radial-gradient(circle at 50% 42%, #c8122c 0%, #8f0c1f 48%, #3a050c 100%)" });
+  s.blobA = mk("div", { cls: "abs", style: { left: "-200px", top: "200px", width: "900px", height: "900px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,120,120,.28) 0%, rgba(255,120,120,0) 65%)" } }, r);
+  s.blobB = mk("div", { cls: "abs", style: { left: "400px", top: "900px", width: "1000px", height: "1000px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,60,90,.22) 0%, rgba(255,60,90,0) 65%)" } }, r);
+  s.glow = mk("div", { cls: "abs", style: { left: "140px", top: "250px", width: "800px", height: "800px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,235,235,.35) 0%, rgba(255,235,235,0) 62%)", opacity: "0" } }, r);
+  s.group = mk("div", { cls: "abs", style: { left: "0", top: "0", width: "1080px", height: "1920px", transformOrigin: "540px 690px" } }, r);
+  const LX = 540 - 320, LY = 370;
+  s.logoBox = mk("div", { cls: "abs", style: { left: LX + "px", top: LY + "px", width: "640px", height: "640px", transformOrigin: "320px 320px" } }, s.group);
+  s.svg = mk("svg", { cls: "ov", attrs: { viewBox: "0 0 745 745", width: 640, height: 640 }, style: { left: "0", top: "0", width: "640px", height: "640px", overflow: "visible" } }, s.logoBox);
   s.cross = [
-    mk("line", { attrs: { x1: 372.5, y1: -40, x2: 372.5, y2: 785, stroke: "#fff", "stroke-width": 3 } }, s.svg),
-    mk("line", { attrs: { x1: -40, y1: 372.5, x2: 785, y2: 372.5, stroke: "#fff", "stroke-width": 3 } }, s.svg),
+    mk("line", { attrs: { x1: 372.5, y1: -60, x2: 372.5, y2: 805, stroke: "#fff", "stroke-width": 2.5, opacity: 0.85 } }, s.svg),
+    mk("line", { attrs: { x1: -60, y1: 372.5, x2: 805, y2: 372.5, stroke: "#fff", "stroke-width": 2.5, opacity: 0.85 } }, s.svg),
   ];
-  s.ticks = [[352, 187, 393, 187], [352, 560, 393, 560], [352, 372.5, 393, 372.5], [372.5, 352, 372.5, 393]].map(([a, b, c, d]) => mk("line", { attrs: { x1: a, y1: b, x2: c, y2: d, stroke: "#fff", "stroke-width": 4 } }, s.svg));
-  s.corners = [[-10, -10, 1, 1], [755, -10, -1, 1], [-10, 755, 1, -1], [755, 755, -1, -1]].map(([x, y, dx, dy]) => mk("path", { attrs: { d: `M${x - dx * 30},${y} L${x},${y} L${x},${y - dy * 30}`, stroke: "#fff", "stroke-width": 4, fill: "none" } }, s.svg));
-  const rr = rng(745);
-  s.shards = LOGO_PATHS.map((d, i) => {
-    const g = mk("g", {}, s.svg);
-    const p = mk("path", { attrs: { d, fill: "#fff" } }, g);
-    const bb = { x: 0, y: 0 };
+  s.ticks = [[350, 187, 395, 187], [350, 560, 395, 560], [350, 372.5, 395, 372.5]].map(([a, b, c, d]) => mk("line", { attrs: { x1: a, y1: b, x2: c, y2: d, stroke: "#fff", "stroke-width": 3.5 } }, s.svg));
+  s.corners = [[-12, -12, 1, 1], [757, -12, -1, 1], [-12, 757, 1, -1], [757, 757, -1, -1]].map(([x, y, dx, dy]) => mk("path", { attrs: { d: `M${x + dx * 32},${y} L${x},${y} L${x},${y + dy * 32}`, stroke: "#fff", "stroke-width": 3.5, fill: "none" } }, s.svg));
+  s.pieces = LOGO_PATHS.map((d, i) => {
+    const fill = mk("path", { attrs: { d, fill: "#fff", opacity: 0 } }, s.svg);
+    const line = BRACKETS.has(i) ? null : mk("path", { attrs: { d, fill: "none", stroke: "#fff", "stroke-width": 2.6, "stroke-linejoin": "round" } }, s.svg);
     const nums = d.match(/[\d.]+/g).map(Number); let sx = 0, sy = 0; for (let k = 0; k < nums.length; k += 2) { sx += nums[k]; sy += nums[k + 1]; }
-    bb.x = sx / (nums.length / 2); bb.y = sy / (nums.length / 2);
-    const ang = Math.atan2(bb.y - 372.5, bb.x - 372.5) + (rr() - 0.5) * 0.8;
-    return { g, p, cx: bb.x, cy: bb.y, fx: Math.cos(ang) * (900 + rr() * 500), fy: Math.sin(ang) * (900 + rr() * 500), rot: (rr() - 0.5) * 540, delay: BRACKETS.has(i) ? 0.95 + (i % 4) * 0.05 : 0.2 + rr() * 0.55 };
+    const cx = sx / (nums.length / 2), cy = sy / (nums.length / 2);
+    return { fill, line, i, cx, cy, dist: Math.hypot(cx - 372.5, cy - 372.5) / 372.5 };
   });
-  s.word = mk("div", { cls: "abs center-x", style: { top: "1010px", fontFamily: "Roboto", fontSize: "96px", lineHeight: "1", color: "#fff", letterSpacing: ".08em" } }, r);
+  s.sweep = mk("div", { cls: "abs", style: { left: "0", top: "0", width: "640px", height: "640px", background: "linear-gradient(105deg, rgba(255,255,255,0) 38%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 62%)", backgroundSize: "300% 100%", WebkitMaskImage: "url(assets/img/h-mask.svg)", maskImage: "url(assets/img/h-mask.svg)", WebkitMaskSize: "640px 640px", maskSize: "640px 640px", mixBlendMode: "overlay", opacity: "0" } }, s.logoBox);
+  s.word = mk("div", { cls: "abs center-x", style: { top: "1070px", fontFamily: "Roboto", fontSize: "92px", lineHeight: "1", color: "#fff", whiteSpace: "nowrap" } }, s.group);
   s.wl = letters(s.word, "HINTON STUDIOS");
   s.wl.forEach((el, i) => { el.style.fontWeight = i < 6 ? "800" : "300"; });
-  s.tag = mk("div", { cls: "abs center-x mono", style: { top: "1150px", fontSize: "34px", fontWeight: "700", letterSpacing: ".22em", color: "#fff" } }, r);
-  s.tagText = "DREAM IN 4K · CREATE WITH AI";
-  s.url = mk("div", { cls: "abs center-x", text: "hintonstudios.com", style: { top: "1232px", fontFamily: "Roboto", fontWeight: "600", fontSize: "58px", color: "#fff", opacity: "0" } }, r);
-  s.loc = mk("div", { cls: "abs center-x mono", text: "MADE IN BENGALURU · MADE FOR THE WORLD", style: { top: "1328px", fontSize: "22px", letterSpacing: ".18em", color: "rgba(255,255,255,.8)", opacity: "0" } }, r);
-  s.pcv = mk("canvas", { attrs: { width: 1080, height: 1920 }, cls: "full" }, r);
-  s.pctx = s.pcv.getContext("2d");
-  const pr = rng(99);
-  s.parts = Array.from({ length: 60 }, () => ({ x: pr() * 1080, y: pr() * 1920, s: 1 + pr() * 3, v: 10 + pr() * 40, a: 0.1 + pr() * 0.35 }));
+  s.rule = mk("div", { cls: "abs", style: { left: "390px", width: "300px", top: "1195px", height: "2px", background: "rgba(255,255,255,.7)" } }, s.group);
+  s.tag = mk("div", { cls: "abs center-x mono", text: "DREAM IN 4K · CREATE WITH AI", style: { top: "1225px", fontSize: "32px", fontWeight: "700", letterSpacing: ".22em", color: "#fff", opacity: "0" } }, s.group);
+  s.url = mk("div", { cls: "abs center-x", text: "hintonstudios.com", style: { top: "1300px", fontFamily: "Roboto", fontWeight: "500", fontSize: "54px", color: "#fff", opacity: "0" } }, s.group);
+  s.loc = mk("div", { cls: "abs center-x mono", text: "BENGALURU · MADE FOR THE WORLD", style: { top: "1392px", fontSize: "21px", letterSpacing: ".24em", color: "rgba(255,255,255,.78)", opacity: "0" } }, s.group);
 }, (s, t) => {
   const lt = t - FIN;
-  const oE = G("expo.out"), bO = G("back.out(1.6)"), p3 = G("power3.inOut");
-  // whole logo: gentle push + settle pulse
-  const settle = lt > 1.25 ? 1 + 0.035 * Math.exp(-(lt - 1.25) * 6) * Math.sin((lt - 1.25) * 18) : 1;
-  const push = 0.94 + Math.min(lt, 9.5) * 0.008;
-  st(s.svg, { transform: `scale(${(push * settle).toFixed(4)})`, transformOrigin: "320px 320px" });
-  s.cross.forEach((l, i) => { const u = oE(clamp((lt - 0.02 - i * 0.06) / 0.45)); st(l, { transform: i ? `scaleX(${u})` : `scaleY(${u})`, transformOrigin: "372.5px 372.5px", opacity: String(clamp(lt / 0.05)) }); });
-  s.ticks.forEach((l, i) => { const u = bO(clamp((lt - 0.25 - i * 0.05) / 0.3)); st(l, { transform: `scale(${u})`, transformOrigin: "372.5px 372.5px" }); });
-  s.corners.forEach((c, i) => { const u = bO(clamp((lt - 1.15 - i * 0.05) / 0.35)); st(c, { opacity: String(clamp((lt - 1.15 - i * 0.05) / 0.05)), transform: `scale(${lerp(1.6, 1, u)})`, transformOrigin: "372.5px 372.5px" }); });
-  s.shards.forEach((sh) => {
-    const u = clamp((lt - sh.delay) / 0.75);
-    const k = spring(Math.max(0, lt - sh.delay), 2.2, 0.62);
-    const x = (1 - k) * sh.fx, y = (1 - k) * sh.fy, rot = (1 - k) * sh.rot;
-    st(sh.g, { opacity: String(clamp((lt - sh.delay) / 0.05)), transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`, transformOrigin: `${sh.cx}px ${sh.cy}px` });
-    const flash = clamp(1 - Math.abs(u - 0.62) / 0.12);            // lands with a white-hot flash
-    st(sh.p, { fill: flash > 0.02 ? `rgb(255,${Math.round(255 - flash * 30)},${Math.round(255 - flash * 60)})` : "#fff" });
+  const eo = G("expo.out"), p2 = G("power2.inOut"), p3o = G("power3.out"), s1 = G("sine.inOut");
+  st(s.blobA, { transform: `translate(${Math.sin(lt * 0.35) * 120}px, ${Math.cos(lt * 0.3) * 80}px)` });
+  st(s.blobB, { transform: `translate(${Math.cos(lt * 0.28) * -140}px, ${Math.sin(lt * 0.33) * 90}px)` });
+  // whole mark: settles from slightly large and soft into focus, then a slow push for the hold
+  const settle = eo(clamp(lt / 2.4));
+  const hold = 1 + Math.max(0, lt - 2.4) * 0.004;
+  st(s.logoBox, { transform: `scale(${(lerp(1.12, 1, settle) * hold).toFixed(4)})`, filter: `blur(${(lerp(7, 0, eo(clamp(lt / 1.4)))).toFixed(2)}px)` });
+  st(s.group, { transform: `translateY(${lerp(20, 0, settle).toFixed(1)}px)` });
+  st(s.glow, { opacity: String((0.55 + 0.25 * Math.sin(lt * 1.3)) * clamp((lt - 1.2) / 1.2)) });
+  // crosshair grows from the centre
+  s.cross.forEach((l, i) => { const u = eo(clamp((lt - i * 0.08) / 1.0)); st(l, { transform: i ? `scaleX(${u})` : `scaleY(${u})`, transformOrigin: "372.5px 372.5px" }); });
+  s.ticks.forEach((l, i) => { const u = p3o(clamp((lt - 0.5 - i * 0.08) / 0.6)); st(l, { opacity: String(u), transform: `scaleX(${u})`, transformOrigin: "372.5px 0px" }); });
+  // H: traced as a blueprint, then filled with light
+  s.pieces.forEach((pc) => {
+    if (pc.line) {
+      const u = p2(clamp((lt - 0.25 - pc.dist * 0.25) / 1.25));
+      drawOn(pc.line, u);
+      st(pc.line, { opacity: String(1 - p2(clamp((lt - 1.5) / 0.6))) });
+      st(pc.fill, { opacity: String(p3o(clamp((lt - 1.15 - pc.dist * 0.15) / 0.8))) });
+    } else {
+      // brackets glide in from the corners
+      const u = eo(clamp((lt - 1.0) / 1.1));
+      const dx = (pc.cx < 372.5 ? -1 : 1) * 70 * (1 - u), dy = (pc.cy < 372.5 ? -1 : 1) * 70 * (1 - u);
+      st(pc.fill, { opacity: String(clamp((lt - 1.0) / 0.4)), transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)` });
+    }
   });
-  st(s.sweep, { transform: `translateX(${lerp(0, 2160, p3(clamp((lt - 1.45) / 0.9)))}px)` });
-  s.wl.forEach((el, i) => { const ti = 1.65 + i * 0.04, k = spring(Math.max(0, lt - ti), 2.8, 0.6); st(el, { opacity: String(clamp((lt - ti) / 0.08)), transform: `translateY(${(1 - k) * 70}px)`, filter: `blur(${((1 - clamp(k)) * 6).toFixed(1)}px)` }); });
-  const n = Math.floor(clamp((lt - 2.5) / 0.8) * s.tagText.length);
-  const tx = s.tagText.slice(0, n);
-  if (s.tag.textContent !== tx) s.tag.textContent = tx;
-  const uk = spring(Math.max(0, lt - 3.35), 2.4, 0.6);
-  st(s.url, { opacity: String(clamp((lt - 3.35) / 0.12)), transform: `translateY(${(1 - uk) * 30}px)` });
-  st(s.loc, { opacity: String(clamp((lt - 3.7) / 0.2) * 0.85) });
-  // floating dust
-  const c = s.pctx; c.clearRect(0, 0, 1080, 1920);
-  for (const q of s.parts) {
-    const y = (q.y - lt * q.v + 1920 * 4) % 1920;
-    c.fillStyle = `rgba(255,230,230,${(q.a * clamp((lt - 1) / 1)).toFixed(3)})`; c.beginPath(); c.arc(q.x + Math.sin(lt + q.y) * 10, y, q.s, 0, 6.2832); c.fill();
-  }
-  st(s.grain, { transform: `translate(${(hash(Math.round(t * FPS)) * 14).toFixed(1)}px, 0)` });
+  s.corners.forEach((c, i) => { const u = eo(clamp((lt - 1.3 - i * 0.05) / 0.8)); st(c, { opacity: String(u * 0.9), transform: `scale(${lerp(1.15, 1, u)})`, transformOrigin: "372.5px 372.5px" }); });
+  // one soft light sweep across the finished mark
+  const sw = s1(clamp((lt - 2.1) / 1.1));
+  st(s.sweep, { opacity: String(sw > 0 && sw < 1 ? 1 : 0), backgroundPosition: `${lerp(120, -20, sw)}% 0` });
+  // wordmark: tracking closes as the letters rise into place
+  const wk = p3o(clamp((lt - 2.2) / 1.2));
+  st(s.word, { letterSpacing: `${lerp(0.16, 0.08, wk).toFixed(3)}em` });
+  s.wl.forEach((el, i) => { const ti = 2.2 + i * 0.03, u = p3o(clamp((lt - ti) / 0.8)); st(el, { opacity: String(u), transform: `translateY(${(1 - u) * 26}px)`, filter: `blur(${((1 - u) * 5).toFixed(1)}px)` }); });
+  st(s.rule, { transform: `scaleX(${p3o(clamp((lt - 2.9) / 0.8))})` });
+  [[s.tag, 3.2], [s.url, 3.55], [s.loc, 3.9]].forEach(([el, ti]) => { const u = p3o(clamp((lt - ti) / 0.8)); st(el, { opacity: String(u * (el === s.loc ? 0.85 : 1)), transform: `translateY(${(1 - u) * 18}px)` }); });
 });

@@ -1,3 +1,9 @@
+## 2026-09-25 — Reel v3: real clips, rebuilt score/mix, smooth logo finale
+
+- Five Kling clips supplied by the owner are integrated with their diegetic sound: billboard, milk abhishekam, whistling audience, the tear and slow-motion coins. `prep_media.sh` now uses files already in `media/` and no longer drops entries because of ffmpeg reading stdin.
+- The score is re-edited as continuous, unstretched passes with joins only on hits or in silence. The master uses smooth voice-driven ducking and a dry vocal chain, at −14 LUFS / −1.5 dBTP.
+- The logo finale is now a blueprint-trace → light-fill reveal with gliding brackets, a light sweep and a tracking-in wordmark. It replaces the fragment assembly.
+
 ## 2026-09-25 — "Dream in 4K" reel v2 (90 s)
 
 - The reel is now 90 s. New beats: a superstar "star wall" (16 stars, 1970s–2000s, 7 languages; names and verified film facts only), a Vox headlines timeline (1956–2023), a camera-evolution row, a denoise generation, 3D parallax work wall, pixel-to-4K resolve, "generated worlds" grid, and a 2D logo finale built from the real H-mask shards. The 3D sting clip is no longer used.

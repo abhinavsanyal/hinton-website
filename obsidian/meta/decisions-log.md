@@ -10,6 +10,19 @@ consequences. Use [[templates/adr-note]] for new entries. Newest first.
 
 ---
 
+## ADR-0028 — Reel audio: continuous music passes and envelope ducking
+
+- **Status:** Accepted
+- **Date:** 2026-09-25
+
+**Context.** Owner feedback on v2: the music sounded broken and the master unpolished. Causes: a time-stretched intro, mid-phrase splices between cues, and hard sidechain pumping (10:1) under the voice.
+
+**Decision.** Build the score only from long, unstretched passes of each cue, and join them only on hits or in silence. Duck music with a smoothed gain curve derived from the voice envelope (look-ahead, about 50 ms attack and 280 ms release, −10 dB) instead of a fast compressor sidechain. Keep the vocal dry. Master with light glue compression and two-pass loudnorm at −14 LUFS / −1.5 dBTP.
+
+**Consequences.** Fewer, cleaner edits, and speech-band voice-to-bed ≥7.6 dB on every line. Future re-times must keep scene hits aligned to the pass boundaries in `music_edit_v3.py`.
+
+---
+
 ## ADR-0027 — Reel v2: video slots with still fallbacks; text-only star tributes
 
 - **Status:** Accepted

@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
-# Pull the Higgsfield clips/images listed in tools/media_urls.tsv into the composition and write the manifest.
-# Clips → 30 fps JPEG sequences in comp/assets/clips/<name>/ (gitignored); images → comp/assets/img/<name>.jpg
-set -euo pipefail
+# Bring the Higgsfield clips/stills listed in tools/media_urls.tsv into the composition and write the manifest.
+# Files already in media/ are used as-is (e.g. downloaded by hand); unreachable ones are skipped (still fallback).
+# Clips → 30 fps JPEG sequences in comp/assets/clips/<name>/ (gitignored); stills → comp/assets/img/<name>.jpg
+set -uo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p comp/assets/clips media
 clips="{"; extra="["
+seq_from() {  # name, source mp4, extra ffmpeg input args, filter prefix
+  rm -rf "comp/assets/clips/$1"; mkdir -p "comp/assets/clips/$1"
+  ffmpeg -nostdin -v error -y $3 -i "$2" -vf "${4}fps=30,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" -q:v 3 "comp/assets/clips/$1/%04d.jpg"
+  clips="$clips\"$1\":$(ls "comp/assets/clips/$1" | wc -l),"
+}
 while IFS=$'\t' read -r name url; do
   [ -z "$name" ] && continue
   ext="${url##*.}"
-  [ -f "media/$name.$ext" ] || curl -sSf -o "media/$name.$ext" "$url"
+  [ -f "media/$name.$ext" ] || curl -sSf -o "media/$name.$ext" "$url" 2>/dev/null || { echo "skip $name (not available)"; continue; }
   if [ "$ext" = "mp4" ]; then
-    rm -rf "comp/assets/clips/$name"; mkdir -p "comp/assets/clips/$name"
-    ffmpeg -v error -y -i "media/$name.mp4" -vf "fps=30,scale=1080:1936:force_original_aspect_ratio=increase,crop=1080:1920" -q:v 3 "comp/assets/clips/$name/%04d.jpg"
-    n=$(ls "comp/assets/clips/$name" | wc -l); clips="$clips\"$name\":$n,"
+    seq_from "$name" "media/$name.mp4" "" ""
   else
-    ffmpeg -v error -y -i "media/$name.$ext" -q:v 3 "comp/assets/img/$name.jpg"; extra="$extra\"$name.jpg\","
+    ffmpeg -nostdin -v error -y -i "media/$name.$ext" -q:v 3 "comp/assets/img/$name.jpg"; extra="$extra\"$name.jpg\","
   fi
 done < tools/media_urls.tsv
-echo "window.MANIFEST = { clips: ${clips%,}}, extra: ${extra%,}] };" > comp/assets/data/manifest.js
+# derived: the coins clip's payoff (last 1.74 s) as smooth 2× slow motion
+if [ -f media/v10_coins.mp4 ]; then
+  seq_from v10_coins_slow media/v10_coins.mp4 "-ss 3.3 -t 1.74" "setpts=2.0*PTS,minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:vsbmc=1,"
+fi
+echo "window.MANIFEST = { clips: ${clips%,}}, extra: [${extra#[}] };" | sed 's/, extra: \[\]/, extra: []/; s/,\] };/] };/' > comp/assets/data/manifest.js
 cat comp/assets/data/manifest.js
