@@ -8,7 +8,7 @@ mkdir -p comp/assets/clips media
 clips="{"; extra="["
 seq_from() {  # name, source mp4, extra ffmpeg input args, filter prefix
   rm -rf "comp/assets/clips/$1"; mkdir -p "comp/assets/clips/$1"
-  ffmpeg -nostdin -v error -y $3 -i "$2" -vf "${4}fps=30,scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" -q:v 3 "comp/assets/clips/$1/%04d.jpg"
+  ffmpeg -nostdin -v error -y $3 -i "$2" -vf "${4}fps=30,scale=1080:-2" -q:v 3 "comp/assets/clips/$1/%04d.jpg"
   clips="$clips\"$1\":$(ls "comp/assets/clips/$1" | wc -l),"
 }
 while IFS=$'\t' read -r name url; do

@@ -1,3 +1,7 @@
+## 2026-09-25 — Reel v3.1: all 14 clips, motion-graphics coin shot
+
+- All 14 Kling clips supplied by the owner are integrated with diegetic sound. Clip frames keep their native aspect. The coin clip is replaced by a Vox motion-graphics sequence (screen, beam, silhouettes, vector coins, labels).
+
 ## 2026-09-25 — Reel v3: real clips, rebuilt score/mix, smooth logo finale
 
 - Five Kling clips supplied by the owner are integrated with their diegetic sound: billboard, milk abhishekam, whistling audience, the tear and slow-motion coins. `prep_media.sh` now uses files already in `media/` and no longer drops entries because of ffmpeg reading stdin.

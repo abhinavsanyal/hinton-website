@@ -10,6 +10,7 @@ This is a human-curated log — not a mirror of `git log`.
 
 ## 2026-09-25 (reel v3)
 
+- Later the same day, all 14 clips were integrated (native aspect) and the coin shot was rebuilt as motion graphics.
 - `video/hinton-reel-2026/`: five real clips with their diegetic audio; `music_edit_v3.py` (continuous passes, no stretching), `mix_v3.py` (smooth ducking, dry vocal, −14 LUFS), `sfx_v3.py` (leaner). The logo finale is a blueprint-trace/light-fill reveal. See [[decisions-log]] ADR-0028.
 
 ## 2026-09-25 ("Dream in 4K" reel v2)

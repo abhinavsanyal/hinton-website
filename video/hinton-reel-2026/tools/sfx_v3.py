@@ -225,6 +225,8 @@ for i in range(4):
 for i in range(9):
     place(shimmer(0.5) * 0.6, 71.67 + i * 0.13, 0.07, rng.uniform(-0.6, 0.6))
 place(tick(0.04, 2200) * 2, 74.6, 0.12)
+for _ in range(22):                                                    # vector coins striking the screen
+    place(coin(), rng.uniform(35.7, 36.45), rng.uniform(0.05, 0.11), rng.uniform(-0.7, 0.7))
 # logo finale: one soft air-whoosh into the reveal and a single shimmer as the mark resolves
 place(whoosh(1.2, 150, 2500, 0.8), 79.9, 0.2)
 place(shimmer(1.4), 81.55, 0.16)

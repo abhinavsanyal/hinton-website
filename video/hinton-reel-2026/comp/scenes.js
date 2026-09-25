@@ -368,7 +368,7 @@ const LANGCOL = { Hindi: ["#b3122b", "#fff"], Tamil: ["#ff8a00", "#1a0a00"], Tel
 const WALL_T0 = 23.55, WALL_STEP = 0.395;
 scene(23.5, 30.1, (s, r) => {
   st(r, { background: "#150305" });
-  s.bg = clipSlot(r, "v13_fdfs", "audience.jpg", { opacity: ".38" }, { drift: [0.03, 0, -10] });
+  s.bg = clipSlot(r, "v13_fdfs", "audience.jpg", { opacity: ".42" }, { drift: [0.03, 0, -10], offset: 3.5 });
   s.bg.t0 = 23.5;
   s.rays = mk("div", { cls: "abs", style: { left: "-900px", top: "-600px", width: "2880px", height: "2880px", borderRadius: "50%", background: "repeating-conic-gradient(from 0deg, rgba(255,140,0,.28) 0deg 6deg, rgba(0,0,0,0) 6deg 14deg)", mixBlendMode: "screen" } }, r);
   s.dots = mk("div", { cls: "fill", style: { backgroundImage: "radial-gradient(rgba(255,214,90,.22) 2.2px, transparent 2.6px)", backgroundSize: "18px 18px", WebkitMask: "radial-gradient(circle at 50% 45%, transparent 30%, #000 75%)" } }, r);
@@ -488,16 +488,36 @@ const CLIPS_NEWS = [
   ["The Screen Daily", "Los Angeles · 2023", "Naatu Naatu wins the Oscar", "Best Original Song — RRR.", 2023],
 ];
 scene(34.9, 38.95, (s, r) => {
-  st(r, { background: "#0d0907" });
-  s.bg = clipSlot(r, "v08_audience", "audience.jpg", {}, { drift: [0.05, 0, 0], offset: 2.5 });
-  s.bg.t0 = 34.9;
-  s.bg2 = clipSlot(r, "v10_coins_slow", "audience.jpg", { opacity: "0" }, { drift: [0.03, 0, 0] });
-  s.bg2.t0 = 35.75;
+  st(r, { background: "radial-gradient(ellipse at 50% 30%, #1d1a2a 0%, #0a0910 60%, #050408 100%)" });
+  // the screen, in slight perspective, showing the god on the cut-out
+  s.room = mk("div", { cls: "abs", style: { left: "0", top: "0", width: "1080px", height: "1920px", perspective: "1600px", perspectiveOrigin: "540px 1500px" } }, r);
+  s.screen = mk("div", { cls: "abs", style: { left: "90px", top: "300px", width: "900px", height: "560px", transform: "rotateX(10deg)", transformOrigin: "50% 100%", background: "#fff7e8", boxShadow: "0 0 120px 30px rgba(255,236,200,.45), 0 0 0 14px #1a1714", overflow: "hidden" } }, s.room);
+  s.onScreen = clipSlot(s.screen, "v06_milk", "milk.jpg", { width: "100%", height: "100%" }, { drift: [0.02, 0, 0], pos: "50% 22%", offset: 1.5 });
+  s.onScreen.t0 = 34.9;
+  mk("div", { cls: "fill", style: { background: "linear-gradient(180deg, rgba(255,240,210,.15), rgba(0,0,0,.25))" } }, s.screen);
+  s.curtL = mk("div", { cls: "abs", style: { left: "-40px", top: "240px", width: "150px", height: "760px", background: "repeating-linear-gradient(90deg, #5a0b14 0 26px, #7d1320 26px 44px)", borderRadius: "0 0 60px 0", boxShadow: "inset -20px 0 40px rgba(0,0,0,.6)" } }, r);
+  s.curtR = mk("div", { cls: "abs", style: { right: "-40px", top: "240px", width: "150px", height: "760px", background: "repeating-linear-gradient(90deg, #7d1320 0 18px, #5a0b14 18px 44px)", borderRadius: "0 0 0 60px", boxShadow: "inset 20px 0 40px rgba(0,0,0,.6)" } }, r);
+  s.beam = mk("div", { cls: "abs", style: { left: "0", top: "0", width: "1080px", height: "1920px", background: "conic-gradient(from 180deg at 540px 1980px, rgba(0,0,0,0) 0deg, rgba(0,0,0,0) 152deg, rgba(255,236,190,.16) 164deg, rgba(255,236,190,.22) 180deg, rgba(255,236,190,.16) 196deg, rgba(0,0,0,0) 208deg)", mixBlendMode: "screen" } }, r);
   s.cv = mk("canvas", { attrs: { width: 1080, height: 1920 }, cls: "full" }, r);
   s.ctx = s.cv.getContext("2d");
-  const rr = rng(2024);
-  s.coins = Array.from({ length: 26 }, () => ({ t0: 34.95 + rr() * 1.6, x: 140 + rr() * 800, y: 1250 + rr() * 500, vx: (rr() - 0.5) * 380, vy: -760 - rr() * 520, spin: 5 + rr() * 9, ph: rr() * 6, gold: rr() < 0.65, z: 0.45 + rr() * 1.0 }));
-  s.shade = mk("div", { cls: "fill", style: { background: "rgba(8,6,5,.78)", opacity: "0" } }, r);
+  const rr = rng(1975);
+  // audience silhouettes (three rows) and throwing hands
+  s.crowd = Array.from({ length: 34 }, (_, i) => { const row = i % 3; return { x: 40 + rr() * 1000, row, y: 1480 + row * 150, s: 0.8 + row * 0.25 + rr() * 0.15, ph: rr() * 6, arm: rr() < 0.55 }; }).sort((a, b) => a.row - b.row);
+  // coins: launched from the crowd in waves, arcing into the screen plane
+  s.coins = Array.from({ length: 46 }, (_, i) => {
+    const x0 = 120 + rr() * 840, t0 = 34.95 + (i / 46) * 1.35 + rr() * 0.08;
+    return { t0, x0, y0: 1500 + rr() * 260, x1: 180 + rr() * 720, y1: 360 + rr() * 440, dur: 0.72 + rr() * 0.22, spin: 9 + rr() * 10, ph: rr() * 6, kind: rr() < 0.45 ? "25" : rr() < 0.7 ? "50" : "₹1", gold: rr() < 0.62 };
+  });
+  s.lab1 = mk("div", { cls: "label", text: "25 paise", style: { left: "150px", top: "1010px", fontSize: "24px", opacity: "0" } }, r);
+  s.lab2 = mk("div", { cls: "label red", text: "₹1", style: { left: "760px", top: "930px", fontSize: "26px", opacity: "0" } }, r);
+  const sv = svgOver(r);
+  s.arr1 = stroke(sv, arrowPath(300, 1040, 380, 930, 0.2), "#f6f0e2", 5); s.arr1h = stroke(sv, arrowHead(300, 1040, 380, 930, 0.2, 20), "#f6f0e2", 5);
+  s.arr2 = stroke(sv, arrowPath(790, 960, 700, 860, -0.2), "#e11d48", 5); s.arr2h = stroke(sv, arrowHead(790, 960, 700, 860, -0.2, 20), "#e11d48", 5);
+  s.card = mk("div", { cls: "abs", style: { left: "80px", top: "1120px", width: "920px", padding: "26px 32px", background: "#f6f0e2", color: "#0b0a09", boxShadow: "0 30px 60px rgba(0,0,0,.6)", opacity: "0" } }, r);
+  mk("div", { cls: "mono", text: "THE SINGLE-SCREEN OVATION", style: { fontSize: "22px", fontWeight: "700", letterSpacing: ".3em", color: "#b3122b" } }, s.card);
+  mk("div", { cls: "anton", html: "Coins, flowers, whistles —<br>hurled at the hero", style: { fontSize: "74px", lineHeight: ".98", marginTop: "8px" } }, s.card);
+  // headlines timeline
+  s.shade = mk("div", { cls: "fill", style: { background: "rgba(8,6,5,.9)", opacity: "0" } }, r);
   s.line = mk("div", { cls: "abs", style: { left: "96px", top: "360px", width: "5px", height: "1020px", background: "#e11d48", transformOrigin: "50% 0" } }, r);
   s.items = CLIPS_NEWS.map((c, i) => {
     const y = 370 + i * 168;
@@ -507,38 +527,64 @@ scene(34.9, 38.95, (s, r) => {
     return { dot, yr, cl };
   });
 }, (s, t) => {
-  s.bg.set(t, 1.08 + (t - 34.9) * 0.05);
-  const haveCoins = !!CLIPS.v10_coins_slow;
-  if (haveCoins) { s.bg2.set(t, 1.04 + Math.max(0, t - 35.75) * 0.03); st(s.bg2.box, { opacity: String(clamp((t - 35.75) / 0.12)) }); }
-  else st(s.bg.el, { filter: "brightness(.5) blur(2px)" });
+  const lt = t - 34.9;
+  s.onScreen.set(t);
+  // slow push toward the screen
+  const push = E.ioS(clamp(lt / 1.8));
+  st(s.room, { transform: `translateY(${push * 40}px) scale(${1 + push * 0.06})`, transformOrigin: "540px 600px" });
+  st(s.beam, { opacity: String(0.85 + 0.15 * Math.sin(t * 23) * Math.sin(t * 7)) });
   const c = s.ctx; c.clearRect(0, 0, 1080, 1920);
-  if (!haveCoins) {
-    for (const q of s.coins) {
-      const d = (t - q.t0) * 0.62; if (d < 0 || d > 1.7) continue;        // slow motion
-      const x = q.x + q.vx * d, y = q.y + q.vy * d + 0.5 * 1100 * d * d;
-      const sc = q.z * (1 + d * 1.4), rx = 30 * sc;
-      const ang = q.ph + d * q.spin, ry = Math.max(2, rx * Math.abs(Math.cos(ang)));
-      const blur = Math.abs(q.z - 0.9) * 5;
-      c.save(); c.filter = `blur(${blur.toFixed(1)}px)`; c.translate(x, y); c.rotate(0.35);
-      const g = c.createLinearGradient(-rx, -ry, rx, ry);
-      if (q.gold) { g.addColorStop(0, "#fff6c8"); g.addColorStop(0.35, "#f0c043"); g.addColorStop(0.7, "#9a6a0c"); g.addColorStop(1, "#5a3a05"); }
-      else { g.addColorStop(0, "#ffffff"); g.addColorStop(0.4, "#c9cdd2"); g.addColorStop(0.75, "#7b8189"); g.addColorStop(1, "#3f444a"); }
-      c.fillStyle = g; c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 6.2832); c.fill();
-      c.strokeStyle = q.gold ? "rgba(90,55,5,.9)" : "rgba(60,65,72,.9)"; c.lineWidth = 3 * sc; c.stroke();
-      c.strokeStyle = q.gold ? "rgba(255,240,190,.6)" : "rgba(255,255,255,.55)"; c.lineWidth = 1.5 * sc;
-      c.beginPath(); c.ellipse(0, 0, rx * 0.72, ry * 0.72, 0, 0, 6.2832); c.stroke();
-      const sh = Math.max(0, Math.sin(ang * 2));      // specular glint as it spins
-      c.fillStyle = `rgba(255,255,255,${(sh * 0.7).toFixed(3)})`; c.beginPath(); c.ellipse(-rx * 0.3, -ry * 0.3, rx * 0.25, ry * 0.18, 0, 0, 6.2832); c.fill();
+  // dust in the beam
+  const dr = rng(77);
+  for (let i = 0; i < 90; i++) { const bx = 540 + (dr() - 0.5) * 900 * dr(), by = (dr() * 1900 - lt * (20 + dr() * 40) + 1920) % 1920; c.fillStyle = `rgba(255,236,200,${(0.08 + dr() * 0.2).toFixed(2)})`; c.beginPath(); c.arc(bx + Math.sin(lt * 2 + i) * 6, by, 1 + dr() * 2.2, 0, 6.2832); c.fill(); }
+  // coins (drawn before the crowd so the front rows overlap their launch)
+  for (const q of s.coins) {
+    const u = (t - q.t0) / q.dur; if (u < 0) continue;
+    const drawCoin = (uu, alpha) => {
+      const e = uu;                                                   // ballistic arc toward the screen plane
+      const x = lerp(q.x0, q.x1, e), y = lerp(q.y0, q.y1, e) - Math.sin(Math.PI * e) * 260;
+      const rad = lerp(34, 13, E.outQ(e));                            // shrinks with depth
+      const ang = q.ph + (t - q.t0) * q.spin * (uu / Math.max(u, 1e-3)), ry = Math.max(2, rad * Math.abs(Math.cos(ang)));
+      c.save(); c.globalAlpha = alpha; c.translate(x, y); c.rotate(0.25);
+      c.fillStyle = q.gold ? "#e9b53a" : "#c7ccd3"; c.beginPath(); c.ellipse(0, 0, rad, ry, 0, 0, 6.2832); c.fill();
+      c.lineWidth = Math.max(1.5, rad * 0.14); c.strokeStyle = q.gold ? "#9a6a0c" : "#7b8189"; c.stroke();
+      c.lineWidth = Math.max(1, rad * 0.06); c.strokeStyle = q.gold ? "#fff0b0" : "#ffffff";
+      c.beginPath(); c.ellipse(0, 0, rad * 0.7, ry * 0.7, 0, 0, 6.2832); c.stroke();
+      if (ry > rad * 0.45 && alpha > 0.9) { c.scale(1, ry / rad); c.fillStyle = q.gold ? "#7a5208" : "#4f555c"; c.font = `700 ${Math.round(rad * 0.8)}px 'Roboto Mono'`; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(q.kind, 0, 1); }
       c.restore();
+    };
+    if (u <= 1) {
+      for (let g = 3; g >= 1; g--) drawCoin(Math.max(0, u - g * 0.05), 0.12 * (4 - g));   // motion trail
+      drawCoin(u, 1);
+    } else if (u < 1.35) {                                            // hits the screen: spark burst
+      const k = (u - 1) / 0.35; c.strokeStyle = `rgba(255,244,210,${(1 - k).toFixed(2)})`; c.lineWidth = 3;
+      for (let a = 0; a < 6; a++) { const aa = a * 1.047 + q.ph; c.beginPath(); c.moveTo(q.x1 + Math.cos(aa) * 8 * (1 + k * 3), q.y1 + Math.sin(aa) * 8 * (1 + k * 3)); c.lineTo(q.x1 + Math.cos(aa) * 16 * (1 + k * 3), q.y1 + Math.sin(aa) * 16 * (1 + k * 3)); c.stroke(); }
     }
   }
-  const sh = clamp((t - 36.55) / 0.3);
+  // audience silhouettes with raised, throwing arms (rim-lit by the screen)
+  for (const p of s.crowd) {
+    const bob = Math.sin(t * 9 + p.ph) * 8 * p.s, x = p.x, y = p.y + bob, sc = p.s;
+    c.fillStyle = ["#15111c", "#0b0910", "#030205"][p.row];
+    if (p.arm) { c.strokeStyle = c.fillStyle; c.lineCap = "round"; c.lineWidth = 22 * sc; const th = Math.sin(t * 6 + p.ph); c.beginPath(); c.moveTo(x + 30 * sc, y + 40 * sc); c.lineTo(x + (50 + th * 30) * sc, y - (80 + th * 20) * sc); c.stroke(); }
+    c.beginPath(); c.arc(x, y, 42 * sc, 0, 6.2832); c.fill();
+    c.beginPath(); c.roundRect(x - 80 * sc, y + 34 * sc, 160 * sc, 260 * sc, 60 * sc); c.fill();
+    c.strokeStyle = "rgba(255,230,190,.25)"; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 42 * sc, Math.PI * 1.15, Math.PI * 1.85); c.stroke();
+  }
+  // annotations
+  const a1 = pop(t, 35.45, 3, 0.5), a2 = pop(t, 35.7, 3, 0.5);
+  st(s.lab1, { opacity: String(a1.o * (1 - P(t, 36.4, 36.6))), transform: `scale(${lerp(0.6, 1, a1.k)})` });
+  st(s.lab2, { opacity: String(a2.o * (1 - P(t, 36.4, 36.6))), transform: `scale(${lerp(0.6, 1, a2.k)})` });
+  drawOn(s.arr1, E.outC(P(t, 35.45, 35.7))); drawOn(s.arr1h, E.outC(P(t, 35.65, 35.75)));
+  drawOn(s.arr2, E.outC(P(t, 35.7, 35.95))); drawOn(s.arr2h, E.outC(P(t, 35.9, 36.0)));
+  const ak = clamp(1 - P(t, 36.4, 36.6)); [s.arr1, s.arr1h, s.arr2, s.arr2h].forEach((p) => st(p, { opacity: String(ak) }));
+  const ck = sp(t, 35.95, 2.6, 0.6);
+  st(s.card, { opacity: String(clamp((t - 35.95) / 0.1) * (1 - P(t, 36.45, 36.6))), transform: tf(0, (1 - ck) * 300, 1, lerp(5, -1.5, ck)) });
+  // → headlines timeline
+  const sh = clamp((t - 36.55) / 0.25);
   st(s.shade, { opacity: String(sh) });
-  st(s.cv, { opacity: String(1 - sh) });
   st(s.line, { transform: `scaleY(${E.outC(P(t, 36.6, 38.6))})`, opacity: String(sh) });
   s.items.forEach(({ dot, yr, cl }, i) => {
-    const ti = 36.7 + i * 0.33, k = sp(t, ti, 2.8, 0.6);
-    const o = clamp((t - ti) / 0.06);
+    const ti = 36.7 + i * 0.33, k = sp(t, ti, 2.8, 0.6), o = clamp((t - ti) / 0.06);
     st(dot, { opacity: String(o), transform: `scale(${lerp(0.2, 1, k)})` });
     st(yr, { opacity: String(o) });
     st(cl, { opacity: String(o), transform: tf((1 - k) * 700, 0, 1, (1 - k) * 8 + (i % 2 ? 0.6 : -0.6)) });
@@ -947,7 +993,7 @@ scene(71.48, 74.72, (s, r) => {
 /* ============ S21 — The visionaries are already here (74.6 – 78.55) ============ */
 scene(74.6, 78.55, (s, r) => {
   st(r, { background: "#000" });
-  s.bg = clipSlot(r, "v12_muskan", "muskan_director.jpg", {}, { drift: [0.03, 0, 6], pos: "50% 40%" });
+  s.bg = clipSlot(r, "v12_muskan", "muskan_director.jpg", {}, { drift: [0.03, 0, 6], pos: "50% 40%", offset: 1.0 });
   s.bg.t0 = 74.6;
   mk("div", { cls: "fill", style: { background: "linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,.75) 85%)" } }, r);
   const sv = svgOver(r);
@@ -978,13 +1024,20 @@ scene(74.6, 78.55, (s, r) => {
 scene(78.5, 80.56, (s, r) => {
   st(r, { background: "#000" });
   s.face = mk("img", { src: img(pick("i02_muskan_portrait.jpg", "muskan_director.jpg")), cls: "abs", style: { left: "0", top: "0", width: "1080px", height: "1920px", objectFit: "cover", objectPosition: "50% 20%", opacity: "0" } }, r);
+  s.smile = clipSlot(r, "v12_muskan", "muskan_director.jpg", { opacity: "0" }, { offset: 4.35, speed: 0.3 });
+  s.smile.t0 = 78.5;
   s.vig = mk("div", { cls: "fill", style: { background: "radial-gradient(ellipse at 50% 35%, rgba(0,0,0,0) 20%, rgba(0,0,0,.85) 70%)" } }, r);
   s.are = mk("div", { cls: "abs center-x anton", html: "<span class='a1'>Are</span> <span class='a2' style='color:#e11d48'>you?</span>", style: { top: "1150px", fontSize: "250px", lineHeight: "1", color: "#fff" } }, r);
   s.a1 = s.are.querySelector(".a1"); s.a2 = s.are.querySelector(".a2");
 }, (s, t) => {
+  if (CLIPS.v12_muskan) {
+    s.smile.set(t);
+    st(s.smile.box, { opacity: String(clamp((t - 78.55) / 0.5) * 0.92), transform: `scale(${2.1 + (t - 78.5) * 0.04})`, transformOrigin: "62% 27%" });
+    st(s.face, { opacity: "0" });
+  }
   const isFallback = !EXTRA.has("i02_muskan_portrait.jpg");
   const z = isFallback ? 2.3 : 1.05;
-  st(s.face, { opacity: String(clamp((t - 78.55) / 0.5) * 0.9), transform: `scale(${z + (t - 78.5) * 0.03}) translateY(${isFallback ? 250 : 0}px)`, transformOrigin: isFallback ? "50% 22%" : "50% 40%" });
+  if (!CLIPS.v12_muskan) st(s.face, { opacity: String(clamp((t - 78.55) / 0.5) * 0.9), transform: `scale(${z + (t - 78.5) * 0.03}) translateY(${isFallback ? 250 : 0}px)`, transformOrigin: isFallback ? "50% 22%" : "50% 40%" });
   const k1 = sp(t, 79.48, 3, 0.5), k2 = sp(t, 79.78, 3, 0.45);
   st(s.a1, { display: "inline-block", opacity: String(clamp((t - 79.48) / 0.05)), transform: `scale(${lerp(1.4, 1, k1)})` });
   st(s.a2, { display: "inline-block", opacity: String(clamp((t - 79.78) / 0.05)), transform: `scale(${lerp(1.6, 1, k2)})` });

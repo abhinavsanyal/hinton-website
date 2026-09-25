@@ -16,7 +16,8 @@ This folder is self-contained and is **not part of the Next.js site build**; esl
 
 ## v3 update (current encode)
 
-- **Real motion clips:** five Kling 3.0 clips are now in the cut: billboard painter, milk abhishekam, whistling audience, the tear, and coins (as a 2× motion-interpolated slow-motion payoff). They sit in `media/`, and their own diegetic sound (street, drums and crowd, cinema cheer, coin clinks) replaces the synthesised crowd. The other clips in `tools/media_urls.tsv` still use still fallbacks until they are placed in `media/` (then run `tools/prep_media.sh`).
+- **All 14 Kling 3.0 motion clips are in the cut** (sources in `media/`, frame sequences built by `tools/prep_media.sh` at native aspect), with their diegetic sound: projector, crank camera, talkie, dance, billboard painter, milk abhishekam, first-day-first-show crowd (from 3.5 s, past the AI signage), dawn queue, whistling audience, the tear, scripts desk, dreamer, and Muskan (her smile to camera also carries "Are you?").
+- **The coin shot is pure motion graphics now**, replacing the coin clip: a perspective cinema screen playing the abhishekam, a projector beam with dust, rows of silhouetted fans, 46 vector coins (25 paise / 50 paise / ₹1) arcing into the screen with motion trails and spark hits, Vox labels, and a "single-screen ovation" card.
 - **Score rebuilt** (`tools/music_edit_v3.py`): five long, continuous passes from the original Lyria cues, with no time-stretching. Joins fall only on hits or in silence. The vintage theme now starts after "1913" so its hit lands exactly on the colour slam.
 - **Mix and master rebuilt** (`tools/mix_v3.py`):
   - Dry vocal chain: high-pass, de-mud, presence, de-esser, gentle compression; the echo is removed.

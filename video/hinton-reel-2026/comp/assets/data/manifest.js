@@ -1,1 +1,1 @@
-window.MANIFEST = { clips: {"v05_billboard":151,"v06_milk":151,"v08_audience":151,"v09_tear":151,"v10_coins":151,"v10_coins_slow":105}, extra: [] };
+window.MANIFEST = { clips: {"v01_projector":151,"v02_camera1913":151,"v03_talkie":151,"v04_dance":151,"v05_billboard":151,"v06_milk":151,"v07_queue":151,"v08_audience":151,"v09_tear":151,"v10_coins":151,"v11_dreamer":151,"v12_muskan":151,"v13_fdfs":301,"v14_scripts":151,"v10_coins_slow":105}, extra: [] };

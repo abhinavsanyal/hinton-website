@@ -36,11 +36,19 @@ def lay(name, t0, t1, off=0.0, gain=0.4, fi=0.12, fo=0.3):
     n1, n2 = int(fi * SR), int(fo * SR)
     seg[:n1] *= np.linspace(0, 1, n1)[:, None]; seg[-n2:] *= np.linspace(1, 0, n2)[:, None]
     i = int(t0 * SR); dieg[i:i + len(seg)] += seg * gain
+lay("v01_projector", 1.08, 3.4, 0.0, 0.55, 0.2, 0.4)
 lay("v05_billboard", 16.95, 20.05, 0.0, 0.32, 0.4)
 lay("v06_milk", 19.95, 23.6, 0.0, 0.42, 0.15, 0.5)
 lay("v08_audience", 32.45, 33.62, 0.0, 0.55, 0.05, 0.2)
-lay("v08_audience", 34.9, 35.85, 2.5, 0.4, 0.1, 0.25)
-lay("v10_coins", 35.8, 36.7, 3.9, 0.45, 0.05, 0.3)
+lay("v08_audience", 34.9, 35.85, 2.5, 0.45, 0.1, 0.25)
+lay("v08_audience", 35.8, 36.6, 3.6, 0.3, 0.05, 0.3)
+lay("v07_queue", 30.0, 32.5, 0.0, 0.4, 0.3, 0.3)
+lay("v02_camera1913", 3.25, 6.9, 0.0, 0.45, 0.3, 0.4)
+lay("v03_talkie", 9.62, 12.15, 0.0, 0.22, 0.3, 0.4)
+lay("v04_dance", 12.05, 13.4, 0.0, 0.18, 0.2, 0.3)
+lay("v13_fdfs", 23.5, 30.05, 3.5, 0.3, 0.3, 0.3)
+lay("v11_dreamer", 55.97, 58.7, 0.0, 1.4, 0.4, 0.4)
+lay("v12_muskan", 74.6, 78.4, 1.0, 1.4, 0.5, 0.5)
 mix = vo * float(os.environ.get("VO_G", 1.7)) + mu * duck[:, None] * float(os.environ.get("MU_G", 0.5)) + fx * fxduck[:, None] * 0.9 + dieg * duck[:, None] ** 0.5
 if os.environ.get("STEMS"):
     sf.write(A("audio/_stem_vo.wav"), vo, SR, subtype="FLOAT"); sf.write(A("audio/_stem_bed.wav"), mix - vo * float(os.environ.get("VO_G", 1.7)), SR, subtype="FLOAT")
