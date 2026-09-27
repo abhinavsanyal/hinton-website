@@ -1,5 +1,7 @@
 "use client";
 
+import { WHATSAPP_CONTACT_URL } from "@/lib/whatsapp";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useCookieStore } from "@/components/common/Cookie/cookieStore";
@@ -35,7 +37,7 @@ export function ProjectPlanner() {
   return <section id="start-a-project" className="editorial-section project-planner" aria-labelledby="project-title">
     <p className="editorial-kicker">A good story starts with a conversation</p><h2 id="project-title">What are you making?</h2><p className="editorial-lede">A thirty-second spark or a feature-length world. Pick a starting point and let’s shape it together.</p>
     <div className="editorial-grid" aria-label="Choose a project type">{paths.map((path, index) => <button type="button" key={path.name} className="editorial-card project-choice" aria-pressed={selected === index} onClick={() => { setSelected(index); trackEvent("project_type_selected", { project_type: path.name }); }}><span className="editorial-kicker">{path.number} / {selected === index ? "Selected" : "Start here"}</span><h3>{path.name} ↗</h3><p>{path.description}</p></button>)}</div>
-    <div className="brief-layout"><div><p className="editorial-kicker">Your next step</p><h3>Give us the first few lines.</h3><p>{paths[selected].suggestion}</p><p>No polished deck needed. A rough idea is enough to start a conversation.</p><a className="quiet-button" href={`https://wa.me/919330226381?text=${encodeURIComponent(`Hi Hinton, I’d like to discuss ${paths[selected].name.toLowerCase()}.`)}`} target="_blank" rel="noopener noreferrer" data-cta>Prefer WhatsApp? Chat with us ↗</a></div>
+    <div className="brief-layout"><div><p className="editorial-kicker">Your next step</p><h3>Give us the first few lines.</h3><p>{paths[selected].suggestion}</p><p>No polished deck needed. A rough idea is enough to start a conversation.</p><a className="quiet-button" href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer" data-cta>Prefer WhatsApp? Chat with us ↗</a></div>
       {status === "sent" ? <div ref={successRef} tabIndex={-1} className="editorial-card" role="status"><h3>Let’s make it happen.</h3><p>{message}</p><Link href="/work" className="quiet-button">Explore more films ↗</Link></div> : <form onSubmit={submit} className="planner-form">
         <div className="form-pair"><label>Your name<input name="name" autoComplete="name" required maxLength={100} placeholder="Name" /></label><label>Email address<input type="email" name="email" autoComplete="email" required maxLength={254} placeholder="you@company.com" /></label></div>
         <div className="form-pair"><label>Where are you starting?<select name="stage"><option>An early idea</option><option>A script or brief</option><option>Ready for production</option><option>Exploring possibilities</option></select></label><label>When are you thinking?<select name="timing"><option>Let’s discuss a timeline</option><option>Within a month</option><option>In 1–3 months</option><option>Later this year</option></select></label></div>

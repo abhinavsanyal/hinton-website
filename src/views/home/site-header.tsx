@@ -1,5 +1,7 @@
 "use client";
 
+import { WHATSAPP_CONTACT_URL } from "@/lib/whatsapp";
+
 import Image from "next/image";
 import { Hover } from "@/components/animation/springs/hover";
 import { usePathname } from "next/navigation";
@@ -111,7 +113,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
 
         {/* WhatsApp Button */}
         <a
-          href="https://wa.me/919330226381"
+          href={WHATSAPP_CONTACT_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="pointer-events-auto flex size-[52px] max-sm:size-[44px] items-center justify-center rounded-full bg-white/10 backdrop-blur-xl border border-white/20 transition-all duration-300 hover:bg-[#25D366] hover:border-[#25D366] hover:scale-105 group"

@@ -41,3 +41,7 @@
 ## 2026-09-27 — Google Ads custom conversion setup
 - Installed the supplied `conversion_event_purchase` event for successful enquiries and WhatsApp/phone clicks, gated by marketing consent.
 - Added server-ID deduplication, safe delayed navigation with a two-second fallback, and regression coverage. Replaced the old label-based emission; no second Google loader or automatic page-load conversion added.
+
+## 2026-09-27 — Prefilled WhatsApp enquiries
+- Header, footer and project-planner contact links now share the owner's supplied introductory message via `lib/whatsapp.ts`. Omitted the unrelated `utm_source=chatgpt.com` parameter. Video-sharing links retain their film-specific text.
+- WhatsApp opens a draft; visitors must tap Send themselves. Existing consent-aware click conversions are unchanged and measure clicks, not confirmed WhatsApp messages.

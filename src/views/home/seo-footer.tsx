@@ -1,5 +1,7 @@
 "use client";
 
+import { WHATSAPP_CONTACT_URL } from "@/lib/whatsapp";
+
 import { SocialLinks } from "@/components/common/social-links";
 import { useState } from "react";
 import Link from "next/link";
@@ -75,7 +77,7 @@ export const SeoFooter = () => {
             <li><a href="mailto:souvik@hintonstudios.com" className="hover:text-white">souvik@hintonstudios.com</a></li>
           </ul>
 
-          <p className="mt-4 text-sm"><a href="tel:+919330226381">+91 93302 26381</a> · <a href="https://wa.me/919330226381">WhatsApp</a></p>
+          <p className="mt-4 text-sm"><a href="tel:+919330226381">+91 93302 26381</a> · <a href={WHATSAPP_CONTACT_URL}>WhatsApp</a></p>
           <h3 className="text-[1.6vmin] max-sm:text-[13px] uppercase tracking-widest font-semibold mb-6 mt-8 text-white/50">Legal</h3>
           <ul className="space-y-3 text-[1.5vmin] max-sm:text-[14px] text-white/80 flex flex-col">
             <li><a href="/terms-and-conditions" className="hover:text-white">Terms & Conditions</a></li>

@@ -123,3 +123,5 @@ async component must mirror its final layout with one of these
 - `lib/google-tag.ts`: consent-aware, idempotent initialization of the single Google tag; automatic history page views are owned by Enhanced Measurement. Tested separately from React with Node’s built-in test runner.
 
 - `lib/google-conversions.ts`: approved direct-contact URL classification and custom Ads conversion sender; deduplicates successful enquiry IDs and provides once-only delayed navigation with a two-second fallback. Used by the root Analytics click listener and `trackLead`; no conversion is emitted from the route/page-view effect.
+
+- `lib/whatsapp.ts`: shared studio contact URL and URL-encoded prefilled enquiry message used by the header, footer and project planner.
