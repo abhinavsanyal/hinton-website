@@ -36,3 +36,8 @@ test("a genuinely separate Ads target is configured once without extra page view
   h.configure(true, true, "AW-999999999");
   assert.deepEqual(h.commands.filter(command => command[0] === "config"), [["config", GA_ID, { send_page_view: true }], ["config", "AW-999999999", { send_page_view: false }]]);
 });
+test("marketing-only consent loads the connected Ads tag without optional environment IDs", () => {
+  const h = harness();
+  assert.equal(h.configure(false, true), true);
+  assert.deepEqual(h.commands.filter(command => command[0] === "config"), [["config", GA_ID, { send_page_view: false }]]);
+});

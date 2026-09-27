@@ -1,6 +1,7 @@
 "use client";
 
 import { GA_ID, configureGoogleTag, createGoogleTagState, type GoogleTagState } from "@/lib/google-tag";
+import { contactConversionMethod, createConversionTracker } from "@/lib/google-conversions";
 import { publicEnv } from "@/env";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
@@ -27,11 +28,12 @@ export function trackEvent(name: string, params: Record<string, string> = {}) {
   if (!useCookieStore.getState().consent?.analytics) return;
   window.gtag?.("event", name, { ...params, send_to: GA_ID });
 }
+const sendConversion = createConversionTracker();
+
 export function trackLead(method: string, eventId: string) {
   trackEvent("generate_lead", { method });
   if (!useCookieStore.getState().consent?.marketing) return;
-  const { NEXT_PUBLIC_GOOGLE_ADS_ID: adsId, NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL: label } = publicEnv;
-  if (adsId && label) window.gtag?.("event", "conversion", { send_to: `${adsId}/${label}`, transaction_id: eventId });
+  sendConversion(window.gtag, true, method, { eventId });
   window.fbq?.("track", "Lead", { content_name: method }, { eventID: eventId });
 }
 export function Analytics() {
@@ -87,8 +89,18 @@ export function Analytics() {
       const target = event.target instanceof Element ? event.target.closest<HTMLElement>("a,button") : null;
       if (!target || target.closest("[data-share-dialog]")) return;
       const href = target.getAttribute("href") || "";
-      const name = href.startsWith("mailto:") ? "email_click" : href.startsWith("tel:") ? "phone_click" : /wa.me|api.whatsapp.com/.test(href) ? "whatsapp_click" : target.hasAttribute("data-cal-link") || target.hasAttribute("data-cta") ? "cta_click" : null;
+      const contactMethod = contactConversionMethod(href);
+      const name = href.startsWith("mailto:") ? "email_click" : href.startsWith("tel:") ? "phone_click" : contactMethod === "whatsapp_click" ? "whatsapp_click" : target.hasAttribute("data-cal-link") || target.hasAttribute("data-cta") ? "cta_click" : null;
       if (name) trackEvent(name, { page_path: location.pathname });
+      if (!contactMethod || event.defaultPrevented || event.button !== 0) return;
+      const marketing = useCookieStore.getState().consent?.marketing ?? false;
+      const sameTab = (!target.getAttribute("target") || target.getAttribute("target") === "_self")
+        && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+        && !target.hasAttribute("download");
+      const sent = sendConversion(window.gtag, marketing, contactMethod, {
+        navigate: sameTab ? () => window.location.assign(href) : undefined,
+      });
+      if (sent && sameTab) event.preventDefault();
     };
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);

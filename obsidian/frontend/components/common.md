@@ -121,3 +121,5 @@ async component must mirror its final layout with one of these
 - `StartingPoints`: small conversion paths to audit, feature-film service, work and journal.
 
 - `lib/google-tag.ts`: consent-aware, idempotent initialization of the single Google tag; automatic history page views are owned by Enhanced Measurement. Tested separately from React with Node’s built-in test runner.
+
+- `lib/google-conversions.ts`: approved direct-contact URL classification and custom Ads conversion sender; deduplicates successful enquiry IDs and provides once-only delayed navigation with a two-second fallback. Used by the root Analytics click listener and `trackLead`; no conversion is emitted from the route/page-view effect.

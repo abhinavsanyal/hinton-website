@@ -15,7 +15,6 @@ const publicSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   NEXT_PUBLIC_MEDIA_URL: z.string().url().optional(),
   NEXT_PUBLIC_GOOGLE_ADS_ID: z.string().regex(/^AW-\d+$/).optional(),
-  NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL: z.string().optional(),
   NEXT_PUBLIC_META_PIXEL_ID: z.string().regex(/^\d+$/).optional(),
 });
 
@@ -37,7 +36,6 @@ export const publicEnv = publicSchema.parse({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_MEDIA_URL: process.env.NEXT_PUBLIC_MEDIA_URL,
   NEXT_PUBLIC_GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID,
-  NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL: process.env.NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL,
   NEXT_PUBLIC_META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID,
 });
 

@@ -37,3 +37,7 @@
 - Removed manual route page views and let the existing enabled Google history tracking own them. Google initialization/configuration is now once per document, independent of Clarity, with consent-upgrade handling and duplicate alias protection for optional Ads configuration.
 - Explicitly route custom analytics events to GA4. Keep Ads conversion events targeted to their configured conversion label.
 - Added four regression tests for denied consent, repeated initialization, consent upgrades and distinct Ads destinations (`node --experimental-strip-types --test scripts/google-tag.test.ts`).
+
+## 2026-09-27 — Google Ads custom conversion setup
+- Installed the supplied `conversion_event_purchase` event for successful enquiries and WhatsApp/phone clicks, gated by marketing consent.
+- Added server-ID deduplication, safe delayed navigation with a two-second fallback, and regression coverage. Replaced the old label-based emission; no second Google loader or automatic page-load conversion added.

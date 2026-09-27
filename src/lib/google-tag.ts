@@ -21,7 +21,7 @@ export function configureGoogleTag(
   consent: { analytics: boolean; marketing: boolean },
   adsId?: string,
 ) {
-  if (!consent.analytics && !(consent.marketing && adsId)) return false;
+  if (!consent.analytics && !consent.marketing) return false;
   if (!state.started) {
     state.started = true;
     gtag("js", new Date());
