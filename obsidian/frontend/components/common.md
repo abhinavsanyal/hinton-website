@@ -141,3 +141,10 @@ async component must mirror its final layout with one of these
 - Two equal logo groups, one accessible and one decorative, move continuously using React Spring. Pauses on hover, keyboard focus, explicit pause, offscreen and hidden tabs.
 - Reduced-motion visitors get one static, horizontally scrollable list. No visible company captions or headings.
 - Local WebP logo assets and per-source greyscale/inversion preserve readable marks on black. See [[frontend/client-logo-sources]].
+
+## DriftingStrip and ClientTestimonial
+- `src/components/common/drifting-strip.tsx` supplies the shared accessible loop for client logos (18 px/s left) and services (29 px/s right). ResizeObserver measures a complete repeat so pacing stays consistent with content and screen size. React Spring drives movement; no CSS animation or protected engine edits.
+- Both bands use muted grey on charcoal, compact spacing, soft edge masks, independent pause controls and reduced-motion scrollable lists.
+- `src/views/home/client-testimonial.tsx` presents the owner-supplied TrendLoud interview as one large click-to-play video after the work stage. No video element or media request before interaction. Native controls, poster, error fallback and a contact CTA.
+- Analytics-consented events: `testimonial_start`, `testimonial_progress` (25/50/75, once per mount), `testimonial_complete`, `testimonial_cta`. These are engagement events, not Ads conversions.
+- R2 object `video-assets-hinton/trendloud-testimonial-2026.mp4`: 1280×720 H.264/AAC, full 183.98-second duration, MP4 faststart, 39,013,973 bytes. Public endpoint returned 200 and a 256-byte range request returned 206. Original file remains untouched outside the repo.

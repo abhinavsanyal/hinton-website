@@ -3,7 +3,7 @@ export interface ArticleSection { heading: string; body: string; sources?: Artic
 export interface Article {
   slug: string; title: string; category: string; service: string; description: string;
   sections: ArticleSection[]; published?: string; featured?: boolean;
-  cover?: string; coverAlt?: string; diagram?: string; diagramAlt?: string; takeaway?: string;
+  cover: string; coverAlt: string; diagram?: string; diagramAlt?: string; takeaway?: string;
 }
 export function readingMinutes(article: Article) {
   const words = article.sections.map(s => [s.body, s.prompt, ...(s.bullets ?? [])].filter(Boolean).join(" ")).join(" ").split(/\s+/).length;

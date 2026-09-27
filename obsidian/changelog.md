@@ -58,3 +58,9 @@
 - Confirmed Caesar AI / Spartan Media / House of Farmer from owner-provided links. Saved optimized local WebP assets (148,702 bytes total) and recorded provenance in `frontend/client-logo-sources.md`.
 - Added hover/focus/offscreen/tab visibility pause, a keyboard-accessible pause toggle, and a static scrollable list for reduced motion. Decorative duplicate images are hidden from assistive technology.
 - Verified desktop and 390px mobile rendering, all 28 assets loaded, no document horizontal overflow, stable paused transform, and reduced-motion transform/duplicate/overflow behavior. Lint and production build pass; browser reported no errors.
+
+## 2026-09-27 — Opposing grey bands, client film and complete blog imagery
+- Replaced the white service ticker with a compact charcoal/grey band. Shared measured React Spring loops now send logos left at 18 px/s and service names right at 29 px/s, with pause and reduced-motion support on both.
+- Added the owner's real TrendLoud testimonial as a single prominent click-to-play section. Encoded the full 3:04 source to a 39 MB faststart MP4 and uploaded it to the existing R2 bucket through the signed-in dashboard. Confirmed public access, byte-range delivery and actual browser playback. No media request before the user presses play; consent-aware testimonial engagement tracking is included.
+- Generated ten individual editorial covers using the built-in image generation tool. Every one of the 15 blog posts now has a cover, alt text, card image, social preview and BlogPosting image. Made cover/alt required in Article types. Prompt/output manifest: `frontend/blog-cover-prompts.md`.
+- Checked the new covers visually, desktop/mobile layouts, opposing transforms, stable pause control, no horizontal overflow, and article image metadata. Lint, production build, all 15 cover file checks and 9 Google tag/conversion regression tests pass.

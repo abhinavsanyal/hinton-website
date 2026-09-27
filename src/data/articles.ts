@@ -5,6 +5,8 @@ export const articles: Article[] = [
   ...featuredArticles,
   {
     "slug": "ai-video-production-workflow",
+    "cover": "/assets/blog/ai-video-production-workflow.webp",
+    "coverAlt": "A production brief becomes storyboard panels and a finished film frame.",
     "title": "From brief to final frame: an AI production workflow",
     "category": "AI & technology",
     "service": "ai-ad-film-production",
@@ -26,6 +28,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "consistent-characters-ai-film",
+    "cover": "/assets/blog/consistent-characters-ai-film.webp",
+    "coverAlt": "A character reference sheet connects consistent front, profile and three-quarter views.",
     "title": "Keeping characters consistent across AI film shots",
     "category": "AI & technology",
     "service": "ai-animation",
@@ -47,6 +51,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "ai-vs-cgi-product-films",
+    "cover": "/assets/blog/ai-vs-cgi-product-films.webp",
+    "coverAlt": "A product bottle shown through wireframe CGI, studio imagery and an imagined environment.",
     "title": "AI, CGI or live action: choosing a product film approach",
     "category": "AI & technology",
     "service": "ai-product-films",
@@ -68,6 +74,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "brief-ai-tvc",
+    "cover": "/assets/blog/brief-ai-tvc.webp",
+    "coverAlt": "A television frame, creative brief and timing marks arranged on a director’s desk.",
     "title": "How to brief an AI television commercial",
     "category": "Filmmaking & advertising",
     "service": "ai-tvc-production",
@@ -89,6 +97,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "brand-film-storytelling",
+    "cover": "/assets/blog/brand-film-storytelling.webp",
+    "coverAlt": "Layered cinematic frames connect a person, a crafted object and an audience.",
     "title": "What makes a brand film worth watching?",
     "category": "Filmmaking & advertising",
     "service": "ai-brand-films",
@@ -110,6 +120,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "vertical-micro-drama-planning",
+    "cover": "/assets/blog/vertical-micro-drama-planning.webp",
+    "coverAlt": "Vertical story frames connected by an episodic narrative thread.",
     "title": "Planning a vertical micro-drama series",
     "category": "Filmmaking & advertising",
     "service": "vertical-micro-dramas",
@@ -131,6 +143,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "reels-creative-testing",
+    "cover": "/assets/blog/reels-creative-testing.webp",
+    "coverAlt": "A contact sheet compares three visual approaches to a short-form product ad.",
     "title": "A practical creative testing plan for brand reels",
     "category": "Filmmaking & advertising",
     "service": "ai-reels",
@@ -152,6 +166,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "ugc-style-without-fake-testimonials",
+    "cover": "/assets/blog/ugc-style-without-fake-testimonials.webp",
+    "coverAlt": "A smartphone filming setup records a hands-on product demonstration.",
     "title": "UGC-style ads without invented customer testimonials",
     "category": "Filmmaking & advertising",
     "service": "ugc-style-ads",
@@ -173,6 +189,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "animatics-before-production",
+    "cover": "/assets/blog/animatics-before-production.webp",
+    "coverAlt": "Pencil storyboard frames develop into an animatic timeline.",
     "title": "Why an animatic belongs before production",
     "category": "Filmmaking & advertising",
     "service": "ai-storyboards-and-moodboards",
@@ -194,6 +212,8 @@ export const articles: Article[] = [
   },
   {
     "slug": "ai-public-interest-political-communication",
+    "cover": "/assets/blog/ai-public-interest-political-communication.webp",
+    "coverAlt": "An editorial illustration connects civic information, film and the public.",
     "title": "AI film for public-interest and political communication: possibilities and boundaries",
     "category": "Industry perspectives",
     "service": "ai-ad-film-production",

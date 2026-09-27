@@ -73,7 +73,7 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
       <ClientLogoMarquee />
 
       {/* ═══════════ SECTION 2 — SERVICES MARQUEE ═══════════ */}
-      <section className="relative z-10 bg-white py-4 sm:py-6 overflow-hidden">
+      <section className="services-drift-section" aria-label="Production capabilities">
         <Marquee items={content.marquee} />
       </section>
 
