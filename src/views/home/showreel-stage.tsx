@@ -3,6 +3,7 @@
 import { Inview } from "@/components/animation/springs/in-view";
 import { ShareVideo } from "@/components/common/share-video";
 import { GlassPlayButton } from "@/components/common/glass-play-button";
+import { ClientLogoMarquee } from "@/views/home/client-logo-marquee";
 import { Marquee } from "@/views/home/marquee";
 import type { ShowreelContent } from "@/data/mocks/home";
 import Image from "next/image";
@@ -14,7 +15,7 @@ export interface ShowreelStageProps {
 
 /**
  * Flat, fast home page — replaces the scroll-driven 3D showreel.
- * Four clean sections: Hero → Services Marquee → Portfolio → CTA.
+ * Hero → Client Logos → Services Marquee → Portfolio → CTA.
  * Zero WebGL, zero autoplay videos, zero scroll-hijacking.
  */
 export const ShowreelStage = ({ content }: ShowreelStageProps) => {
@@ -68,6 +69,8 @@ export const ShowreelStage = ({ content }: ShowreelStageProps) => {
           </div>
         </div>
       </section>
+
+      <ClientLogoMarquee />
 
       {/* ═══════════ SECTION 2 — SERVICES MARQUEE ═══════════ */}
       <section className="relative z-10 bg-white py-4 sm:py-6 overflow-hidden">

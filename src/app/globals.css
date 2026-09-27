@@ -307,3 +307,31 @@ button:disabled { cursor: not-allowed; }
 .article-body a:focus-visible, .article-card:focus-visible, .article-actions button:focus-visible { outline:2px solid var(--accent-light); outline-offset:4px; }
 @media (max-width:1000px) { .article-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:640px) { .article-grid { grid-template-columns:1fr; } .article-prompt { padding:var(--space-lg); } .article-section-heading { align-items:start; } }
+
+/* Client logos: local assets, restrained contrast, and a calm continuous drift. */
+:root {
+  --client-cell-width: 12rem;
+  --client-logo-width: 9rem;
+  --client-logo-height: 3rem;
+  --client-strip-padding: 2.75rem;
+  --client-edge-fade: 7%;
+  --client-logo-opacity: 0.58;
+}
+.client-marquee { position: relative; background: var(--background); padding-block: var(--client-strip-padding); }
+.client-marquee-window { overflow: hidden; mask-image: linear-gradient(to right, transparent, black var(--client-edge-fade), black calc(100% - var(--client-edge-fade)), transparent); }
+.client-marquee-track { display: flex; width: max-content; will-change: transform; }
+.client-marquee-group { display: flex; flex: none; align-items: center; margin: 0; padding: 0; list-style: none; }
+.client-marquee-cell { flex: 0 0 var(--client-cell-width); width: var(--client-cell-width); display: flex; align-items: center; justify-content: center; }
+.client-marquee-logo { width: var(--client-logo-width); height: var(--client-logo-height); object-fit: contain; filter: grayscale(1); opacity: var(--client-logo-opacity); mix-blend-mode: screen; }
+.client-marquee-logo-invert { filter: grayscale(1) invert(1); }
+.client-marquee-toggle { position: absolute; right: 1rem; bottom: 0.25rem; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; color: #999; cursor: pointer; border-radius: 50%; }
+.client-marquee-toggle:hover { color: white; }
+.client-marquee-toggle:focus-visible, .client-marquee-window:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+@media (max-width: 640px) { :root { --client-cell-width: 10rem; --client-logo-width: 7.5rem; --client-logo-height: 2.5rem; --client-strip-padding: 2.5rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .client-marquee-window { overflow-x: auto; }
+  .client-marquee-track { transform: none !important; will-change: auto; }
+  .client-marquee-copy, .client-marquee-toggle { display: none; }
+}
+
+.client-marquee-logo-round { width: var(--client-logo-height); border-radius: 50%; }

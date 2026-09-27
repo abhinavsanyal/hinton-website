@@ -134,3 +134,10 @@ async component must mirror its final layout with one of these
 - `views/blog.tsx`: listing and long-form views, two figures for new features, source links, table of contents, prompt blocks, CTA and BlogPosting metadata.
 - `data/article-types.ts`, `data/featured-articles.ts`: typed content, computed reading minutes and five researched features. The combined `articles` export retains the original archive.
 - `views/home/featured-articles.tsx`: three latest feature cards linking to canonical article URLs.
+
+## ClientLogoMarquee
+- `src/views/home/client-logo-marquee.tsx`, backed by `src/data/clients.ts`.
+- Lives immediately after the hero and before the services marquee in ShowreelStage.
+- Two equal logo groups, one accessible and one decorative, move continuously using React Spring. Pauses on hover, keyboard focus, explicit pause, offscreen and hidden tabs.
+- Reduced-motion visitors get one static, horizontally scrollable list. No visible company captions or headings.
+- Local WebP logo assets and per-source greyscale/inversion preserve readable marks on black. See [[frontend/client-logo-sources]].

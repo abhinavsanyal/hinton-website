@@ -52,3 +52,9 @@
 - Blogs navigation on desktop/mobile, three homepage featured stories, image cards, article-specific social metadata, BlogPosting JSON-LD and dated sitemap entries.
 - Added spring-animated clap/love reactions, persistent personal preferences, native/social/copy sharing, reading progress and consent-aware reading/CTA events. No public reaction totals or comments are fabricated. Blog engagement never calls Ads lead conversion tracking.
 - Consolidated footer location to one Bengaluru, India line with a location pin. Kept worldwide markets separately.
+
+## 2026-09-27 — Client logo drift
+- Added the owner's newly approved 28-client logo list directly between the homepage hero and services marquee. Logo-only presentation, greyscale treatment, soft edge fades and slow continuous React Spring movement.
+- Confirmed Caesar AI / Spartan Media / House of Farmer from owner-provided links. Saved optimized local WebP assets (148,702 bytes total) and recorded provenance in `frontend/client-logo-sources.md`.
+- Added hover/focus/offscreen/tab visibility pause, a keyboard-accessible pause toggle, and a static scrollable list for reduced motion. Decorative duplicate images are hidden from assistive technology.
+- Verified desktop and 390px mobile rendering, all 28 assets loaded, no document horizontal overflow, stable paused transform, and reduced-motion transform/duplicate/overflow behavior. Lint and production build pass; browser reported no errors.

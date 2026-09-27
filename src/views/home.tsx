@@ -18,7 +18,6 @@ export const HomeView = () => (
     <SiteHeader nav={homeContent.nav} logo={homeContent.logo} cta={homeContent.headerCta} awaitLoader={false} />
     <main id="main">
       <ShowreelStage content={homeContent} />
-      {/* Client logos temporarily hidden at the owner’s request. Restore ClientStrip here when ready. */}
       <ProjectPlanner />
       <SeoCapabilities />
       <SeoHowTo />
