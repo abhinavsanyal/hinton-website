@@ -112,6 +112,7 @@ export const homeContent: ShowreelContent = {
   logo: "/assets/brand/hinton-studios-logo.png",
   nav: [
     { label: "Work", href: "/work" },
+    { label: "Blogs", href: "/blog" },
     {
       label: "Services",
       href: "/services",

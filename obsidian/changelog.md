@@ -45,3 +45,10 @@
 ## 2026-09-27 — Prefilled WhatsApp enquiries
 - Header, footer and project-planner contact links now share the owner's supplied introductory message via `lib/whatsapp.ts`. Omitted the unrelated `utm_source=chatgpt.com` parameter. Video-sharing links retain their film-specific text.
 - WhatsApp opens a draft; visitors must tap Send themselves. Existing consent-aware click conversions are unchanged and measure clicks, not confirmed WhatsApp messages.
+
+## 2026-09-27 — Illustrated journal and engagement
+- Added five researched articles (approximately 650–900 words each), dated source links, original prompting examples and clearly qualified market/job analysis. Retained the existing ten articles and URLs.
+- Added five optimized generated covers and five original SVG explainers; each new story has two images. Artwork direction is recorded in `frontend/journal-artwork.md`.
+- Blogs navigation on desktop/mobile, three homepage featured stories, image cards, article-specific social metadata, BlogPosting JSON-LD and dated sitemap entries.
+- Added spring-animated clap/love reactions, persistent personal preferences, native/social/copy sharing, reading progress and consent-aware reading/CTA events. No public reaction totals or comments are fabricated. Blog engagement never calls Ads lead conversion tracking.
+- Consolidated footer location to one Bengaluru, India line with a location pin. Kept worldwide markets separately.

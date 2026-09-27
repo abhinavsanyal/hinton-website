@@ -125,3 +125,12 @@ async component must mirror its final layout with one of these
 - `lib/google-conversions.ts`: approved direct-contact URL classification and custom Ads conversion sender; deduplicates successful enquiry IDs and provides once-only delayed navigation with a two-second fallback. Used by the root Analytics click listener and `trackLead`; no conversion is emitted from the route/page-view effect.
 
 - `lib/whatsapp.ts`: shared studio contact URL and URL-encoded prefilled enquiry message used by the header, footer and project planner.
+
+### Illustrated journal
+- `components/blog/editorial-shell.tsx`: shared server-rendered editorial shell (re-exported from the existing editorial view for compatibility).
+- `components/blog/article-card.tsx`: image, category and reading-time link; appropriate heading level for listing/home contexts.
+- `components/blog/article-engagement.tsx`: spring-driven reading bar and clap/love buttons; reduced-motion support, keyboard controls and device-local reaction persistence. No public popularity counts.
+- `ShareArticle` reuses the native dialog/share behavior of `ShareVideo`, with article URLs and `content_type: article`. Video behavior is retained.
+- `views/blog.tsx`: listing and long-form views, two figures for new features, source links, table of contents, prompt blocks, CTA and BlogPosting metadata.
+- `data/article-types.ts`, `data/featured-articles.ts`: typed content, computed reading minutes and five researched features. The combined `articles` export retains the original archive.
+- `views/home/featured-articles.tsx`: three latest feature cards linking to canonical article URLs.

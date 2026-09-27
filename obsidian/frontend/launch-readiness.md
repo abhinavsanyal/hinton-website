@@ -58,3 +58,19 @@ After the fix, the local production build was checked with the actual Google lib
 - Enquiries deduplicate by server event ID per document. The old label-based Google conversion emission was replaced, avoiding two Google conversion signals for one submission. GA4 `generate_lead` and Meta Lead remain separate.
 - Same-tab direct contact navigation waits for the callback, with an independent two-second fallback and once-only navigation. New-tab and modifier-click behavior is preserved. No form values or invented purchase values are sent.
 - Verify real attribution in Google Ads/Tag Assistant after deployment; local stubbed tests do not prove account-side recording or campaign attribution.
+
+## Journal measurement — September 2026
+- `select_content`: article discovery, with `content_type`, `item_id`, and placement (`home` / `blog`).
+- `article_view`: article opened after analytics consent. `article_scroll`: once each at 25%, 50%, 90% of article body. `article_engaged`: 30 foreground seconds while body is visible. `article_complete`: at least 30 foreground seconds and 90% depth.
+- `article_reaction`: clap/love add/remove, article slug and personal reaction count. Counts reflect this device only.
+- `share`: article identifier, method, `content_type: article`; cancelled native sharing does not record success. Social links measure a share intent, not confirmed publication.
+- `article_cta_click`: article slug and same-site destination. These events do not call `conversion_event_purchase`; the existing successful-enquiry / phone / WhatsApp rules remain the only Ads triggers.
+- Configure GA4 custom dimensions for `article_slug`, `placement`, `reaction` and other parameters if needed for exploration reports. No Analytics or Ads account settings are changed by this code.
+
+### Journal validation
+- ESLint, TypeScript/production build and nine existing Google tag/conversion regression tests pass.
+- All 15 article pages checked for one H1, matching canonical and parseable structured data. The five new pages each render exactly two described article images and a unique cover in social metadata.
+- Desktop and 390px mobile browser checks: no horizontal overflow, images load, Blogs menu resolves correctly, homepage has three featured cards, footer location is consolidated.
+- Reaction preferences survive reload; no event emitted before analytics consent. With a stubbed tag, clap/love and copy-share events carry the article identifier, and no Ads conversion event is emitted. Native dialog Escape and canonical share URL verified.
+- Source audit: FICCI–EY’s official PDF was downloaded and its animation/VFX/post-production table cross-checked. The full report URL was corrected to the publisher’s actual download link.
+- Timed browser check confirmed one `article_engaged` and one `article_complete` at 30 foreground seconds after reaching 90% depth; no duplicate milestone events in the captured queue.

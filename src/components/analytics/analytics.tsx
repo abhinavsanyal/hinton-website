@@ -88,6 +88,10 @@ export function Analytics() {
     const onClick = (event: MouseEvent) => {
       const target = event.target instanceof Element ? event.target.closest<HTMLElement>("a,button") : null;
       if (!target || target.closest("[data-share-dialog]")) return;
+      const articleSlug = target.getAttribute("data-article-slug");
+      if (articleSlug) trackEvent("select_content", { content_type: "article", item_id: articleSlug, placement: target.getAttribute("data-article-placement") || "blog" });
+      const articleCta = target.getAttribute("data-article-cta");
+      if (articleCta) trackEvent("article_cta_click", { article_slug: articleCta, destination: target.getAttribute("href") || "" });
       const href = target.getAttribute("href") || "";
       const contactMethod = contactConversionMethod(href);
       const name = href.startsWith("mailto:") ? "email_click" : href.startsWith("tel:") ? "phone_click" : contactMethod === "whatsapp_click" ? "whatsapp_click" : target.hasAttribute("data-cal-link") || target.hasAttribute("data-cta") ? "cta_click" : null;

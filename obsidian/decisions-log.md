@@ -15,3 +15,8 @@ References: https://support.google.com/analytics/answer/12326985 and https://dev
 
 ## Google Ads conversions: explicit lead outcomes
 Use the owner's supplied custom event and approved enquiry/contact-click triggers. Since contact forms display inline success, emit on confirmed API success rather than every page load. Do not invent a purchase value. Preserve default connected-tag routing for this custom Ads event, while ordinary analytics events remain GA4-targeted. Replace legacy label-based conversion emission to prevent dual signals. Marketing consent controls all Ads conversion emission; contact navigation must work even if the Google script is blocked.
+
+## Journal: source-backed articles and personal reactions
+Keep the first ten article URLs while introducing typed, sourced feature stories. Verified vendor capabilities and published market data are attributed beside the relevant paragraphs; workflow recommendations are original editorial guidance, not claimed studio benchmarks. Model names are verified against official documentation. Do not equate total ad spend with AI production revenue or occupational exposure with job losses.
+
+Article HTML, images and metadata render on the server. Client leaves handle reactions, spring motion, sharing and engagement. Reactions persist only on the reader’s device and are explicitly labelled; there is no aggregate backend or fabricated social proof. Analytics consent gates all article events. Reading completion requires 90% depth plus 30 seconds of foreground time; it remains an engagement proxy, not evidence that the reader understood the article, and is not an advertising conversion.

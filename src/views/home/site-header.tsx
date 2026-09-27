@@ -55,7 +55,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
           </a>
 
           {/* Desktop nav links */}
-          <ul className="hidden items-stretch gap-1 sm:flex">
+          <ul className="hidden items-stretch gap-1 lg:flex">
             {nav.map((link) =>
               link.menu ? (
                 <li key={link.label} className="flex">
@@ -89,7 +89,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-transparent hover:bg-white/10 transition-colors sm:hidden"
+            className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-transparent hover:bg-white/10 transition-colors lg:hidden"
           >
             <svg width="20" height="20" viewBox="0 0 18 18" aria-hidden="true" className="text-white">
               {open ? (
@@ -128,7 +128,7 @@ export const SiteHeader = ({ nav, logo, cta }: SiteHeaderProps) => {
       {/* Mobile dropdown */}
       {open && (
         <div
-          className="pointer-events-auto mt-3 w-[calc(100%-2rem)] max-w-[420px] max-h-[70dvh] overflow-y-auto rounded-2xl bg-black/60 backdrop-blur-2xl border border-white/10 p-2 sm:hidden shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
+          className="pointer-events-auto mt-3 w-[calc(100%-2rem)] max-w-[420px] max-h-[70dvh] overflow-y-auto rounded-2xl bg-black/60 backdrop-blur-2xl border border-white/10 p-2 lg:hidden shadow-[0_16px_48px_rgba(0,0,0,0.5)]"
         >
           <ul className="flex flex-col gap-1">
             <li><button type="button" disabled className="originals-nav">Originals <span>Coming soon</span></button></li>

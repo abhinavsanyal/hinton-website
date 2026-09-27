@@ -1,4 +1,8 @@
-export const articles = [
+import type { Article } from "./article-types";
+import { featuredArticles } from "./featured-articles";
+
+export const articles: Article[] = [
+  ...featuredArticles,
   {
     "slug": "ai-video-production-workflow",
     "title": "From brief to final frame: an AI production workflow",

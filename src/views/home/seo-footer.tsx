@@ -54,15 +54,15 @@ export const SeoFooter = () => {
         <div>
           <h2 className="text-[2.5vmin] max-sm:text-[20px] font-semibold mb-4">Hinton Studios</h2>
           <p className="text-[1.6vmin] max-sm:text-[14px] text-white/70 leading-relaxed mb-6">
-            Hinton Studios — AI filmmaking and AI video production studio based in Bengaluru, India.
+            Hinton Studios — Human-directed AI filmmaking and video production for brands worldwide.
           </p>
           <address className="not-italic text-[1.4vmin] max-sm:text-[13px] text-white/50 mb-6">
-            Bengaluru, Karnataka<br/>
-            India<br />Serving India, USA, UAE, UK and Singapore
+            <span className="footer-location"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Bengaluru, India</span>
+            <span className="footer-markets">Working worldwide · USA, UAE, UK &amp; Singapore</span>
           </address>
 
           <nav aria-label="Explore Hinton" className="flex flex-wrap gap-4 mb-6 text-sm">
-            <Link href="/about">About</Link><Link href="/blog">Journal</Link><Link href="/work">Work</Link><Link href="/audio-samples">Audio</Link><Link href="/video-marketing-report">Free video planner</Link>
+            <Link href="/about">About</Link><Link href="/blog">Blogs</Link><Link href="/work">Work</Link><Link href="/audio-samples">Audio</Link><Link href="/video-marketing-report">Free video planner</Link>
             <button type="button" onClick={() => useCookieStore.getState().openModal()}>Cookie settings</button>
           </nav>
           <SocialLinks />
