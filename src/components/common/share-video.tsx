@@ -5,14 +5,14 @@ import { createPortal } from "react-dom";
 import { siteConfig } from "@/lib/site";
 import { trackEvent } from "@/components/analytics/analytics";
 
-function ShareContent({ slug, title, contentType }: { slug: string; title: string; contentType: "video" | "article" }) {
+function ShareContent({ slug, title, contentType }: { slug: string; title: string; contentType: "video" | "article" | "testimonial" }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (open) dialog.current?.showModal(); }, [open]);
   const trigger = useRef<HTMLButtonElement>(null);
-  const url = `${siteConfig.url}/${contentType === "video" ? "work" : "blog"}/${slug}`;
+  const url = `${siteConfig.url}/${contentType === "testimonial" ? "testimonials" : contentType === "video" ? "work" : "blog"}/${slug}`;
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(`${title} — Hinton Studios`);
   const record = (method: string) => trackEvent("share", { method, content_type: contentType, item_id: slug });
@@ -27,7 +27,7 @@ function ShareContent({ slug, title, contentType }: { slug: string; title: strin
   }
   return <div className="share-video" onClick={event => event.stopPropagation()} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); setOpen(false); trigger.current?.focus(); } }}>
     <button ref={trigger} type="button" className="quiet-button" aria-expanded={open} aria-controls={id} aria-label={`Share ${title}`} onClick={() => setOpen(!open)}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m8 7 4-4 4 4M12 3v12M5 12v8h14v-8" /></svg>Share</button>
-    {open && createPortal(<dialog ref={dialog} id={id} className="share-panel" data-share-dialog aria-label={`Share ${title}`} onCancel={() => setOpen(false)} onClose={() => { setOpen(false); trigger.current?.focus(); }}><div className="film-actions"><p>Share this {contentType === "video" ? "film" : "article"}</p><button type="button" className="quiet-button" onClick={() => dialog.current?.close()}>Close</button></div><div className="action-row">
+    {open && createPortal(<dialog ref={dialog} id={id} className="share-panel" data-share-dialog aria-label={`Share ${title}`} onCancel={() => setOpen(false)} onClose={() => { setOpen(false); trigger.current?.focus(); }}><div className="film-actions"><p>Share this {contentType === "testimonial" ? "testimonial" : contentType === "video" ? "film" : "article"}</p><button type="button" className="quiet-button" onClick={() => dialog.current?.close()}>Close</button></div><div className="action-row">
       <button type="button" className="quiet-button" onClick={nativeShare}>Share to apps</button>
       <button type="button" className="quiet-button" onClick={copy}>Copy link</button>
       {[
@@ -43,3 +43,5 @@ function ShareContent({ slug, title, contentType }: { slug: string; title: strin
 
 export function ShareVideo(props: { slug: string; title: string }) { return <ShareContent {...props} contentType="video" />; }
 export function ShareArticle(props: { slug: string; title: string }) { return <ShareContent {...props} contentType="article" />; }
+
+export function ShareTestimonial(props: { slug: string; title: string }) { return <ShareContent {...props} contentType="testimonial" />; }

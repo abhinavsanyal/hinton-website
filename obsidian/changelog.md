@@ -64,3 +64,7 @@
 - Added the owner's real TrendLoud testimonial as a single prominent click-to-play section. Encoded the full 3:04 source to a 39 MB faststart MP4 and uploaded it to the existing R2 bucket through the signed-in dashboard. Confirmed public access, byte-range delivery and actual browser playback. No media request before the user presses play; consent-aware testimonial engagement tracking is included.
 - Generated ten individual editorial covers using the built-in image generation tool. Every one of the 15 blog posts now has a cover, alt text, card image, social preview and BlogPosting image. Made cover/alt required in Article types. Prompt/output manifest: `frontend/blog-cover-prompts.md`.
 - Checked the new covers visually, desktop/mobile layouts, opposing transforms, stable pause control, no horizontal overflow, and article image metadata. Lint, production build, all 15 cover file checks and 9 Google tag/conversion regression tests pass.
+
+## 2026-09-27 — Shareable testimonial watch page
+- Added Share and Open player actions to the homepage testimonial, plus a dedicated `/testimonials/trendloud` watch page with native playback, fullscreen controls, social previews, canonical URL, sitemap entry and VideoObject schema.
+- Reused the share dialog for native sharing, copy link and social destinations with consent-aware share analytics. All shared links stay on hintonstudios.com.

@@ -148,3 +148,8 @@ async component must mirror its final layout with one of these
 - `src/views/home/client-testimonial.tsx` presents the owner-supplied TrendLoud interview as one large click-to-play video after the work stage. No video element or media request before interaction. Native controls, poster, error fallback and a contact CTA.
 - Analytics-consented events: `testimonial_start`, `testimonial_progress` (25/50/75, once per mount), `testimonial_complete`, `testimonial_cta`. These are engagement events, not Ads conversions.
 - R2 object `video-assets-hinton/trendloud-testimonial-2026.mp4`: 1280×720 H.264/AAC, full 183.98-second duration, MP4 faststart, 39,013,973 bytes. Public endpoint returned 200 and a 256-byte range request returned 206. Original file remains untouched outside the repo.
+
+## Testimonial sharing
+- Homepage testimonial offers Share and Open player. `ShareTestimonial` reuses the existing native/social/copy-link dialog and records consent-aware `share` events with `content_type: testimonial`.
+- `/testimonials/trendloud` is a dedicated on-domain watch page with a large native video player, explicit Fullscreen action (including iOS fallback), contact link, share controls, canonical/social metadata and VideoObject schema. Shared links never point directly to R2.
+- `src/data/testimonial.ts` defines the shared title, URL and video source. Browser fullscreen requires the viewer's gesture; opening the link does not force fullscreen or autoplay audio.

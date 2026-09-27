@@ -349,3 +349,12 @@ button:disabled { cursor: not-allowed; }
 .client-story-footer { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; }
 .client-story-footer a { color: var(--foreground); }
 @media (max-width: 640px) { .client-story-heading { display: block; } .client-story-heading > p { margin-top: 1rem; } .client-story-footer { flex-direction: column; } .client-story-watch { bottom: .75rem; left: .75rem; right: .75rem; } }
+
+/* Shared testimonial destination: a spacious player without navigation overlays. */
+.testimonial-watch-shell { min-height: 100svh; padding: 1.5rem; }
+.testimonial-watch-shell > nav { max-width: var(--testimonial-width); margin-inline: auto; color: var(--drift-ink); }
+.client-story-watch-page { padding: 2rem 0; }
+.client-story-watch-page h1 { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 400; letter-spacing: -.04em; }
+.client-story-watch-page .client-story-player { max-height: 72svh; }
+.client-story-watch-page video { object-fit: contain; }
+.client-story-footer .action-row { align-items: center; }
