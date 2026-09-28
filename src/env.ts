@@ -15,7 +15,7 @@ const publicSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   NEXT_PUBLIC_MEDIA_URL: z.string().url().optional(),
   NEXT_PUBLIC_GOOGLE_ADS_ID: z.string().regex(/^AW-\d+$/).optional(),
-  NEXT_PUBLIC_META_PIXEL_ID: z.string().regex(/^\d+$/).optional(),
+  NEXT_PUBLIC_META_PIXEL_ID: z.string().regex(/^\d+$/).default("2163865941221500"),
 });
 
 const serverSchema = z.object({

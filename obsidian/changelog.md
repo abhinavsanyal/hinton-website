@@ -68,3 +68,8 @@
 ## 2026-09-27 — Shareable testimonial watch page
 - Added Share and Open player actions to the homepage testimonial, plus a dedicated `/testimonials/trendloud` watch page with native playback, fullscreen controls, social previews, canonical URL, sitemap entry and VideoObject schema.
 - Reused the share dialog for native sharing, copy link and social destinations with consent-aware share analytics. All shared links stay on hintonstudios.com.
+
+## 2026-09-28 — Activate supplied Meta Pixel
+- Set `2163865941221500` as the default public Meta Pixel ID and document it in `.env.example`.
+- Reuses the existing shared consent-aware loader: one initialization, PageView on initial consented load and route changes, and Lead after successful enquiries. Optional environment override remains supported.
+- No additional inline loader or unconditional noscript beacon is inserted, avoiding duplicate events and tracking before marketing consent. CAPI still requires separate server credentials.
