@@ -73,3 +73,8 @@
 - Set `2163865941221500` as the default public Meta Pixel ID and document it in `.env.example`.
 - Reuses the existing shared consent-aware loader: one initialization, PageView on initial consented load and route changes, and Lead after successful enquiries. Optional environment override remains supported.
 - No additional inline loader or unconditional noscript beacon is inserted, avoiding duplicate events and tracking before marketing consent. CAPI still requires separate server credentials.
+
+## 2026-09-29 — Repair Google Ads conversion mapping
+- Replaced the unmatched purchase event with the verified GA4 import `manual_event_REQUEST_QUOTE`, targeted to G-J75JY1GDPW.
+- Existing Ads action renamed “Website enquiries & WhatsApp / phone clicks” and set to Count One. Campaign budgets/bidding unchanged.
+- Regression tests verify all five approved trigger methods reach the imported event, with consent, deduplication and navigation fallback preserved.

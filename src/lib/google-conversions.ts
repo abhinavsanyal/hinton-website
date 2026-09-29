@@ -1,5 +1,7 @@
-/** The custom Google Ads event supplied by the account owner. No purchase value is invented. */
-export const ADS_CONVERSION_EVENT = "conversion_event_purchase";
+/** Existing GA4 import used by Hinton Search Ads (action 7796649086).
+ * Keep the legacy event name: renaming the Ads action does not change its GA4 mapping.
+ */
+export const ADS_CONVERSION_EVENT = "manual_event_REQUEST_QUOTE";
 export const CONVERSION_TIMEOUT_MS = 2000;
 type Command = (...args: unknown[]) => void;
 
@@ -12,7 +14,7 @@ export function contactConversionMethod(href: string): "phone_click" | "whatsapp
   return null;
 }
 
-export function createConversionTracker() {
+export function createConversionTracker(gaMeasurementId: string) {
   const sentLeads = new Set<string>();
   return function sendConversion(
     gtag: Command | undefined,
@@ -23,7 +25,7 @@ export function createConversionTracker() {
     if (!marketingConsent || !gtag) return false;
     if (options.eventId && sentLeads.has(options.eventId)) return false;
     if (options.eventId) sentLeads.add(options.eventId);
-    const params: Record<string, unknown> = { method };
+    const params: Record<string, unknown> = { method, send_to: gaMeasurementId };
     if (options.eventId) params.transaction_id = options.eventId;
     if (options.navigate) {
       let finished = false;
@@ -38,7 +40,7 @@ export function createConversionTracker() {
       params.event_callback = finish;
       params.event_timeout = CONVERSION_TIMEOUT_MS;
     }
-    // Use the connected tag's default destinations, matching the supplied snippet.
+    // This is an imported GA4 key event, not a direct AW conversion-label event.
     gtag("event", ADS_CONVERSION_EVENT, params);
     return true;
   };

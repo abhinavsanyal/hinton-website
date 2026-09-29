@@ -28,7 +28,7 @@ export function trackEvent(name: string, params: Record<string, string> = {}) {
   if (!useCookieStore.getState().consent?.analytics) return;
   window.gtag?.("event", name, { ...params, send_to: GA_ID });
 }
-const sendConversion = createConversionTracker();
+const sendConversion = createConversionTracker(GA_ID);
 
 export function trackLead(method: string, eventId: string) {
   trackEvent("generate_lead", { method });
