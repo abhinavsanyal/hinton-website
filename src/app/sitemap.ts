@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: siteConfig.url, lastModified, changeFrequency: "monthly", priority: 1 },
     { url: `${siteConfig.url}/services`, lastModified, changeFrequency: "monthly", priority: 0.9 },
     { url: `${siteConfig.url}/work`, lastModified, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${siteConfig.url}/contact`, lastModified: new Date("2026-09-29"), changeFrequency: "monthly", priority: 0.8 },
     ...["/about", "/blog", "/video-marketing-report"].map(path => ({ url: `${siteConfig.url}${path}`, lastModified })),
     { url: `${siteConfig.url}/testimonials/trendloud`, lastModified: new Date("2026-09-27") },
     ...workVideos.map(video => ({ url: `${siteConfig.url}/work/${video.slug}`, lastModified })),

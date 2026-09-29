@@ -82,6 +82,9 @@ export function Analytics() {
     // Only custom engagement is manual. Google tracks page views on load/history.
     if (lastPage.current === pathname) return;
     lastPage.current = pathname;
+    if (pathname.startsWith("/services/")) trackEvent("view_service", { service_slug: pathname.split("/")[2] });
+    if (pathname === "/contact") trackEvent("view_contact", { page_path: pathname });
+    if (pathname === "/thank-you") trackEvent("view_acknowledgement", { page_path: pathname });
     if (pathname === "/work" || pathname.startsWith("/work/") || pathname === "/audio-samples") trackEvent("view_work", { page_path: pathname });
   }, [consent, pathname]);
   useEffect(() => {

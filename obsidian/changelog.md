@@ -78,3 +78,11 @@
 - Replaced the unmatched purchase event with the verified GA4 import `manual_event_REQUEST_QUOTE`, targeted to G-J75JY1GDPW.
 - Existing Ads action renamed “Website enquiries & WhatsApp / phone clicks” and set to Count One. Campaign budgets/bidding unchanged.
 - Regression tests verify all five approved trigger methods reach the imported event, with consent, deduplication and navigation fallback preserved.
+
+## 2026-09-29 — Repair enquiry delivery and acknowledgement journey
+- Confirmed production contact API returned 503 because SMTP credentials were absent. Owner chose password-free delivery instead of configuring a Google app password.
+- Added server-side FormSubmit delivery with fixed To/CC, structured table emails, reply-to, full brief/source/reference and strict provider-response checking. Sent the owner's receiving inbox an activation request; inbox activation and actual inbox arrival still require verification.
+- Shared enquiry submission hook now preserves failed briefs, blocks concurrent clicks, separates form attempts/errors from successful Ads leads, and sends accepted submissions to the new branded `/thank-you` page. Added indexable `/contact` and footer navigation; replaced the placeholder calendar in the legacy modal with a working enquiry form.
+- Report requests notify the studio independently from visitor email delivery. Password-free AJAX delivery does not support visitor autoresponses; the UI does not promise one. Optional SMTP retains confirmations.
+- Added privacy disclosure, large-image preview metadata and form/service/contact engagement events. The acknowledgement is noindex and never a conversion trigger.
+- Validation: 13 delivery/Google regression tests, lint and production build; local SMTP browser tests for contact and project briefs, mobile acknowledgement and retained footer input on failure; all 40 sitemap pages passed status, title, description, canonical and H1 checks. Real FormSubmit delivery awaits inbox activation.

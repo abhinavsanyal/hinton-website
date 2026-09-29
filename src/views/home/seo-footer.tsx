@@ -3,48 +3,19 @@
 import { WHATSAPP_CONTACT_URL } from "@/lib/whatsapp";
 
 import { SocialLinks } from "@/components/common/social-links";
-import { useState } from "react";
+import { useEnquiryForm } from "@/hooks/use-enquiry-form";
+import { FormFeedback } from "@/components/contact/form-feedback";
 import Link from "next/link";
 import { serviceNavigation } from "@/data/service-navigation";
 import { useCookieStore } from "@/components/common/Cookie/cookieStore";
-import { trackLead } from "@/components/analytics/analytics";
+
 
 export const SeoFooter = () => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("loading");
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      marketingConsent: useCookieStore.getState().consent?.marketing ?? false,
-      name: formData.get("name"),
-      email: formData.get("email"),
-      message: formData.get("message"),
-    };
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        setStatus("success");
-        const body = await res.json();
-        trackLead("contact_form", body.data.eventId);
-        (e.target as HTMLFormElement).reset();
-      } else {
-        const body = await res.json();
-        setErrorMessage(body.error?.message || "Please try again or email the studio directly.");
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
+  const enquiry = useEnquiryForm("contact_form");
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    await enquiry.submit({ name: String(data.get("name") || ""), email: String(data.get("email") || ""), message: String(data.get("message") || ""), website: String(data.get("website") || "") });
   };
 
   return (
@@ -62,7 +33,7 @@ export const SeoFooter = () => {
           </address>
 
           <nav aria-label="Explore Hinton" className="flex flex-wrap gap-4 mb-6 text-sm">
-            <Link href="/about">About</Link><Link href="/blog">Blogs</Link><Link href="/work">Work</Link><Link href="/audio-samples">Audio</Link><Link href="/video-marketing-report">Free video planner</Link>
+            <Link href="/contact">Contact</Link><Link href="/about">About</Link><Link href="/blog">Blogs</Link><Link href="/work">Work</Link><Link href="/audio-samples">Audio</Link><Link href="/video-marketing-report">Free video planner</Link>
             <button type="button" onClick={() => useCookieStore.getState().openModal()}>Cookie settings</button>
           </nav>
           <SocialLinks />
@@ -96,12 +67,7 @@ export const SeoFooter = () => {
         {/* Contact Form */}
         <div>
           <h3 className="text-[1.6vmin] max-sm:text-[13px] uppercase tracking-widest font-semibold mb-6 text-white/50">Send a Message</h3>
-          {status === "success" ? (
-            <div role="status" className="bg-white/10 border border-white/20 rounded-xl p-4 text-sm text-white">
-              Thanks for reaching out! We&apos;ll get back to you shortly.
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <form onSubmit={handleSubmit} onFocus={enquiry.start} onInvalid={enquiry.invalid} aria-label="Send a message" aria-busy={enquiry.busy} className="flex flex-col gap-3">
               <input
                 type="text"
                 name="name"
@@ -125,16 +91,15 @@ export const SeoFooter = () => {
               ></textarea>
               <button
                 type="submit"
-                disabled={status === "loading"}
+                disabled={enquiry.busy}
                 className="mt-1 bg-white text-black hover:bg-white/90 disabled:opacity-50 rounded-lg px-4 py-2.5 text-sm font-semibold flex justify-center items-center"
               >
-                {status === "loading" ? "Sending..." : "Send Message"}
+                {enquiry.busy ? "Sending..." : "Send Message"}
               </button>
-              {status === "error" && (
-                <p role="alert" className="text-accent text-xs mt-1">{errorMessage || "Failed to send. Please email abhinava@hintonstudios.com."}</p>
-              )}
+              <div className="sr-only" aria-hidden="true"><label>Leave empty<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
+              <p className="form-note">We’ll use your details to respond to your enquiry. <Link href="/privacy-policy">Privacy policy</Link></p>
+              <FormFeedback error={enquiry.error} />
             </form>
-          )}
         </div>
       </div>
     </footer>

@@ -83,8 +83,11 @@ Server Components instead (no client request at all).
 
 ## Example
 
-`app/api/contact/route.ts` — a contact/lead endpoint. Runs out of the box
-(logs server-side); set `CONTACT_ENDPOINT` to forward leads upstream.
+`app/api/contact/route.ts` validates enquiries and only returns success after the email provider accepts them. Without a complete SMTP configuration it uses FormSubmit server-side. Abhinava is the fixed To recipient, with Souvik and Avkash in CC; the visitor's email is Reply-To. FormSubmit requires one-time receiving-inbox activation. HTTP errors, activation responses and string `"false"` are failures, not leads. Provider acceptance is not proof of inbox delivery.
+
+A complete SMTP configuration remains optional and additionally enables visitor confirmation/report emails. There is no automatic retry between providers after an ambiguous delivery error. The report endpoint independently reports studio and visitor delivery status.
+
+Contact success sets an HttpOnly, one-hour acknowledgement cookie containing only a UUID, timestamp and confirmation-email status. `/thank-you` is noindex and excluded from the sitemap; direct visits without a valid receipt show a neutral invitation. The cookie is a presentation hint, not an authentication token or conversion trigger. `useEnquiryForm` emits conversions once at API success, never on acknowledgement page views. Errors preserve the entered brief and offer direct-contact links.
 
 ## Related
 

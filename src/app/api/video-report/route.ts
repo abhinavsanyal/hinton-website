@@ -2,19 +2,32 @@ import { z } from "zod";
 import { handle } from "@/lib/api";
 import { guardSubmission } from "@/lib/submission-guard";
 import { auditWebsite } from "@/lib/website-audit";
-import { mailer, studioRecipients } from "@/lib/mail";
+import { mailer, hasSmtp } from "@/lib/mail";
+import { randomUUID } from "node:crypto";
+import { deliverViaFormSubmit, enquiryTo, enquiryCc } from "@/lib/form-delivery";
 import { siteConfig } from "@/lib/site";
-const schema = z.object({ website: z.url().max(2048), email: z.email().max(254), consent: z.literal(true) });
+export const maxDuration = 60;
+const schema = z.object({ website: z.url().max(2048), email: z.string().trim().max(254).pipe(z.email()), consent: z.literal(true) });
 export const POST = handle(async req => {
   guardSubmission(req);
   const input = schema.parse(await req.json());
   const report = await auditWebsite(input.website);
   let emailed = false;
-  try {
+  let leadReceived = false;
+  if (!hasSmtp()) {
+    const delivery = await deliverViaFormSubmit({ email: input.email, source: "video_marketing_report", eventId: randomUUID(),
+      message: `Website: ${report.website}\n\n${report.recommendations.join("\n\n")}\n\n${report.limitation}\n\nThe visitor requested this report and agreed to enquiry follow-up.` });
+    leadReceived = delivery.accepted;
+  } else try {
     const { transport, from } = mailer();
-    await transport.sendMail({ from, to: input.email, subject: "Your video marketing starter report — Hinton Studios", text: `${report.website}\n\n${report.recommendations.join("\n\n")}\n\n${report.limitation}\n\nExplore work: ${siteConfig.url}/work` });
-    emailed = true;
-    await transport.sendMail({ from, to: studioRecipients, replyTo: input.email, subject: "Video marketing report requested", text: `Website: ${report.website}\nEmail: ${input.email}\nThe visitor requested a report and agreed to enquiry follow-up.` });
+    try {
+      const delivery = await transport.sendMail({ from, to: enquiryTo, cc: enquiryCc, replyTo: input.email, subject: "Video marketing report requested", text: `Website: ${report.website}\nEmail: ${input.email}\nThe visitor requested a report and agreed to enquiry follow-up.` });
+      leadReceived = Boolean(delivery.accepted?.length);
+    } catch { console.error("[video-report] studio notification failed"); }
+    try {
+      const delivery = await transport.sendMail({ from, to: input.email, subject: "Your video marketing starter report — Hinton Studios", text: `${report.website}\n\n${report.recommendations.join("\n\n")}\n\n${report.limitation}\n\nExplore work: ${siteConfig.url}/work` });
+      emailed = Boolean(delivery.accepted?.length);
+    } catch { console.error("[video-report] visitor email failed"); }
   } catch { console.error("Video report email delivery unavailable or incomplete."); }
-  return { report, emailed };
+  return { report, emailed, leadReceived };
 });

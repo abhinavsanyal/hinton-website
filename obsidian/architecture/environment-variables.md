@@ -44,3 +44,6 @@ When the next variable is introduced:
 ## September 2026 integrations
 
 See `.env.example` and `frontend/launch-readiness.md`: optional public Google Ads ID/label and Meta Pixel ID; server-only SMTP settings and Meta CAPI token/API version/test-event code. GA4 and Clarity IDs supplied by the site owner are configured in the shared analytics component. Never put SMTP passwords or CAPI tokens in public variables.
+
+## Enquiry delivery (29 September 2026)
+No SMTP password is required for the default FormSubmit gateway. The receiving inbox must click its one-time activation email before production enquiries can be delivered. To: abhinava@hintonstudios.com; CC: souvik@hintonstudios.com, avkash@hintonstudios.com. Optional complete SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / SMTP_FROM switches to SMTP and enables visitor confirmation/report emails. Partial SMTP settings do not disable FormSubmit. Do not store credentials in source control.

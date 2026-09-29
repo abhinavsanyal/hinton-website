@@ -50,3 +50,6 @@ presentational components. Use [[templates/hook-note]] to document it here.
 ## Related
 
 [[animation-system]] · [[smooth-scroll]] · [[utils]]
+
+## useEnquiryForm
+`src/hooks/use-enquiry-form.ts` shares contact, footer, modal and project-brief submission behavior. Uses a synchronous pending ref to prevent concurrent submissions, consent-aware non-PII funnel events, server acceptance before `trackLead`, retained inputs on failure and navigation to `/thank-you` only after success. `FormFeedback` provides an accessible error and direct-contact fallback.
