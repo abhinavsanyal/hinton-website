@@ -86,3 +86,7 @@
 - Report requests notify the studio independently from visitor email delivery. Password-free AJAX delivery does not support visitor autoresponses; the UI does not promise one. Optional SMTP retains confirmations.
 - Added privacy disclosure, large-image preview metadata and form/service/contact engagement events. The acknowledgement is noindex and never a conversion trigger.
 - Validation: 13 delivery/Google regression tests, lint and production build; local SMTP browser tests for contact and project briefs, mobile acknowledgement and retained footer input on failure; all 40 sitemap pages passed status, title, description, canonical and H1 checks. Real FormSubmit delivery awaits inbox activation.
+
+## 2026-10-04 — Live enquiry audit
+- Confirmed Google Ads action 7796649086 is active and maps to the deployed GA4 event.
+- Activated the existing FormSubmit receiving form; production requests still fail while the same gateway payload succeeds locally. Added privacy-safe gateway status/type/error-code diagnostics to identify the hosting-side failure without logging enquiry contents.

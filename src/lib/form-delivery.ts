@@ -19,6 +19,12 @@ export async function deliverViaFormSubmit(input: StudioEnquiry, request: typeof
       }),
       signal: AbortSignal.timeout(20000), cache: "no-store",
     });
+    const contentType = response.headers.get("content-type") || "";
+    if (!response.ok || !contentType.includes("application/json")) {
+      // Never log upstream bodies: they can echo the visitor's personal details.
+      console.error("[form-delivery] gateway response rejected", { status: response.status, contentType });
+      return { accepted: false, reason: "delivery_failed" };
+    }
     const result: unknown = await response.json();
     if (!result || typeof result !== "object") return { accepted: false, reason: "delivery_failed" };
     const body = result as Record<string, unknown>;
@@ -26,5 +32,10 @@ export async function deliverViaFormSubmit(input: StudioEnquiry, request: typeof
     if (response.ok && (body.success === true || body.success === "true")) return { accepted: true };
     const activation = typeof body.message === "string" && /needs activation/i.test(body.message);
     return { accepted: false, reason: activation ? "activation_required" : "delivery_failed" };
-  } catch { return { accepted: false, reason: "delivery_failed" }; }
+  } catch (error) {
+    const cause = error instanceof Error && "cause" in error ? error.cause : undefined;
+    const code = cause && typeof cause === "object" && "code" in cause ? String(cause.code) : undefined;
+    console.error("[form-delivery] gateway request failed", { type: error instanceof Error ? error.name : "UnknownError", code });
+    return { accepted: false, reason: "delivery_failed" };
+  }
 }
