@@ -92,3 +92,8 @@ Contact success sets an HttpOnly, one-hour acknowledgement cookie containing onl
 ## Related
 
 [[backend/README]] · [[environment-variables]] · [[routing]] · [[data-flow]] · [[tech-stack]]
+
+### Production gateway restriction (4 October 2026)
+The receiver was activated and a local gateway test arrived in the studio inbox, but FormSubmit returns HTTP 403 (`text/html`) to the production Vercel function. This is `gateway_blocked`, returned as HTTP 503 with no success receipt or conversion. Configure the existing SMTP transport or resolve the provider restriction; never bypass TLS or report delivery success for a rejected request. Diagnostics log only status/content type/error code, not bodies or form contents.
+
+Video-report requests now receive a stable event ID only if the studio email is accepted. The client emits the existing consent-aware Google conversion once for that ID. A generated report with failed studio delivery remains available but is not counted as a lead.

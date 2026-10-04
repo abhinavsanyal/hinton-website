@@ -47,3 +47,5 @@ See `.env.example` and `frontend/launch-readiness.md`: optional public Google Ad
 
 ## Enquiry delivery (29 September 2026)
 No SMTP password is required for the default FormSubmit gateway. The receiving inbox must click its one-time activation email before production enquiries can be delivered. To: abhinava@hintonstudios.com; CC: souvik@hintonstudios.com, avkash@hintonstudios.com. Optional complete SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / SMTP_FROM switches to SMTP and enables visitor confirmation/report emails. Partial SMTP settings do not disable FormSubmit. Do not store credentials in source control.
+
+Resend alternative: set server-only `RESEND_API_KEY` and `RESEND_FROM` (an address on a verified sending domain). A complete Resend configuration takes priority over SMTP; an ambiguous delivery failure never automatically retries via a second provider. No client bundle receives the key. The existing studio To/CC and visitor confirmation behavior is shared by both transports.

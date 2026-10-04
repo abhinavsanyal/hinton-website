@@ -2,7 +2,7 @@
 export const enquiryTo = "abhinava@hintonstudios.com";
 export const enquiryCc = "souvik@hintonstudios.com,avkash@hintonstudios.com";
 export type StudioEnquiry = { name?: string; email: string; message: string; source: string; eventId: string };
-export type DeliveryResult = { accepted: true } | { accepted: false; reason: "activation_required" | "delivery_failed" };
+export type DeliveryResult = { accepted: true } | { accepted: false; reason: "activation_required" | "gateway_blocked" | "delivery_failed" };
 
 export async function deliverViaFormSubmit(input: StudioEnquiry, request: typeof fetch = fetch): Promise<DeliveryResult> {
   try {
@@ -20,10 +20,10 @@ export async function deliverViaFormSubmit(input: StudioEnquiry, request: typeof
       signal: AbortSignal.timeout(20000), cache: "no-store",
     });
     const contentType = response.headers.get("content-type") || "";
-    if (!response.ok || !contentType.includes("application/json")) {
+    if (!response.ok) {
       // Never log upstream bodies: they can echo the visitor's personal details.
       console.error("[form-delivery] gateway response rejected", { status: response.status, contentType });
-      return { accepted: false, reason: "delivery_failed" };
+      return { accepted: false, reason: response.status === 403 ? "gateway_blocked" : "delivery_failed" };
     }
     const result: unknown = await response.json();
     if (!result || typeof result !== "object") return { accepted: false, reason: "delivery_failed" };

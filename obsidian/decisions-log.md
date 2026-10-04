@@ -26,3 +26,6 @@ The signed-in Ads account revealed action 7796649086 imports `manual_event_REQUE
 
 ## Enquiries: password-free delivery with explicit acceptance (29 September 2026)
 The owner declined SMTP credential setup and requested To abhinava@hintonstudios.com with CC souvik@hintonstudios.com and avkash@hintonstudios.com. Use FormSubmit's server-side AJAX endpoint when SMTP is incomplete. Recipients and template are fixed in code, and visitor data never configures destinations. Keep optional SMTP for future branded sender/autoresponse support. Do not silently fail over after a send error, which could duplicate leads. FormSubmit activation and `success: "false"` must fail closed; only acceptance creates an acknowledgement receipt and allows client lead conversion. FormSubmit AJAX has no autoresponse; show on-site acknowledgement honestly. No email provider secrets enter the browser.
+
+## ADR — Free transactional email alternative (2026-10-04)
+FormSubmit returns HTTP 403 from the production Vercel function. Add an optional server-only Resend HTTPS adapter to the existing mailer, without new dependencies. Preserve SMTP and fallback for unconfigured installations; never silently retry a possibly accepted email across providers. Success requires the provider's returned message ID. User chose a free replacement; domain/account provisioning remains an external requirement.

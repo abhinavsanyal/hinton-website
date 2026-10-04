@@ -82,3 +82,5 @@ exception — note it clearly). Group by domain under `utils/<domain>/`.
 ## Related
 
 [[hooks]] · [[seo-metadata]] · [[smooth-scroll]]
+
+`lib/resend-mail.ts`: server-only transactional adapter used by the shared mailer; validates provider acceptance and preserves To/CC/Reply-To.

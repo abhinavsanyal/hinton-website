@@ -1,9 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { trackEvent } from "@/components/analytics/analytics";
+import { trackEvent, trackLead } from "@/components/analytics/analytics";
 import { FormFeedback } from "@/components/contact/form-feedback";
-type Result = { report: { website: string; title: string; recommendations: string[]; limitation: string }; emailed: boolean; leadReceived: boolean };
+type Result = { report: { website: string; title: string; recommendations: string[]; limitation: string }; emailed: boolean; leadReceived: boolean; eventId?: string };
 export function ReportForm() {
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState("");
@@ -21,6 +21,10 @@ export function ReportForm() {
       const body = await response.json();
       if (!response.ok) { measure("enquiry_form_error", { error_code: body.error?.code || "report_error" }); throw new Error(body.error?.message || "Unable to review this website. Please try its final HTTPS homepage URL."); }
       setResult(body.data); measure("lead_tool_submission", { method: "website_report", email_delivery: body.data.emailed ? "accepted" : "unavailable", studio_delivery: body.data.leadReceived ? "accepted" : "unavailable" });
+      // Generating a report alone is not a lead: studio delivery must succeed.
+      if (body.data.leadReceived && typeof body.data.eventId === "string") {
+        try { trackLead("website_report", body.data.eventId); } catch { /* Measurement never hides a delivered report. */ }
+      }
       requestAnimationFrame(() => { results.current?.focus(); results.current?.scrollIntoView({ block: "start", behavior: "instant" }); });
     } catch (error) { setError(error instanceof Error ? error.message : "Please try again."); } finally { pending.current = false; setBusy(false); }
   }

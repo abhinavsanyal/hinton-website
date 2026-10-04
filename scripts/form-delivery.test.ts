@@ -29,3 +29,11 @@ test("HTTP failures, malformed responses and network errors fail safely", async 
     async () => { throw new Error("network timeout"); },
   ]) assert.deepEqual(await deliverViaFormSubmit(enquiry, request), { accepted: false, reason: "delivery_failed" });
 });
+
+test("hosting gateway rejection is distinguished from activation and ambiguous delivery", async () => {
+  assert.deepEqual(await deliverViaFormSubmit(enquiry, async () => new Response("Forbidden", { status: 403, headers: { "Content-Type": "text/html" } })), { accepted: false, reason: "gateway_blocked" });
+});
+
+test("accepts the provider's valid JSON even when labelled text/html", async () => {
+  assert.deepEqual(await deliverViaFormSubmit(enquiry, async () => new Response('{"success":"true"}', { headers: { "Content-Type": "text/html; charset=UTF-8" } })), { accepted: true });
+});

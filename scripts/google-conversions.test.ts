@@ -21,11 +21,11 @@ test("consent and available tag are required; successful enquiries deduplicate b
 test("all approved lead methods reach the existing imported campaign action, never purchase", () => {
   const calls: unknown[][] = [];
   const send = createConversionTracker("G-J75JY1GDPW");
-  for (const method of ["contact_form", "contact_modal", "project_brief", "whatsapp_click", "phone_click"]) {
+  for (const method of ["contact_form", "contact_modal", "project_brief", "website_report", "whatsapp_click", "phone_click"]) {
     send((...args) => calls.push(args), true, method);
   }
   assert.equal(ADS_CONVERSION_EVENT, "manual_event_REQUEST_QUOTE");
-  assert.equal(calls.length, 5);
+  assert.equal(calls.length, 6);
   for (const [command, event, params] of calls) {
     assert.equal(command, "event");
     assert.equal(event, "manual_event_REQUEST_QUOTE");

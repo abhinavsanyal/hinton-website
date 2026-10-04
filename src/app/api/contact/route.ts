@@ -4,7 +4,7 @@ import { RECEIPT_COOKIE } from "@/lib/enquiry-receipt";
 import { sendMetaLead } from "@/lib/meta-conversions";
 import { z } from "zod";
 import { ApiError, handle } from "@/lib/api";
-import { mailer, hasSmtp } from "@/lib/mail";
+import { mailer, hasMailTransport } from "@/lib/mail";
 import { deliverViaFormSubmit, enquiryTo, enquiryCc } from "@/lib/form-delivery";
 import { siteConfig } from "@/lib/site";
 import { guardSubmission } from "@/lib/submission-guard";
@@ -16,11 +16,11 @@ export const POST = handle(async (req) => {
   const input = schema.parse(await req.json());
   const eventId = randomUUID();
   let confirmationSent = false;
-  if (!hasSmtp()) {
+  if (!hasMailTransport()) {
     const result = await deliverViaFormSubmit({ ...input, eventId });
     if (!result.accepted) {
       console.error("[contact] delivery rejected", { eventId, reason: result.reason });
-      throw new ApiError(result.reason === "activation_required" ? 503 : 502, result.reason,
+      throw new ApiError(result.reason === "activation_required" || result.reason === "gateway_blocked" ? 503 : 502, result.reason,
         "We couldn’t confirm email delivery. Your message is still here. Please contact us directly below.");
     }
   } else {

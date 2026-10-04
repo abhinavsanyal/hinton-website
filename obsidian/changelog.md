@@ -90,3 +90,9 @@
 ## 2026-10-04 — Live enquiry audit
 - Confirmed Google Ads action 7796649086 is active and maps to the deployed GA4 event.
 - Activated the existing FormSubmit receiving form; production requests still fail while the same gateway payload succeeds locally. Added privacy-safe gateway status/type/error-code diagnostics to identify the hosting-side failure without logging enquiry contents.
+
+## 2026-10-04 — Transactional email repair and report lead measurement
+- Confirmed the production FormSubmit gateway rejects Vercel requests with HTTP 403; local delivery succeeds. Added a distinct unavailable response and kept valid JSON responses compatible with incorrectly labelled text/html content types.
+- Added optional server-only Resend delivery using a verified sender, retaining SMTP support. Provider errors cannot produce a success receipt; no cross-provider retry after an ambiguous delivery.
+- Successful website-report enquiries now emit the existing consent-aware lead conversion with the server event ID. Updated processor disclosure and environment documentation.
+- Validation: 17 regression tests passed, lint clean, production build successful. Live delivery still requires the verified sending domain and production Resend environment configuration.

@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
 
             <section>
               <h2 className="text-white text-xl mt-8 mb-4 font-medium">3. Sharing Your Information</h2>
-              <p>We do not sell, trade, or rent your personal information to third parties. We may share data with trusted third-party service providers (such as hosting partners or our CRM platform) solely for the purpose of operating our business, to deliver the requested service. Enquiry forms use FormSubmit to forward your submitted name, email address and project details to our studio team, including team members copied on the enquiry. FormSubmit states that it retains submissions for 30 days. Please avoid including passwords, payment information or other sensitive personal details in your brief.</p>
+              <p>We do not sell, trade, or rent your personal information to third parties. We may share data with trusted third-party service providers (such as hosting partners or our CRM platform) solely for the purpose of operating our business, to deliver the requested service. Enquiry forms use our configured email delivery provider (Resend, our SMTP email service, or FormSubmit) to forward your submitted name, email address and project details to our studio team, including team members copied on the enquiry, and where available to send you an acknowledgement. When FormSubmit is used, it states that it retains submissions for 30 days. Please avoid including passwords, payment information or other sensitive personal details in your brief.</p>
             </section>
 
             <section>
