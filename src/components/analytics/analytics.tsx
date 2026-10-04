@@ -2,6 +2,7 @@
 
 import { GA_ID, configureGoogleTag, createGoogleTagState, type GoogleTagState } from "@/lib/google-tag";
 import { contactConversionMethod, createConversionTracker } from "@/lib/google-conversions";
+import { trackMetaContact } from "@/lib/meta-contact";
 import { publicEnv } from "@/env";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
@@ -101,6 +102,7 @@ export function Analytics() {
       if (name) trackEvent(name, { page_path: location.pathname });
       if (!contactMethod || event.defaultPrevented || event.button !== 0) return;
       const marketing = useCookieStore.getState().consent?.marketing ?? false;
+      trackMetaContact(window.fbq, marketing, contactMethod);
       const sameTab = (!target.getAttribute("target") || target.getAttribute("target") === "_self")
         && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
         && !target.hasAttribute("download");

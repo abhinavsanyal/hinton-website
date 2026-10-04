@@ -96,3 +96,7 @@
 - Added optional server-only Resend delivery using a verified sender, retaining SMTP support. Provider errors cannot produce a success receipt; no cross-provider retry after an ambiguous delivery.
 - Successful website-report enquiries now emit the existing consent-aware lead conversion with the server event ID. Updated processor disclosure and environment documentation.
 - Validation: 17 regression tests passed, lint clean, production build successful. Live delivery still requires the verified sending domain and production Resend environment configuration.
+
+## 2026-10-04 — Align Meta contact intent measurement
+- WhatsApp and phone clicks now emit consent-gated Meta Contact events alongside existing GA4 and Google Ads measurement. Successful forms continue to emit Lead only after delivery; engagement remains separate.
+- Resend DNS is verified and a production-only, subdomain-scoped sending credential is configured in Vercel. No secrets committed.

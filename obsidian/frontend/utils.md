@@ -84,3 +84,5 @@ exception — note it clearly). Group by domain under `utils/<domain>/`.
 [[hooks]] · [[seo-metadata]] · [[smooth-scroll]]
 
 `lib/resend-mail.ts`: server-only transactional adapter used by the shared mailer; validates provider acceptance and preserves To/CC/Reply-To.
+
+- `src/lib/meta-contact.ts` sends consent-gated Meta Contact events for WhatsApp/phone intent; these are not Lead or completed-sale events. Vendor failures cannot stop navigation.
